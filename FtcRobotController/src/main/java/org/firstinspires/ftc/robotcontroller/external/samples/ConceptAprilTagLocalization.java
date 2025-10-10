@@ -66,7 +66,7 @@ import java.util.List;
  */
 @TeleOp(name = "Concept: AprilTag Localization", group = "Concept")
 @Disabled
-public class ConceptAprilTagLocalization extends LinearOpMode {
+public class  ConceptAprilTagLocalization extends LinearOpMode {
 
     private static final boolean USE_WEBCAM = true;  // true for webcam, false for phone camera
 

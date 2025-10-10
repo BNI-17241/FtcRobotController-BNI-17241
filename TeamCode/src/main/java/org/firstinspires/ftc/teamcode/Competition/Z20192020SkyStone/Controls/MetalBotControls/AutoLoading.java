@@ -180,7 +180,7 @@ package org.firstinspires.ftc.teamcode.Competition.Z20192020SkyStone.Controls.Me
 //        }
 //
 //        Bot.HookGrab();
-//        sleep(500);                 // adjusted from 500 to save time
+//        sleep(500);                 // adjusted from 500 to save123 time
 //
 //    }
 //

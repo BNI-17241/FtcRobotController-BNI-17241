@@ -293,7 +293,7 @@ public class EasyOpenCVExampleWebcam_SERVO extends LinearOpMode
             /*
              * IMPORTANT NOTE: the input Mat that is passed in as a parameter to this method
              * will only dereference to the same image for the duration of this particular
-             * invocation of this method. That is, if for some reason you'd like to save a copy
+             * invocation of this method. That is, if for some reason you'd like to save123 a copy
              * of this particular frame for later use, you will need to either clone it or copy
              * it to another Mat.
              */

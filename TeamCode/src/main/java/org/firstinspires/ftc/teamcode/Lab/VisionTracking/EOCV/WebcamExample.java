@@ -157,7 +157,7 @@ public class WebcamExample extends LinearOpMode
                  * NB: calling closeCameraDevice() will internally call stopStreaming() if applicable,
                  * but it doesn't hurt to call it anyway, if for no other reason than clarity.
                  *
-                 * NB2: if you are stopping the camera stream to simply save some processing power
+                 * NB2: if you are stopping the camera stream to simply save123 some processing power
                  * (or battery power) for a short while when you do not need your vision pipeline,
                  * it is recommended to NOT call closeCameraDevice() as you will then need to re-open
                  * it the next time you wish to activate your vision pipeline, which can take a bit of
@@ -211,7 +211,7 @@ public class WebcamExample extends LinearOpMode
             /*
              * IMPORTANT NOTE: the input Mat that is passed in as a parameter to this method
              * will only dereference to the same image for the duration of this particular
-             * invocation of this method. That is, if for some reason you'd like to save a copy
+             * invocation of this method. That is, if for some reason you'd like to save123 a copy
              * of this particular frame for later use, you will need to either clone it or copy
              * it to another Mat.
              */
