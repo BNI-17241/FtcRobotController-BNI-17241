@@ -32,7 +32,7 @@ public class TeleOp17241 extends OpMode {
     boolean previousDpadDown = false;
     boolean feedIsOn = false;
 
-
+// I andrew decree that I am very very very very flipping short
 
     private static final int PROFILE_1 = 1;  //User 1
     private static final int PROFILE_2 = 2; //user 2
@@ -191,10 +191,8 @@ public class TeleOp17241 extends OpMode {
        // telemetry.addData("Current X Pos: ", odo.getPosition().getX(DistanceUnit.INCH));
        // telemetry.addData("Current Y Pos: ", odo.getPosition().getY(DistanceUnit.INCH));
         //telemetry.addData("Hue Value: ", sensor.hsvValues[0]);
-        telemetry.addData("Left Odo", decBot.leftEncoder.getCurrentPosition());
         telemetry.addData("Right Odo", decBot.rightEncoder.getCurrentPosition());
         telemetry.addData("Center Odo", decBot.centerEncoder.getCurrentPosition());
-
         telemetry.update();
     }
     // ***** Helper Method for Speed Control
@@ -240,6 +238,7 @@ public class TeleOp17241 extends OpMode {
             feedIsOn = !feedWheelIsOn;
         }
         previousDpadDown = gamepad1.dpad_down;
+        feedWheelIsOn = true;
         if (feedWheelIsOn) {
             decBot.feedArtifact(true, 0.2);
         } else {

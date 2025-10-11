@@ -23,7 +23,7 @@ public class DecodeBot{
     public DcMotor feederWheel;
 
     public DcMotor rightEncoder;
-    public DcMotor leftEncoder;
+
     public DcMotor centerEncoder;
 
     public LinearOpMode LinearOp = null;
@@ -62,7 +62,7 @@ public class DecodeBot{
         //feeders
         feederWheel = hwBot.dcMotor.get("feeder_wheel");//Port ex 2
         //encoders / odo
-        leftEncoder = hwBot.dcMotor.get("left_encoder");
+
         rightEncoder = hwBot.dcMotor.get("right_encoder");
         centerEncoder = hwBot.dcMotor.get("center_encoder");
 

@@ -17,8 +17,6 @@ public class MecanumDrive extends DecodeBot {
     public MecanumDrive() {
 
     }
-
-
     // Helper Method for Linear Op
     public LinearOpMode LinearOp = null;
     public void setLinearOp(LinearOpMode LinearOp) {
@@ -329,19 +327,17 @@ public class MecanumDrive extends DecodeBot {
 
     // Helper Method to reset encoders
     public void resetEncoders() {
-        leftEncoder.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
         rightEncoder.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         centerEncoder.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-        leftEncoder.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
         rightEncoder.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         centerEncoder.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
     // get odo values
-    public double getLeftOdo() {
-        return leftEncoder.getCurrentPosition();
-    }
+
     public double getRightOdo() {
         return rightEncoder.getCurrentPosition();
     }
