@@ -22,9 +22,9 @@ public class DecodeBot{
 
     public DcMotor feederWheel;
 
-    public DcMotor rightEncoder;
-    public DcMotor leftEncoder;
-    public DcMotor centerEncoder;
+//    public DcMotor rightEncoder;
+//    public DcMotor leftEncoder;
+//    public DcMotor centerEncoder;
 
     public LinearOpMode LinearOp = null;
 
@@ -62,9 +62,9 @@ public class DecodeBot{
         //feeders
         feederWheel = hwBot.dcMotor.get("feeder_wheel");//Port ex 2
         //encoders / odo
-        leftEncoder = hwBot.dcMotor.get("left_encoder");
-        rightEncoder = hwBot.dcMotor.get("right_encoder");
-        centerEncoder = hwBot.dcMotor.get("center_encoder");
+//        leftEncoder = hwBot.dcMotor.get("left_encoder");
+//        rightEncoder = hwBot.dcMotor.get("right_encoder");
+//        centerEncoder = hwBot.dcMotor.get("center_encoder");
 
 
     // dirrection mapping
@@ -115,13 +115,17 @@ public class DecodeBot{
         }
 
     }
-    public void feedArtifact(boolean isOn, double speed){
-        if (isOn == true){
-            feederWheel.setPower(speed);
-        }
-        else{
-            feederWheel.setPower(0);
-        }
+    public void feedArtifact(double speed){
+
+        feederWheel.setPower(speed);
+
+
+//        if (isOn == true){
+//            feederWheel.setPower(speed);
+//        }
+//        else{
+//            feederWheel.setPower(0);
+//        }
     }
 
 }

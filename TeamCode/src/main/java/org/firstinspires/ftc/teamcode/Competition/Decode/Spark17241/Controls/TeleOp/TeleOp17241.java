@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Robots.DecodeBot;
 
-@TeleOp(name = "DecodeBot TeleOp", group = "Drive")
+@TeleOp(name = "DecodeBot TeleOp1", group = "Drive")
 public class TeleOp17241 extends OpMode {
     double leftStickYVal;
     double leftStickXVal;
@@ -23,7 +23,7 @@ public class TeleOp17241 extends OpMode {
     double speedMultiply = 0.75;
 
     boolean flywheelIsOn = false;
-    double flywheelSpeed = 0.5;
+    double flywheelSpeed = 1;
     final double SPEED_INCREMENT = 0.01;
     boolean previousDpadUp = false;
 
@@ -135,8 +135,9 @@ public class TeleOp17241 extends OpMode {
 
     // Robot Centric Drive Method
     public void RobotCentricDrive() {
+        //reverse drive
+        leftStickYVal = -gamepad1.left_stick_y;
 
-        leftStickYVal = gamepad1.left_stick_y;
         leftStickYVal = Range.clip(leftStickYVal, -1, 1);
         rightStickYVal = gamepad1.right_stick_y;
         rightStickYVal = Range.clip(rightStickYVal, -1, 1);
@@ -191,9 +192,9 @@ public class TeleOp17241 extends OpMode {
        // telemetry.addData("Current X Pos: ", odo.getPosition().getX(DistanceUnit.INCH));
        // telemetry.addData("Current Y Pos: ", odo.getPosition().getY(DistanceUnit.INCH));
         //telemetry.addData("Hue Value: ", sensor.hsvValues[0]);
-        telemetry.addData("Left Odo", decBot.leftEncoder.getCurrentPosition());
-        telemetry.addData("Right Odo", decBot.rightEncoder.getCurrentPosition());
-        telemetry.addData("Center Odo", decBot.centerEncoder.getCurrentPosition());
+//        telemetry.addData("Left Odo", decBot.leftEncoder.getCurrentPosition());
+//        telemetry.addData("Right Odo", decBot.rightEncoder.getCurrentPosition());
+//        telemetry.addData("Center Odo", decBot.centerEncoder.getCurrentPosition());
 
         telemetry.update();
     }
@@ -215,15 +216,19 @@ public class TeleOp17241 extends OpMode {
 
 
     public void FlyWheelControl(){
-        if (gamepad1.dpad_up && !previousDpadUp) {
-            flywheelIsOn = !flywheelIsOn;
-        }
-        previousDpadUp = gamepad1.dpad_up;
+        //Toggle
+//        if (gamepad1.dpad_up && !previousDpadUp) {
+//            flywheelIsOn = !flywheelIsOn;
+//        }
+//        previousDpadUp = gamepad1.dpad_up;
+
+        /*
         if (flywheelIsOn) {
             decBot.flylaunch(true, flywheelSpeed);
         } else {
             decBot.flylaunch(false, 0);
         }
+
         if (gamepad1.dpad_right) {
             if (flywheelSpeed <= 1) {
                 flywheelSpeed += SPEED_INCREMENT;
@@ -233,19 +238,29 @@ public class TeleOp17241 extends OpMode {
             if (flywheelSpeed >= 0) {
                 flywheelSpeed -= SPEED_INCREMENT;
             }
-        }
+        }*/
+
+
+             if(gamepad1.x){decBot.flylaunch(true, .2);}
+        else if(gamepad1.a){decBot.flylaunch(true, .4);}
+        else if(gamepad1.b){decBot.flylaunch(true, .6);}
+
+        if(gamepad1.right_bumper){decBot.flylaunch(false, 0);}
     }
     public void feed(){
-        if (gamepad1.dpad_down && !previousDpadDown) {
-            feedIsOn = !feedWheelIsOn;
-        }
-        previousDpadDown = gamepad1.dpad_down;
-        if (feedWheelIsOn) {
-            decBot.feedArtifact(true, 0.2);
-        } else {
-            decBot.feedArtifact(false, 0);
+//        if (gamepad1.dpad_down && !previousDpadDown) {
+//            feedIsOn = !feedWheelIsOn;
+//        }
+//        previousDpadDown = gamepad1.dpad_down;
+
+
+        if (gamepad1.left_trigger > 0.5) {
+            decBot.feedArtifact( 1.0);
+        } else if(gamepad1.left_bumper)  {
+            decBot.feedArtifact(0);
         }
     }
+
 
 
 
