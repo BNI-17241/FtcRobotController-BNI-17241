@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Robots.DecodeBot;
 
-@TeleOp(name = "DecodeBot TeleOp1", group = "Drive")
+@TeleOp(name = "DecodeBot TeleOp2", group = "Drive")
 public class TeleOp17241 extends OpMode {
     double leftStickYVal;
     double leftStickXVal;
@@ -64,7 +64,7 @@ public class TeleOp17241 extends OpMode {
         feed();
 
         //fieldCentricDrive();
-        imuStart();
+        //imuStart();
         //driveCases();
         //transferControl();
     }
@@ -241,7 +241,7 @@ public class TeleOp17241 extends OpMode {
         }*/
 
 
-             if(gamepad1.x){decBot.flylaunch(true, .2);}
+             if(gamepad1.x){decBot.flylaunch(true, .3);}
         else if(gamepad1.a){decBot.flylaunch(true, .4);}
         else if(gamepad1.b){decBot.flylaunch(true, .6);}
 
