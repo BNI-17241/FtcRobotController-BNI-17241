@@ -288,7 +288,7 @@ public class TeleOp17241_Oz extends OpMode {
                 multipleFeedState = TeleOp17241_Oz.multipleFeedStates.WAIT_2;
                 break;
             case WAIT_2:
-                if (timer.time() > 0.5) {
+                if (timer.time() > 0.50) {
                     multipleFeedState = TeleOp17241_Oz.multipleFeedStates.START_3;
                 }
                 break;
