@@ -179,8 +179,8 @@ public class TeleOp17241_Oz extends OpMode {
         telemetry.addData("Right Fly Wheel: ", decBot.rightFlyWheel.getPower());
 
 
-        telemetry.addData("X offset", odo.getXOffset(DistanceUnit.MM));
-        telemetry.addData("Y offset", odo.getYOffset(DistanceUnit.MM));
+        telemetry.addData("get Position", odo.getPosition());
+
 
         telemetry.update();
     }
