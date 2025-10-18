@@ -74,7 +74,7 @@ public class TeleOp17241_Andrew extends OpMode {
     public int currentProfile = PROFILE_1;
 
     // Robot Constructor
-    public DecodeBot decBot = new DecodeBot();
+    public DecodeBot_Andrew decBot = new DecodeBot_Andrew();
 
     // Initialization Method for Hardware
     @Override
@@ -203,7 +203,7 @@ public class TeleOp17241_Andrew extends OpMode {
 
     public void flyWheelControl() {
 
-        if (gamepad1.x) {
+        /*if (gamepad1.x) {
             decBot.flylaunch(true, .2);
         } else if (gamepad1.a) {
             decBot.flylaunch(true, .4);
@@ -213,7 +213,12 @@ public class TeleOp17241_Andrew extends OpMode {
 
         if (gamepad1.right_bumper) {
             decBot.flylaunch(false, 0);
-        }
+        }*/
+
+        /*if(gamepad1.x)
+        {
+            decBot.leftFlyWheel.setVelocity(200):
+        }*/
     }
 
     public void waitControl() {
