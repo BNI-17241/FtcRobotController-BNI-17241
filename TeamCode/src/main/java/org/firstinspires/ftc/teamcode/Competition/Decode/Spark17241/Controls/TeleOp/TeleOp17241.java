@@ -13,7 +13,7 @@ public class TeleOp17241 extends OpMode {
     double leftStickXVal;
     double rightStickYVal;
     double rightStickXVal;
-//
+    //
     double frontLeftSpeed;
     double frontRightSpeed;
     double rearLeftSpeed;
@@ -159,7 +159,7 @@ public class TeleOp17241 extends OpMode {
                 rearLeftSpeed = leftStickYVal - rightStickXVal + leftStickXVal;
                 rearRightSpeed = leftStickYVal + rightStickXVal - leftStickXVal;
 
-            // Default Driver Profile
+                // Default Driver Profile
             default:
                 // stops robot
                 frontLeftSpeed = 0;
@@ -184,9 +184,9 @@ public class TeleOp17241 extends OpMode {
 
     // ***** Helper Method for Telemetry
     public void telemetryOutput() {
-       // telemetry.addData("Heading: ",  getHeading());
-       // telemetry.addData("Current X Pos: ", odo.getPosition().getX(DistanceUnit.INCH));
-       // telemetry.addData("Current Y Pos: ", odo.getPosition().getY(DistanceUnit.INCH));
+        // telemetry.addData("Heading: ",  getHeading());
+        // telemetry.addData("Current X Pos: ", odo.getPosition().getX(DistanceUnit.INCH));
+        // telemetry.addData("Current Y Pos: ", odo.getPosition().getY(DistanceUnit.INCH));
         //telemetry.addData("Hue Value: ", sensor.hsvValues[0]);
 //        telemetry.addData("Left Odo", decBot.leftEncoder.getCurrentPosition());
 //        telemetry.addData("Right Odo", decBot.rightEncoder.getCurrentPosition());
@@ -237,7 +237,7 @@ public class TeleOp17241 extends OpMode {
         }*/
 
 
-             if(gamepad1.x){decBot.flylaunch(true, .3);}
+        if(gamepad1.x){decBot.flylaunch(true, .3);}
         else if(gamepad1.a){decBot.flylaunch(true, .4);}
         else if(gamepad1.b){decBot.flylaunch(true, .6);}
 
