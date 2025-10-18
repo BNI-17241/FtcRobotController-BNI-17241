@@ -81,6 +81,7 @@ public class DecodeBot{
 
         setMotorRunModes(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         setMotorRunModes(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        //setMotorRunModes(DcMotor.RunMode.RUN_USING_ENCODER);
 
 
         feederWheel.setDirection(DcMotor.Direction.FORWARD);
