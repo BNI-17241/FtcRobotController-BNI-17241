@@ -200,9 +200,9 @@ public class TeleOp17241_Andrew extends OpMode {
 
         if (gamepad1.dpad_left) {
             waitTime = .25;
-        } else if (gamepad1.a) {
+        } else if (gamepad1.dpad_down) {
             waitTime = .5;
-        } else if (gamepad1.b) {
+        } else if (gamepad1.dpad_right) {
             waitTime = .75;
         }
 
