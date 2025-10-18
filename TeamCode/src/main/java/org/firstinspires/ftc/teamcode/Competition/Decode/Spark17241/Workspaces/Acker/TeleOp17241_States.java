@@ -4,7 +4,7 @@
  * Note: Machine States do not use motor encoders, uses a timer)
  */
 
-package org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Controls.TeleOp;
+package org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Workspaces.Acker;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -13,7 +13,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Robots.DecodeBot;
 
-@TeleOp(name = "DecodeBot States", group = "Drive")
+@TeleOp(name = "DecodeBot Acker", group = "Drive")
 public class TeleOp17241_States extends OpMode {
     public double leftStickYVal;
     public double leftStickXVal;

@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Controls.TeleOp;
+package org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Workspaces.Andrew;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -7,8 +7,8 @@ import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Robots.DecodeBot;
 
-@TeleOp(name = "DecodeBot Comp", group = "Drive")
-public class TeleOp17241 extends OpMode {
+@TeleOp(name = "DecodeBot Andrew", group = "Drive")
+public class TeleOp17241_Andrew extends OpMode {
     double leftStickYVal;
     double leftStickXVal;
     double rightStickYVal;
@@ -32,6 +32,8 @@ public class TeleOp17241 extends OpMode {
     boolean previousDpadDown = false;
     boolean feedIsOn = false;
 
+
+
     private static final int PROFILE_1 = 1;  //User 1
     private static final int PROFILE_2 = 2; //user 2
     private int currentProfile = PROFILE_1;
@@ -46,9 +48,11 @@ public class TeleOp17241 extends OpMode {
     public void init() {
         decBot.initRobot(hardwareMap);
         //odo.initPinpoint(hardwareMap);
+
         // resetHeading();                       // PINPOINT
         decBot.imu.resetYaw();                   // REV
     }
+
 
 
     @Override
