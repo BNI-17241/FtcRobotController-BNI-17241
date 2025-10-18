@@ -67,6 +67,7 @@ public class DecodeBot_oz {
         feederWheel = hwBot.dcMotor.get("feeder_wheel");//Port ex 2
 
         intakeServo = hwBot.crservo.get("intake_servo");
+
         intakemotor = hwBot.dcMotor.get("intake_motor");//Port ex 3
 
         //encoders / odo
