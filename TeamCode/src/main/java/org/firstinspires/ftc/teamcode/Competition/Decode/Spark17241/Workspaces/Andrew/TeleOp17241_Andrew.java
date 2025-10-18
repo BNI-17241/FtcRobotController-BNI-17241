@@ -82,6 +82,7 @@ public class TeleOp17241_Andrew extends OpMode {
         robotCentricDrive();
         //Launching Controls
         flyWheelControl();
+        waitControl();
         feedStateController();
         feedStatesSingleLoad();
         feedStatesMultipleLoad();
@@ -192,6 +193,18 @@ public class TeleOp17241_Andrew extends OpMode {
         if (gamepad1.right_bumper) {
             decBot.flylaunch(false, 0);
         }
+    }
+
+    public void waitControl() {
+
+        if (gamepad1.dpad_left) {
+            waitTime = .25;
+        } else if (gamepad1.a) {
+            waitTime = .5;
+        } else if (gamepad1.b) {
+            waitTime = .75;
+        }
+
     }
 
 
