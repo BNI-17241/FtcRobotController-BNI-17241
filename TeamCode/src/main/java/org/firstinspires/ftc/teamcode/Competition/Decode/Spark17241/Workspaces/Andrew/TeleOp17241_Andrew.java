@@ -22,6 +22,14 @@ public class TeleOp17241_Andrew extends OpMode {
     public double powerThreshold;
     public double speedMultiply = 0.75;
 
+    public DcMotor leftFlyMotor = hardwareMap.dcMotor.get("left_fly_wheel");
+
+    public int flyPos;
+    public double motorRevolutions;
+
+    public double angle;
+    public double angleNormalized;
+
     public double waitTime = .5;
 
 
@@ -82,6 +90,7 @@ public class TeleOp17241_Andrew extends OpMode {
         robotCentricDrive();
         //Launching Controls
         flyWheelControl();
+        flyEncoderData();
         waitControl();
         feedStateController();
         feedStatesSingleLoad();
@@ -160,7 +169,8 @@ public class TeleOp17241_Andrew extends OpMode {
         telemetry.addData("Multiple Feed State: ", multipleFeedState);
         telemetry.addData("Left Fly Wheel: ", decBot.leftFlyWheel.getPower());
         telemetry.addData("Right Fly Wheel: ", decBot.rightFlyWheel.getPower());
-        telemetry.addData("Wait time: ", waitTime);
+        telemetry.addData("Feeder stop time: ", waitTime);
+        telemetry.addData("Left Flywheel Pos: ", flyPos);
         telemetry.update();
     }
 
@@ -176,6 +186,16 @@ public class TeleOp17241_Andrew extends OpMode {
             speedMultiply = 1;
         }
     }
+
+    //****************** Flywheel Encoder Data ****************
+    public void flyEncoderData()
+    {
+        flyPos = leftFlyMotor.getCurrentPosition();
+    }
+
+
+
+
 
 
     //************ Control surface interfaces******************
