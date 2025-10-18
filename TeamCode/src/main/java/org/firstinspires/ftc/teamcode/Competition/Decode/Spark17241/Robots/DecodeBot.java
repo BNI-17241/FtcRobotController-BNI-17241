@@ -7,6 +7,8 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
 
 import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Drivetrain.MecanumDrive;
+import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Pinpoint.GoBildaPinpointDriver;
+import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Pinpoint.Pinpoint;
 
 public class DecodeBot{
 
@@ -22,9 +24,8 @@ public class DecodeBot{
 
     public DcMotor feederWheel;
 
-//    public DcMotor rightEncoder;
-//    public DcMotor leftEncoder;
-//    public DcMotor centerEncoder;
+    public Pinpoint odo = new Pinpoint();
+
 
     public LinearOpMode LinearOp = null;
 
