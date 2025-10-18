@@ -9,7 +9,7 @@ import com.qualcomm.robotcore.util.Range;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Pinpoint.GoBildaPinpointDriver;
 import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Pinpoint.Pinpoint;
-import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Robots.DecodeBot;
+import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Workspaces.Oz.DecodeBot_oz;
 import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Workspaces.Oz.TeleOp17241_Oz;
 
 @TeleOp(name = "DecodeBot Oz", group = "Drive")
@@ -33,7 +33,7 @@ public class TeleOp17241_Oz extends OpMode {
     private static final int PROFILE_2 = 2; //user 2
     private int currentProfile = PROFILE_1;
 
-    public DecodeBot decBot = new DecodeBot();
+    public DecodeBot_oz decBot = new DecodeBot_oz();
 
     public GoBildaPinpointDriver odo = null;
 
@@ -311,7 +311,16 @@ public class TeleOp17241_Oz extends OpMode {
                 break;
         }
     }
-
+public void intake(){
+        if(gamepad1.y){
+            decBot.setIntakeServo(true); // prob do toogle later-oz
+            decBot.setIntakemotor(true);
+        }
+        else{
+            decBot.setIntakeServo(false);
+            decBot.setIntakemotor(true);
+        }
+}
 
 
 }
