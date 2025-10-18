@@ -248,7 +248,7 @@ public class TeleOp17241_Andrew extends OpMode {
                 multipleFeedState = org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Workspaces.Andrew.TeleOp17241_Andrew.multipleFeedStates.PAUSE_1;
                 break;
             case PAUSE_1:
-                if (timer.time() > waitTime) {
+                if (timer.time() > 0.5) {
                     multipleFeedState = org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Workspaces.Andrew.TeleOp17241_Andrew.multipleFeedStates.STOP_1;
                 }
                 break;
@@ -268,7 +268,7 @@ public class TeleOp17241_Andrew extends OpMode {
                 multipleFeedState = org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Workspaces.Andrew.TeleOp17241_Andrew.multipleFeedStates.PAUSE_2;
                 break;
             case PAUSE_2:
-                if (timer.time() > waitTime) {
+                if (timer.time() > 0.5) {
                     multipleFeedState = org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Workspaces.Andrew.TeleOp17241_Andrew.multipleFeedStates.STOP_2;
                 }
                 break;
@@ -288,7 +288,7 @@ public class TeleOp17241_Andrew extends OpMode {
                 multipleFeedState = org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Workspaces.Andrew.TeleOp17241_Andrew.multipleFeedStates.PAUSE_3;
                 break;
             case PAUSE_3:
-                if (timer.time() > waitTime) {
+                if (timer.time() > 0.5) {
                     multipleFeedState = org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Workspaces.Andrew.TeleOp17241_Andrew.multipleFeedStates.STOP_3;
                 }
                 break;
