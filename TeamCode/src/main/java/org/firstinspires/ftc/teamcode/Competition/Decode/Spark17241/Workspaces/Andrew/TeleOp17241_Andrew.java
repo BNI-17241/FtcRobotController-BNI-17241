@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Workspaces.
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Robots.DecodeBot;
@@ -22,7 +23,6 @@ public class TeleOp17241_Andrew extends OpMode {
     public double powerThreshold;
     public double speedMultiply = 0.75;
 
-    public DcMotor leftFlyMotor = hardwareMap.dcMotor.get("left_fly_wheel");
 
     public int flyPos;
     public double motorRevolutions;
@@ -190,7 +190,7 @@ public class TeleOp17241_Andrew extends OpMode {
     //****************** Flywheel Encoder Data ****************
     public void flyEncoderData()
     {
-        flyPos = leftFlyMotor.getCurrentPosition();
+        flyPos = decBot.leftFlyWheel.getCurrentPosition();
     }
 
 
