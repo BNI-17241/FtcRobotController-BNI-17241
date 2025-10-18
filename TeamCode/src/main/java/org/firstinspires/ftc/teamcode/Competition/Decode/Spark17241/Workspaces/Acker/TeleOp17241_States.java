@@ -216,7 +216,7 @@ public class TeleOp17241_States extends OpMode {
                 singleFeedState = singleFeedStates.PAUSE;
                 break;
             case PAUSE:
-                if (timer.time() > 1.0) {
+                if (timer.time() > 0.5) {
                     singleFeedState = singleFeedStates.STOP;
                 }
                 break;
@@ -238,7 +238,7 @@ public class TeleOp17241_States extends OpMode {
                 multipleFeedState = multipleFeedStates.PAUSE_1;
                 break;
             case PAUSE_1:
-                if (timer.time() > 1.0) {
+                if (timer.time() > 0.5) {
                     multipleFeedState = multipleFeedStates.STOP_1;
                 }
                 break;
@@ -258,7 +258,7 @@ public class TeleOp17241_States extends OpMode {
                 multipleFeedState = multipleFeedStates.PAUSE_2;
                 break;
             case PAUSE_2:
-                if (timer.time() > 1.0) {
+                if (timer.time() > 0.5) {
                     multipleFeedState = multipleFeedStates.STOP_2;
                 }
                 break;
@@ -278,7 +278,7 @@ public class TeleOp17241_States extends OpMode {
                 multipleFeedState = multipleFeedStates.PAUSE_3;
                 break;
             case PAUSE_3:
-                if (timer.time() > 1.0) {
+                if (timer.time() > 0.5) {
                     multipleFeedState = multipleFeedStates.STOP_3;
                 }
                 break;
