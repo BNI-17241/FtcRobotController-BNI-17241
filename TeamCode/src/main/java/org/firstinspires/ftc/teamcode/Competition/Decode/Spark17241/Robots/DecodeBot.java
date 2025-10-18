@@ -61,6 +61,8 @@ public class DecodeBot{
         rightFlyWheel = hwBot.dcMotor.get("right_fly_wheel");//Port ex 1
         //feeders
         feederWheel = hwBot.dcMotor.get("feeder_wheel");//Port ex 2
+
+
         //encoders / odo
 //        leftEncoder = hwBot.dcMotor.get("left_encoder");
 //        rightEncoder = hwBot.dcMotor.get("right_encoder");

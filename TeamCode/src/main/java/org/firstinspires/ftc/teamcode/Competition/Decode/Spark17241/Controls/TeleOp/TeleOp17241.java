@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Controls.TeleOp;
 
+import com.qualcomm.hardware.limelightvision.LLResult;
+import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -22,15 +24,10 @@ public class TeleOp17241 extends OpMode {
     double powerThreshold;
     double speedMultiply = 0.75;
 
-    boolean flywheelIsOn = false;
-    double flywheelSpeed = 1;
-    final double SPEED_INCREMENT = 0.01;
     boolean previousDpadUp = false;
 
 
-    boolean feedWheelIsOn = false;
     boolean previousDpadDown = false;
-    boolean feedIsOn = false;
 
 
 
@@ -39,6 +36,8 @@ public class TeleOp17241 extends OpMode {
     private int currentProfile = PROFILE_1;
 
     public DecodeBot decBot = new DecodeBot();
+
+    private Limelight3A limelight;
 
     //public Pinpoint odo = new Pinpoint();
 
@@ -51,12 +50,24 @@ public class TeleOp17241 extends OpMode {
 
         // resetHeading();                       // PINPOINT
         decBot.imu.resetYaw();                   // REV
+
+        limelight = hardwareMap.get(Limelight3A.class, "limelight");
+
+        telemetry.setMsTransmissionInterval(11);
+
+        limelight.pipelineSwitch(0);
+    }
+
+    @Override
+    public void start() {
+        limelight.start();
     }
 
 
 
     @Override
     public void loop() {
+        cam();
         speedControl();
         telemetryOutput();
         RobotCentricDrive();
@@ -69,6 +80,13 @@ public class TeleOp17241 extends OpMode {
         //transferControl();
     }
 
+
+    public void cam() {
+        LLResult result = limelight.getLatestResult();
+        telemetry.addData("res", result);
+        telemetry.update();
+
+    }
 
 
 
@@ -216,32 +234,17 @@ public class TeleOp17241 extends OpMode {
 
 
     public void FlyWheelControl(){
-        //Toggle
-//        if (gamepad1.dpad_up && !previousDpadUp) {
-//            flywheelIsOn = !flywheelIsOn;
-//        }
-//        previousDpadUp = gamepad1.dpad_up;
+        //toggle
+        if(!previousDpadDown && gamepad1.dpad_down){
 
-        /*
-        if (flywheelIsOn) {
-            decBot.flylaunch(true, flywheelSpeed);
-        } else {
-            decBot.flylaunch(false, 0);
+            previousDpadDown = false;
         }
 
-        if (gamepad1.dpad_right) {
-            if (flywheelSpeed <= 1) {
-                flywheelSpeed += SPEED_INCREMENT;
-            }
-        }
-        if (gamepad1.dpad_left) {
-            if (flywheelSpeed >= 0) {
-                flywheelSpeed -= SPEED_INCREMENT;
-            }
-        }*/
 
 
-             if(gamepad1.x){decBot.flylaunch(true, .2);}
+
+
+             if(gamepad1.x){decBot.flylaunch(true, .3);}
         else if(gamepad1.a){decBot.flylaunch(true, .4);}
         else if(gamepad1.b){decBot.flylaunch(true, .6);}
 
