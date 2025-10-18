@@ -160,6 +160,7 @@ public class TeleOp17241_Andrew extends OpMode {
         telemetry.addData("Multiple Feed State: ", multipleFeedState);
         telemetry.addData("Left Fly Wheel: ", decBot.leftFlyWheel.getPower());
         telemetry.addData("Right Fly Wheel: ", decBot.rightFlyWheel.getPower());
+        telemetry.addData("Wait time: ", waitTime);
         telemetry.update();
     }
 
