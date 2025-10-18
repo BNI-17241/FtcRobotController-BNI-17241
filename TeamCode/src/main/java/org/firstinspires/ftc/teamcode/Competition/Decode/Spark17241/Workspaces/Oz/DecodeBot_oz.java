@@ -24,8 +24,8 @@ public class DecodeBot_oz {
 
     public DcMotor feederWheel;
 
-    public CRServo intakeServo;
-    public DcMotor intakemotor;
+    //public CRServo intakeServo;
+    //public DcMotor intakemotor;
 
     public Pinpoint odo = new Pinpoint();
 
@@ -66,9 +66,9 @@ public class DecodeBot_oz {
         //feeders
         feederWheel = hwBot.dcMotor.get("feeder_wheel");//Port ex 2
 
-        intakeServo = hwBot.crservo.get("intake_servo");
+        //intakeServo = hwBot.crservo.get("intake_servo");
 
-        intakemotor = hwBot.dcMotor.get("intake_motor");//Port ex 3
+        //intakemotor = hwBot.dcMotor.get("intake_motor");//Port ex 3
 
         //encoders / odo
 //        leftEncoder = hwBot.dcMotor.get("left_encoder");
@@ -85,7 +85,7 @@ public class DecodeBot_oz {
         leftFlyWheel.setDirection(DcMotor.Direction.REVERSE);
         rightFlyWheel.setDirection(DcMotor.Direction.FORWARD);
 
-        intakemotor.setDirection(DcMotorSimple.Direction.FORWARD);
+        //intakemotor.setDirection(DcMotorSimple.Direction.FORWARD);
 
         setMotorRunModes(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         setMotorRunModes(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -93,7 +93,7 @@ public class DecodeBot_oz {
 
         feederWheel.setDirection(DcMotor.Direction.FORWARD);
 
-        intakeServo.setDirection(DcMotorSimple.Direction.FORWARD);
+        //intakeServo.setDirection(DcMotorSimple.Direction.FORWARD);
 
         // break mapping
         frontLeftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -104,7 +104,7 @@ public class DecodeBot_oz {
         leftFlyWheel.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rightFlyWheel.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         feederWheel.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        intakemotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        //intakemotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         //IMU for Rev Robotics Control Hub
 
 
@@ -135,18 +135,18 @@ public class DecodeBot_oz {
 
     public void setIntakeServo(boolean isOn){ // currently just bool but can be changed to speed if yall want
         if (isOn){
-            intakeServo.setPower(1);
+            //intakeServo.setPower(1);
         }
         else{
-            intakeServo.setPower(0);
+            //intakeServo.setPower(0);
         }
     }
     public void setIntakemotor(boolean isOn){   // currently just bool but can be changed to speed if yall want
         if(isOn){
-            intakemotor.setPower(1);
+            //intakemotor.setPower(1);
         }
         else{
-            intakemotor.setPower(0);
+            //intakemotor.setPower(0);
         }
     }
 
