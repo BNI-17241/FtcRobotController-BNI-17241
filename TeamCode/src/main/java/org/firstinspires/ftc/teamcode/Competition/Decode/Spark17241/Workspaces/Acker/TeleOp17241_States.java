@@ -255,31 +255,31 @@ public class TeleOp17241_States extends OpMode {
             case START_2:
                 decBot.feedArtifact( 1.0);
                 timer.reset();
-                multipleFeedState = multipleFeedStates.PAUSE_1;
+                multipleFeedState = multipleFeedStates.PAUSE_2;
                 break;
             case PAUSE_2:
                 if (timer.time() > 1.0) {
-                    multipleFeedState = multipleFeedStates.STOP_1;
+                    multipleFeedState = multipleFeedStates.STOP_2;
                 }
                 break;
             case STOP_2:
                 decBot.feedArtifact( 0.0);
                 timer.reset();
-                multipleFeedState = multipleFeedStates.WAIT_1;
+                multipleFeedState = multipleFeedStates.WAIT_2;
                 break;
             case WAIT_2:
                 if (timer.time() > 0.5) {
-                    multipleFeedState = multipleFeedStates.START_2;
+                    multipleFeedState = multipleFeedStates.START_3;
                 }
                 break;
             case START_3:
                 decBot.feedArtifact( 1.0);
                 timer.reset();
-                multipleFeedState = multipleFeedStates.PAUSE_1;
+                multipleFeedState = multipleFeedStates.PAUSE_3;
                 break;
             case PAUSE_3:
                 if (timer.time() > 1.0) {
-                    multipleFeedState = multipleFeedStates.STOP_1;
+                    multipleFeedState = multipleFeedStates.STOP_3;
                 }
                 break;
             case STOP_3:
