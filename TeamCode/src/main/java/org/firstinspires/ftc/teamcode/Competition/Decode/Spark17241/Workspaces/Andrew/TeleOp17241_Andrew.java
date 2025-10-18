@@ -3,79 +3,96 @@ package org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Workspaces.
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
-
 import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Robots.DecodeBot;
 
 @TeleOp(name = "DecodeBot Andrew", group = "Drive")
 public class TeleOp17241_Andrew extends OpMode {
-    double leftStickYVal;
-    double leftStickXVal;
-    double rightStickYVal;
-    double rightStickXVal;
-//
-    double frontLeftSpeed;
-    double frontRightSpeed;
-    double rearLeftSpeed;
-    double rearRightSpeed;
+    public double leftStickYVal;
+    public double leftStickXVal;
+    public double rightStickYVal;
+    public double rightStickXVal;
 
-    double powerThreshold;
-    double speedMultiply = 0.75;
+    public double frontLeftSpeed;
+    public double frontRightSpeed;
+    public double rearLeftSpeed;
+    public double rearRightSpeed;
 
-    boolean flywheelIsOn = false;
-    double flywheelSpeed = 1;
-    final double SPEED_INCREMENT = 0.01;
-    boolean previousDpadUp = false;
+    public double powerThreshold;
+    public double speedMultiply = 0.75;
+
+    public double waitTime = .5;
 
 
-    boolean feedWheelIsOn = false;
-    boolean previousDpadDown = false;
-    boolean feedIsOn = false;
+    // Machine State Variables, Timers & Enums for Control of Feeder
 
+    ElapsedTime timer = new ElapsedTime();
 
+    // State Enum for Single Feeding
+    public enum singleFeedStates {
+        READY,
+        START,
+        PAUSE,
+        STOP,
+    }
 
-    private static final int PROFILE_1 = 1;  //User 1
-    private static final int PROFILE_2 = 2; //user 2
-    private int currentProfile = PROFILE_1;
+    public org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Workspaces.Andrew.TeleOp17241_Andrew.singleFeedStates singleFeedState = org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Workspaces.Andrew.TeleOp17241_Andrew.singleFeedStates.READY;
 
+    // State Enum for Multiple Feeding
+    public enum multipleFeedStates {
+        READY,
+        // First Feed into Fly Wheels
+        START_1,
+        PAUSE_1,
+        STOP_1,
+        WAIT_1,
+        // Second Feed into Fly Wheels
+        START_2,
+        PAUSE_2,
+        STOP_2,
+        WAIT_2,
+        // Third Feed into Fly Wheels
+        START_3,
+        PAUSE_3,
+        STOP_3,
+    }
+
+    public org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Workspaces.Andrew.TeleOp17241_Andrew.multipleFeedStates multipleFeedState = org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Workspaces.Andrew.TeleOp17241_Andrew.multipleFeedStates.READY;
+
+    // Driver Profiles
+    public static final int PROFILE_1 = 1;  //User 1
+    public static final int PROFILE_2 = 2; //user 2
+    public int currentProfile = PROFILE_1;
+
+    // Robot Constructor
     public DecodeBot decBot = new DecodeBot();
 
-    //public Pinpoint odo = new Pinpoint();
-
-    //double botHeading = decBot.imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
-
+    // Initialization Method for Hardware
     @Override
     public void init() {
         decBot.initRobot(hardwareMap);
-        //odo.initPinpoint(hardwareMap);
-
-        // resetHeading();                       // PINPOINT
-        decBot.imu.resetYaw();                   // REV
     }
 
-
-
+    // Play Loop
     @Override
     public void loop() {
+        // Driving Controls
         speedControl();
+        robotCentricDrive();
+        //Launching Controls
+        flyWheelControl();
+        waitControl();
+        feedStateController();
+        feedStatesSingleLoad();
+        feedStatesMultipleLoad();
+        // Helper Controls
         telemetryOutput();
-        RobotCentricDrive();
-        FlyWheelControl();
-        feed();
-
-        //fieldCentricDrive();
-        //imuStart();
-        //driveCases();
-        //transferControl();
     }
 
+    // ********* TeleOp Control Methods **************
 
-
-
-
-//    // ********* TeleOp Control Methods **************
-
-    // ****** Helper method to set Motor Power
+    // Helper method to set Motor Power
     public void setMotorPower(DcMotor motor, double speed, double threshold, double multiplier) {
         if (speed <= threshold && speed >= -threshold) {
             motor.setPower(0);
@@ -83,58 +100,9 @@ public class TeleOp17241_Andrew extends OpMode {
             motor.setPower(speed * multiplier);
         }
     }
-    public void imuStart(){
-        if(gamepad1.options){
-            decBot.imu.resetYaw();
-        }
-    }
-
-    //*********  Driver 1 and Driver 2 Control Methods
-
-
-    // ********  Legacy Drive Control Methods
-//
-//    public void fieldCentricDrive() {
-//        if (gamepad1.options) {
-//            decBot.imu.resetYaw();
-//        }
-//        double y = -gamepad1.left_stick_y; // Remember, Y stick value is reversed
-//        double x = gamepad1.left_stick_x;
-//        double rx = gamepad1.right_stick_x;
-//
-//        // This button choice was made so that it is hard to hit on accident,
-//        // it can be freely changed based on preference.
-//        // The equivalent button is start on Xbox-style controllers.
-//        if (gamepad1.options) {
-//            decBot.imu.resetYaw();
-//        }
-//
-//        double botHeading = decBot.imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
-//
-//        // Rotate the movement direction counter to the bot's rotation
-//        double rotX = x * Math.cos(-botHeading) - y * Math.sin(-botHeading);
-//        double rotY = x * Math.sin(-botHeading) + y * Math.cos(-botHeading);
-//
-//        rotX = rotX * 1.1;  // Counteract imperfect strafing
-//
-//        // Denominator is the largest motor power (absolute value) or 1
-//        // This ensures all the powers maintain the same ratio,
-//        // but only if at least one is out of the range [-1, 1]
-//        double denominator = Math.max(Math.abs(rotY) + Math.abs(rotX) + Math.abs(rx), 1);
-//        double frontLeftPower = (rotY + rotX + rx) / denominator;
-//        double backLeftPower = (rotY - rotX + rx) / denominator;
-//        double frontRightPower = (rotY - rotX - rx) / denominator;
-//        double backRightPower = (rotY + rotX - rx) / denominator;
-//
-//        decBot.frontLeftMotor.setPower(frontLeftPower);
-//        decBot.rearLeftMotor.setPower(backLeftPower);
-//        decBot.frontRightMotor.setPower(frontRightPower);
-//        decBot.rearRightMotor.setPower(backRightPower);
-//    }
-
 
     // Robot Centric Drive Method
-    public void RobotCentricDrive() {
+    public void robotCentricDrive() {
         //reverse drive
         leftStickYVal = -gamepad1.left_stick_y;
 
@@ -163,7 +131,7 @@ public class TeleOp17241_Andrew extends OpMode {
                 rearLeftSpeed = leftStickYVal - rightStickXVal + leftStickXVal;
                 rearRightSpeed = leftStickYVal + rightStickXVal - leftStickXVal;
 
-            // Default Driver Profile
+                // Default Driver Profile
             default:
                 // stops robot
                 frontLeftSpeed = 0;
@@ -188,16 +156,14 @@ public class TeleOp17241_Andrew extends OpMode {
 
     // ***** Helper Method for Telemetry
     public void telemetryOutput() {
-       // telemetry.addData("Heading: ",  getHeading());
-       // telemetry.addData("Current X Pos: ", odo.getPosition().getX(DistanceUnit.INCH));
-       // telemetry.addData("Current Y Pos: ", odo.getPosition().getY(DistanceUnit.INCH));
-        //telemetry.addData("Hue Value: ", sensor.hsvValues[0]);
-//        telemetry.addData("Left Odo", decBot.leftEncoder.getCurrentPosition());
-//        telemetry.addData("Right Odo", decBot.rightEncoder.getCurrentPosition());
-//        telemetry.addData("Center Odo", decBot.centerEncoder.getCurrentPosition());
-
+        telemetry.addData("Single Feed State: ", singleFeedState);
+        telemetry.addData("Multiple Feed State: ", multipleFeedState);
+        telemetry.addData("Left Fly Wheel: ", decBot.leftFlyWheel.getPower());
+        telemetry.addData("Right Fly Wheel: ", decBot.rightFlyWheel.getPower());
+        telemetry.addData("Wait time: ", waitTime);
         telemetry.update();
     }
+
     // ***** Helper Method for Speed Control
     public void speedControl() {
         if (gamepad1.dpad_up) {
@@ -215,54 +181,127 @@ public class TeleOp17241_Andrew extends OpMode {
     //************ Control surface interfaces******************
 
 
-    public void FlyWheelControl(){
-        //Toggle
-//        if (gamepad1.dpad_up && !previousDpadUp) {
-//            flywheelIsOn = !flywheelIsOn;
-//        }
-//        previousDpadUp = gamepad1.dpad_up;
+    public void flyWheelControl() {
 
-        /*
-        if (flywheelIsOn) {
-            decBot.flylaunch(true, flywheelSpeed);
-        } else {
+        if (gamepad1.x) {
+            decBot.flylaunch(true, .2);
+        } else if (gamepad1.a) {
+            decBot.flylaunch(true, .4);
+        } else if (gamepad1.b) {
+            decBot.flylaunch(true, .6);
+        }
+
+        if (gamepad1.right_bumper) {
             decBot.flylaunch(false, 0);
         }
+    }
 
-        if (gamepad1.dpad_right) {
-            if (flywheelSpeed <= 1) {
-                flywheelSpeed += SPEED_INCREMENT;
-            }
-        }
+    public void waitControl() {
+
         if (gamepad1.dpad_left) {
-            if (flywheelSpeed >= 0) {
-                flywheelSpeed -= SPEED_INCREMENT;
-            }
-        }*/
+            waitTime = .25;
+        } else if (gamepad1.a) {
+            waitTime = .5;
+        } else if (gamepad1.b) {
+            waitTime = .75;
+        }
 
-
-             if(gamepad1.x){decBot.flylaunch(true, .3);}
-        else if(gamepad1.a){decBot.flylaunch(true, .4);}
-        else if(gamepad1.b){decBot.flylaunch(true, .6);}
-
-        if(gamepad1.right_bumper){decBot.flylaunch(false, 0);}
     }
-    public void feed(){
-//        if (gamepad1.dpad_down && !previousDpadDown) {
-//            feedIsOn = !feedWheelIsOn;
-//        }
-//        previousDpadDown = gamepad1.dpad_down;
 
 
+    // Feed Controller using States
+    public void feedStateController() {
         if (gamepad1.left_trigger > 0.5) {
-            decBot.feedArtifact( 1.0);
-        } else if(gamepad1.left_bumper)  {
-            decBot.feedArtifact(0);
+            singleFeedState = org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Workspaces.Andrew.TeleOp17241_Andrew.singleFeedStates.START;
+        } else if (gamepad1.right_trigger > 0.5) {
+            multipleFeedState = org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Workspaces.Andrew.TeleOp17241_Andrew.multipleFeedStates.START_1;
         }
     }
 
+    // State Method for Single Feeding into fly wheels
+    public void feedStatesSingleLoad() {
+        switch (singleFeedState) {
+            case START:
+                decBot.feedArtifact(1.0);
+                timer.reset();
+                singleFeedState = org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Workspaces.Andrew.TeleOp17241_Andrew.singleFeedStates.PAUSE;
+                break;
+            case PAUSE:
+                if (timer.time() > waitTime) {
+                    singleFeedState = org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Workspaces.Andrew.TeleOp17241_Andrew.singleFeedStates.STOP;
+                }
+                break;
+            case STOP:
+                decBot.feedArtifact(0.0);
+                singleFeedState = org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Workspaces.Andrew.TeleOp17241_Andrew.singleFeedStates.READY;
+                break;
+            case READY:
+                break;
+        }
+    }
 
-
+    // State Method for Multiple Feeding into fly wheels
+    public void feedStatesMultipleLoad() {
+        switch (multipleFeedState) {
+            case START_1:
+                decBot.feedArtifact(1.0);
+                timer.reset();
+                multipleFeedState = org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Workspaces.Andrew.TeleOp17241_Andrew.multipleFeedStates.PAUSE_1;
+                break;
+            case PAUSE_1:
+                if (timer.time() > 0.5) {
+                    multipleFeedState = org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Workspaces.Andrew.TeleOp17241_Andrew.multipleFeedStates.STOP_1;
+                }
+                break;
+            case STOP_1:
+                decBot.feedArtifact(0.0);
+                timer.reset();
+                multipleFeedState = org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Workspaces.Andrew.TeleOp17241_Andrew.multipleFeedStates.WAIT_1;
+                break;
+            case WAIT_1:
+                if (timer.time() > waitTime) {
+                    multipleFeedState = org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Workspaces.Andrew.TeleOp17241_Andrew.multipleFeedStates.START_2;
+                }
+                break;
+            case START_2:
+                decBot.feedArtifact(1.0);
+                timer.reset();
+                multipleFeedState = org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Workspaces.Andrew.TeleOp17241_Andrew.multipleFeedStates.PAUSE_2;
+                break;
+            case PAUSE_2:
+                if (timer.time() > 0.5) {
+                    multipleFeedState = org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Workspaces.Andrew.TeleOp17241_Andrew.multipleFeedStates.STOP_2;
+                }
+                break;
+            case STOP_2:
+                decBot.feedArtifact(0.0);
+                timer.reset();
+                multipleFeedState = org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Workspaces.Andrew.TeleOp17241_Andrew.multipleFeedStates.WAIT_2;
+                break;
+            case WAIT_2:
+                if (timer.time() > waitTime) {
+                    multipleFeedState = org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Workspaces.Andrew.TeleOp17241_Andrew.multipleFeedStates.START_3;
+                }
+                break;
+            case START_3:
+                decBot.feedArtifact(1.0);
+                timer.reset();
+                multipleFeedState = org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Workspaces.Andrew.TeleOp17241_Andrew.multipleFeedStates.PAUSE_3;
+                break;
+            case PAUSE_3:
+                if (timer.time() > 0.5) {
+                    multipleFeedState = org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Workspaces.Andrew.TeleOp17241_Andrew.multipleFeedStates.STOP_3;
+                }
+                break;
+            case STOP_3:
+                decBot.feedArtifact(0.0);
+                timer.reset();
+                multipleFeedState = org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Workspaces.Andrew.TeleOp17241_Andrew.multipleFeedStates.READY;
+                break;
+            case READY:
+                break;
+        }
+    }
 
 
 }
