@@ -10,8 +10,8 @@ import com.qualcomm.robotcore.util.Range;
 
 //Class is used for testing a single motor, using trigger for variable power.
 //WITHOUT
-@TeleOp(name = "two motor launcher test - RUN USING ENCODERS", group="twowheel")
-@Disabled
+@TeleOp(name = "two motor launcher test - RUN USING ENCODERS", group="Lab")
+
 public class TwoMotor_RunUsingEncoder extends OpMode {
     private DcMotorEx motor_left = null;
     private DcMotorEx motor_right = null;
@@ -33,11 +33,11 @@ public class TwoMotor_RunUsingEncoder extends OpMode {
     @Override
     public void init() {
 //        motor_left = hardwareMap.dcMotor.get("launcher_motor_1");
-        motor_left = hardwareMap.get(DcMotorEx.class, "launcher_motor_1");
-        motor_left.setDirection(DcMotorSimple.Direction.FORWARD);
+        motor_left = hardwareMap.get(DcMotorEx.class, "left_fly_wheel");
+        motor_left.setDirection(DcMotorSimple.Direction.REVERSE);
         motor_left.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         motor_left.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        motor_right = hardwareMap.get(DcMotorEx.class, "launcher_motor_2");
+        motor_right = hardwareMap.get(DcMotorEx.class, "right_fly_wheel");
         motor_right.setDirection(DcMotorSimple.Direction.FORWARD);
         motor_right.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         motor_right.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
