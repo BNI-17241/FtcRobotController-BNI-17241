@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.Range;
 
 @TeleOp(name = "single grabber arm", group = "LAB")
-
+@Disabled
 
 public class SingleServo_Callibrate extends OpMode {
 

@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.Range;
 
 @TeleOp(name = "TWO SERVO CALABRATE")
-
+@Disabled
 public class twoServo_Callibrate extends OpMode {
 
     private Servo grabberArmLeft = null;

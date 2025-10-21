@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 @TeleOp(name = "MotorSpeedControl")
-@Disabled
+
 public class MotorSpeedControl extends OpMode {
 
     //reset elepased time when press A
