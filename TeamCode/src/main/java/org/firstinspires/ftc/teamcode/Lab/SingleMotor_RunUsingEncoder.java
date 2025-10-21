@@ -16,7 +16,10 @@ public class SingleMotor_RunUsingEncoder extends OpMode {
     boolean forward = true;
     boolean toggleLaunch = false;
 
-    double velocity = 1540;
+    double velocity = 500;
+    double velocity_low = 200;
+    double velocity_med = 1200;
+    double velocity_high = 2300;
     double incValue = 1;
 
     @Override
@@ -36,34 +39,18 @@ public class SingleMotor_RunUsingEncoder extends OpMode {
 
     @Override
     public void loop() {
-        if (toggleLaunch && forward == true) {
-            motor_flywheel.setVelocity(-velocity);
 
-        }
-//        Make motor go reverse? Valid values of motors are [-1, +1]
-        if(toggleLaunch && forward == false){
-            motor_flywheel.setVelocity(+velocity);
-
+        if (gamepad1.a) {
+            velocity = velocity_low;
         }
 
-        if (gamepad1.a == true) {
-            toggleLaunch = true;
+        if(gamepad1.b){
+            velocity = velocity_med;
         }
 
-        if(gamepad1.b == true){
-            toggleLaunch = false;
-            motor_flywheel.setPower(0);
-
+        if(gamepad1.y){
+            velocity = velocity_high;
         }
-
-        if (gamepad1.dpad_up == true) {
-            forward = true;
-        }
-
-        if (gamepad1.dpad_down == true) {
-            forward = false;
-        }
-
 
         if (gamepad1.right_bumper) {
             velocity += incValue;
