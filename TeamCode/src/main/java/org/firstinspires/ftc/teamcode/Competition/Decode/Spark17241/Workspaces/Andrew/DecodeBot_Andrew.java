@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Workspaces.
 
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
@@ -20,6 +21,7 @@ public class DecodeBot_Andrew {
     public DcMotor leftFlyWheel;
     public DcMotor rightFlyWheel;
 
+    public CRServo intakeServo;
     public DcMotor feederWheel;
 
     public Pinpoint odo = new Pinpoint();
@@ -61,7 +63,8 @@ public class DecodeBot_Andrew {
         //feeders
         feederWheel = hwBot.dcMotor.get("feeder_wheel");//Port ex 2
 
-
+        //Servos
+        intakeServo = hwBot.crservo.get("intake_servo");//Port Ex 5
         //encoders / odo
 //        leftEncoder = hwBot.dcMotor.get("left_encoder");
 //        rightEncoder = hwBot.dcMotor.get("right_encoder");
@@ -108,6 +111,11 @@ public class DecodeBot_Andrew {
         // Adjust the orientation parameters to match your robot
         imu.initialize(new IMU.Parameters(orientationOnRobot));
 
+    }
+
+    public void runBelt(double power)
+    {
+        intakeServo.setPower(power);
     }
 
     public void flylaunch(boolean isOn, double speed){

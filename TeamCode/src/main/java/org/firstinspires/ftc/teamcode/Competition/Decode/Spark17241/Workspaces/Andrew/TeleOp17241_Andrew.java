@@ -30,7 +30,7 @@ public class TeleOp17241_Andrew extends OpMode {
     public double angle;
     public double angleNormalized;
 
-    public double waitTime = .5;
+
 
 
     // Machine State Variables, Timers & Enums for Control of Feeder
@@ -91,7 +91,6 @@ public class TeleOp17241_Andrew extends OpMode {
         //Launching Controls
         flyWheelControl();
         flyEncoderData();
-        waitControl();
         feedStateController();
         feedStatesSingleLoad();
         feedStatesMultipleLoad();
@@ -169,7 +168,6 @@ public class TeleOp17241_Andrew extends OpMode {
         telemetry.addData("Multiple Feed State: ", multipleFeedState);
         telemetry.addData("Left Fly Wheel: ", decBot.leftFlyWheel.getPower());
         telemetry.addData("Right Fly Wheel: ", decBot.rightFlyWheel.getPower());
-        telemetry.addData("Feeder stop time: ", waitTime);
         telemetry.addData("Left Flywheel Pos: ", flyPos);
         telemetry.update();
     }
@@ -194,6 +192,17 @@ public class TeleOp17241_Andrew extends OpMode {
     }
 
 
+
+
+    //***************Run 360 Servo********************
+
+    public void beltControl()
+    {
+        if(gamepad1.dpad_up)
+        {
+            decBot.runBelt(1);
+        }
+    }
 
 
 
@@ -221,17 +230,7 @@ public class TeleOp17241_Andrew extends OpMode {
         }*/
     }
 
-    public void waitControl() {
 
-        if (gamepad1.dpad_left) {
-            waitTime = .25;
-        } else if (gamepad1.dpad_down) {
-            waitTime = .5;
-        } else if (gamepad1.dpad_right) {
-            waitTime = .75;
-        }
-
-    }
 
 
     // Feed Controller using States
@@ -252,7 +251,7 @@ public class TeleOp17241_Andrew extends OpMode {
                 singleFeedState = org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Workspaces.Andrew.TeleOp17241_Andrew.singleFeedStates.PAUSE;
                 break;
             case PAUSE:
-                if (timer.time() > waitTime) {
+                if (timer.time() > 0.3) {
                     singleFeedState = org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Workspaces.Andrew.TeleOp17241_Andrew.singleFeedStates.STOP;
                 }
                 break;
@@ -274,7 +273,7 @@ public class TeleOp17241_Andrew extends OpMode {
                 multipleFeedState = org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Workspaces.Andrew.TeleOp17241_Andrew.multipleFeedStates.PAUSE_1;
                 break;
             case PAUSE_1:
-                if (timer.time() > 0.5) {
+                if (timer.time() > 0.3) {
                     multipleFeedState = org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Workspaces.Andrew.TeleOp17241_Andrew.multipleFeedStates.STOP_1;
                 }
                 break;
@@ -284,7 +283,7 @@ public class TeleOp17241_Andrew extends OpMode {
                 multipleFeedState = org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Workspaces.Andrew.TeleOp17241_Andrew.multipleFeedStates.WAIT_1;
                 break;
             case WAIT_1:
-                if (timer.time() > waitTime) {
+                if (timer.time() > .5) {
                     multipleFeedState = org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Workspaces.Andrew.TeleOp17241_Andrew.multipleFeedStates.START_2;
                 }
                 break;
@@ -294,7 +293,7 @@ public class TeleOp17241_Andrew extends OpMode {
                 multipleFeedState = org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Workspaces.Andrew.TeleOp17241_Andrew.multipleFeedStates.PAUSE_2;
                 break;
             case PAUSE_2:
-                if (timer.time() > 0.5) {
+                if (timer.time() > 0.3) {
                     multipleFeedState = org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Workspaces.Andrew.TeleOp17241_Andrew.multipleFeedStates.STOP_2;
                 }
                 break;
@@ -304,7 +303,7 @@ public class TeleOp17241_Andrew extends OpMode {
                 multipleFeedState = org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Workspaces.Andrew.TeleOp17241_Andrew.multipleFeedStates.WAIT_2;
                 break;
             case WAIT_2:
-                if (timer.time() > waitTime) {
+                if (timer.time() > 0.5) {
                     multipleFeedState = org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Workspaces.Andrew.TeleOp17241_Andrew.multipleFeedStates.START_3;
                 }
                 break;
@@ -314,7 +313,7 @@ public class TeleOp17241_Andrew extends OpMode {
                 multipleFeedState = org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Workspaces.Andrew.TeleOp17241_Andrew.multipleFeedStates.PAUSE_3;
                 break;
             case PAUSE_3:
-                if (timer.time() > 0.5) {
+                if (timer.time() > 0.3) {
                     multipleFeedState = org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Workspaces.Andrew.TeleOp17241_Andrew.multipleFeedStates.STOP_3;
                 }
                 break;
