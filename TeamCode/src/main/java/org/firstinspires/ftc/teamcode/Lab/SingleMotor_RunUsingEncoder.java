@@ -11,16 +11,14 @@ import com.qualcomm.robotcore.util.Range;
 @TeleOp(name = "Single Motor Velocity Tester", group="Lab")
 
 public class SingleMotor_RunUsingEncoder extends OpMode {
-    private DcMotorEx motor_flywheel = null;
 
-    boolean forward = true;
-    boolean toggleLaunch = false;
+    public DcMotorEx motor_flywheel = null;
 
-    double velocity = 500;
-    double velocity_low = 200;
-    double velocity_med = 1200;
-    double velocity_high = 2300;
-    double incValue = 1;
+    public double velocity = 500;
+    public double velocity_low = 200;
+    public double velocity_med = 1200;
+    public double velocity_high = 2300;
+    public double incValue = 1;
 
     @Override
     public void init() {
@@ -28,12 +26,6 @@ public class SingleMotor_RunUsingEncoder extends OpMode {
         motor_flywheel.setDirection(DcMotorSimple.Direction.REVERSE);
         motor_flywheel.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         motor_flywheel.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
-        forward = true;
-
-        telemetry.addLine("dpad = motor direction; mode; a=start; b=stop; triggers = speed ");
-
-        telemetry.update();
     }
 
 
@@ -77,9 +69,4 @@ public class SingleMotor_RunUsingEncoder extends OpMode {
 
     }
 
-    public void encode () {
-        motor_flywheel.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
-
-    }
 }
