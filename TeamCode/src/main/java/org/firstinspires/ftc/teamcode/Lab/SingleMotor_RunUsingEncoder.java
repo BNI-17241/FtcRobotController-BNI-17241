@@ -61,7 +61,7 @@ public class SingleMotor_RunUsingEncoder extends OpMode {
         }
 
         velocity = Range.clip(velocity, 0, 5000);
-
+        motor_flywheel.setVelocity(velocity);
         update_telemetry();
     }
 
