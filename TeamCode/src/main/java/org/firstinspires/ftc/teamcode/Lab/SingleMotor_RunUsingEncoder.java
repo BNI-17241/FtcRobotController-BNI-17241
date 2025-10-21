@@ -66,8 +66,6 @@ public class SingleMotor_RunUsingEncoder extends OpMode {
     }
 
     public void update_telemetry () {
-        telemetry.addLine("dpad = motor direction; mode; a=start; b=stop; bumpers = speed ");
-        telemetry.addData("Forward mode? ", forward);
         telemetry.addData("left motor power: ", motor_flywheel.getPower());
         telemetry.addData("left motor velocity: ", motor_flywheel.getVelocity());
         telemetry.addData("left motor encoders: ", motor_flywheel.getCurrentPosition());
