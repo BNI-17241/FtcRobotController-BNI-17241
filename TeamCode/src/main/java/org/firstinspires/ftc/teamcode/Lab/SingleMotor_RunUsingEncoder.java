@@ -52,6 +52,10 @@ public class SingleMotor_RunUsingEncoder extends OpMode {
             velocity = velocity_high;
         }
 
+        if(gamepad1.x){
+            velocity = 0;
+        }
+
         if (gamepad1.right_bumper) {
             velocity += incValue;
         }
