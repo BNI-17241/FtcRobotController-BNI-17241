@@ -89,6 +89,7 @@ public class TeleOp17241_Andrew extends OpMode {
         speedControl();
         robotCentricDrive();
         //Launching Controls
+        beltControl();
         flyWheelControl();
         flyEncoderData();
         feedStateController();
