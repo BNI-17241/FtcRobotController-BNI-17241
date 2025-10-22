@@ -15,7 +15,7 @@ public class LauncherOpModePDIF extends OpMode {
     DcMotorEx launcherLeft = null;
     DcMotorEx launcherRight = null;
     DcMotorEx feederWheel = null;
-    public double targetVelocity = 0;
+    public double targetVelocity = 1000;
 
     // Optional: set PIDF coefficients for velocity control (per motor)
     double kP = 0.18;
@@ -78,7 +78,7 @@ public class LauncherOpModePDIF extends OpMode {
         if (gamepad2.x) targetVelocity = 0;
 
         // Fine adjust
-        if (gamepad2.dpad_up)   targetVelocity += 1;
+        if (gamepad2.dpad_up) targetVelocity += 1;
         if (gamepad2.dpad_down) targetVelocity -= 1;
 
         // Keep nominalTarget synced unless we’re in a boost
@@ -91,13 +91,13 @@ public class LauncherOpModePDIF extends OpMode {
         launcherRight.setVelocity(targetVelocity);
 
         // ===== Read velocities & gate =====
-        double vL = launcherLeft.getVelocity();
-        double vR = launcherRight.getVelocity();
+        double currentVelocityLeft = launcherLeft.getVelocity();
+        double currentVelocityRight = launcherRight.getVelocity();
 
-        double tol = Math.max(10.0, Math.abs(nominalTarget) * gatePercent); // floor to 10 tps
-        boolean leftInGate  = Math.abs(vL - nominalTarget) <= tol;
-        boolean rightInGate = Math.abs(vR - nominalTarget) <= tol;
-        boolean inGate = leftInGate && rightInGate;
+        double tolerance = Math.max(10.0, Math.abs(nominalTarget) * gatePercent); // floor to 10 ticks per secibd
+        boolean leftInGateStatus  = Math.abs(currentVelocityLeft - nominalTarget) <= tolerance;
+        boolean rightInGateStatus = Math.abs(currentVelocityRight - nominalTarget) <= tolerance;
+        boolean inGate = leftInGateStatus && rightInGateStatus;
 
         // ===== Shot request (rising edge on RB) =====
         boolean rb = gamepad2.right_bumper;
@@ -154,10 +154,10 @@ public class LauncherOpModePDIF extends OpMode {
         telemetry.addData("Target (nominal velocity)", nominalTarget);
         telemetry.addData("Target (cmd velocity)", targetVelocity);
         telemetry.addData("Gate Tolerance ±%", gatePercent * 100.0);
-        telemetry.addData("Tolerance (ticks per sec)", tol);
-        telemetry.addData("Left Fly Wheel velocity", vL);
-        telemetry.addData("Right Fly Wheel velocity", vR);
-        telemetry.addData("Left|Right inGate Status", "%b | %b", leftInGate, rightInGate);
+        telemetry.addData("Tolerance (ticks per sec)", tolerance);
+        telemetry.addData("Left Fly Wheel velocity", currentVelocityLeft);
+        telemetry.addData("Right Fly Wheel velocity", currentVelocityRight);
+        telemetry.addData("Left|Right inGate Status", "%b | %b", leftInGateStatus, rightInGateStatus);
         telemetry.addData("Feeder Wheel Power", feederWheel.getPower());
         telemetry.update();
     }
