@@ -14,15 +14,15 @@ public class SingleMotor_RunUsingEncoder extends OpMode {
 
     public DcMotorEx motor_flywheel = null;
 
-    public double velocity = 500;
-    public double velocity_low = 200;
-    public double velocity_med = 1200;
-    public double velocity_high = 2300;
-    public double incValue = 1;
+    public double velocity = -500;
+    public double velocity_low = -200;
+    public double velocity_med = -1200;
+    public double velocity_high = -2300;
+    public double incValue = -1;
 
     @Override
     public void init() {
-        motor_flywheel = hardwareMap.get(DcMotorEx.class, "fly_wheel");
+        motor_flywheel = hardwareMap.get(DcMotorEx.class, "left_fly_wheel");
         motor_flywheel.setDirection(DcMotorSimple.Direction.REVERSE);
         motor_flywheel.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         motor_flywheel.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -56,7 +56,7 @@ public class SingleMotor_RunUsingEncoder extends OpMode {
             velocity -= incValue;
         }
 
-        velocity = Range.clip(velocity, 0, 5000);
+        //velocity = Range.clip(velocity, 0, 5000);
         motor_flywheel.setVelocity(velocity);
         update_telemetry();
     }

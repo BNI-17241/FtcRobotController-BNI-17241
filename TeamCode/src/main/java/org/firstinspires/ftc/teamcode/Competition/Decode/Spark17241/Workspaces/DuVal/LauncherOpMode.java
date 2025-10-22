@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 
-@TeleOp(name = "DuVal Launcher", group = "Lab")
+@TeleOp(name = "Two Motor Launcher Tester", group = "Lab")
 
 
 public class LauncherOpMode extends OpMode {
@@ -19,24 +19,21 @@ public class LauncherOpMode extends OpMode {
     public double targetVelocity = 0;
 
 
-
-
-
     @Override
     public void init() {
+
+        // Initiatialize Hardware
         launcherLeft = hardwareMap.get(DcMotorEx.class, "left_fly_wheel");
         launcherRight = hardwareMap.get(DcMotorEx.class, "right_fly_wheel");
         feederWheel = hardwareMap.get(DcMotorEx.class,"feeder_wheel");//Port ex 2
 
 
-        // Reverse one motor if needed
-        launcherLeft.setDirection(DcMotor.Direction.REVERSE);
-        launcherRight.setDirection(DcMotor.Direction.FORWARD);
+        // Programmatically Reverse one motor if needed
+        launcherLeft.setDirection(DcMotorSimple.Direction.FORWARD);
+        launcherRight.setDirection(DcMotorSimple.Direction.REVERSE);
 
 
         // Set to run using encoder
-//        launcherLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-//        launcherRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         launcherLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         launcherRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         launcherLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -44,33 +41,29 @@ public class LauncherOpMode extends OpMode {
 
 
         // Optional: set PIDF coefficients for velocity control (per motor)
-//        PIDFCoefficients pidf = new PIDFCoefficients(50.0, 0.0, 0.0, 12.0); // Example values
-//        launcherLeft.setVelocityPIDFCoefficients(pidf.p, pidf.i, pidf.d, pidf.f);
-//        launcherRight.setVelocityPIDFCoefficients(pidf.p, pidf.i, pidf.d, pidf.f);
-
-//        targetVelocity = 2000; // Example value, tune based on motor and gear ratio
+        PIDFCoefficients pidf = new PIDFCoefficients(90.0, 0.20, 0.20, 12.0); // Example values
+        targetVelocity = 800; // Example value, tune based on motor and gear ratio
 
     }
 
     @Override
     public void loop() {
         if (gamepad2.a) {
-            targetVelocity = 1000;
-            launcherLeft.setVelocity(targetVelocity);
-            launcherRight.setVelocity(targetVelocity);
+            targetVelocity = 1200;
         }
 
         if (gamepad2.b) {
-            launcherLeft.setPower(0);
-            launcherRight.setPower(0);
+            targetVelocity = 1600;
         }
 
-        if (gamepad2.right_bumper) {
-            feederWheel.setPower(1);
+        if (gamepad2.y) {
+            targetVelocity = 2000;
         }
-        if (gamepad2.left_bumper) {
-            feederWheel.setPower(0);
+
+        if (gamepad2.x) {
+            targetVelocity = 0;
         }
+
 
         if (gamepad2.dpad_up) {
             targetVelocity += 1;
@@ -79,8 +72,13 @@ public class LauncherOpMode extends OpMode {
             targetVelocity -= 1;
         }
 
-//        launcherLeft.setVelocity(targetVelocity);
-//        launcherRight.setVelocity(targetVelocity);
+        // USE WITH 100% Proportional Velocity, No PDIF
+        launcherLeft.setVelocity(targetVelocity);
+        launcherRight.setVelocity(targetVelocity);
+
+        // USE WITH PDIF Velocity Coefficients
+        // launcherLeft.setVelocityPIDFCoefficients(pidf.p, pidf.i, pidf.d, pidf.f);
+        // launcherRight.setVelocityPIDFCoefficients(pidf.p, pidf.i, pidf.d, pidf.f);
 
         telemetry.addData("Velocity", targetVelocity);
         telemetry.addData("MotorLeft", launcherLeft.getVelocity());

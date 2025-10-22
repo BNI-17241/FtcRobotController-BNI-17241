@@ -10,6 +10,7 @@ import com.qualcomm.robotcore.util.Range;
 
 //Class is used for testing a single motor, using trigger for variable power.
 //WITHOUT
+@Disabled
 @TeleOp(name = "two motor launcher test - RUN USING ENCODERS", group="Lab")
 
 public class TwoMotor_RunUsingEncoder extends OpMode {
