@@ -150,15 +150,15 @@ public class LauncherOpModePDIF extends OpMode {
         }
 
         // ===== Telemetry =====
-        telemetry.addData("Launch State", state);
+        telemetry.addData("Launching State", state);
         telemetry.addData("Target (nominal velocity)", nominalTarget);
         telemetry.addData("Target (cmd velocity)", targetVelocity);
         telemetry.addData("Gate Tolerance ±%", gatePercent * 100.0);
-        telemetry.addData("Tol (tps)", tol);
+        telemetry.addData("Tolerance (ticks per sec)", tol);
         telemetry.addData("Left Fly Wheel velocity", vL);
         telemetry.addData("Right Fly Wheel velocity", vR);
-        telemetry.addData("Left|Right inGate", "%b | %b", leftInGate, rightInGate);
-        telemetry.addData("Feeder power", feederWheel.getPower());
+        telemetry.addData("Left|Right inGate Status", "%b | %b", leftInGate, rightInGate);
+        telemetry.addData("Feeder Wheel Power", feederWheel.getPower());
         telemetry.update();
     }
 }
