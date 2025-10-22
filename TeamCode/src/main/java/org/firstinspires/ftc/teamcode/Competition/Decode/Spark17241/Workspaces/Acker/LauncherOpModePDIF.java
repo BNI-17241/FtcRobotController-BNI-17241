@@ -15,7 +15,7 @@ public class LauncherOpModePDIF extends OpMode {
     DcMotorEx launcherLeft = null;
     DcMotorEx launcherRight = null;
     DcMotorEx feederWheel = null;
-    public double targetVelocity = 1000;
+    public double targetVelocity = 0;
 
     // Optional: set PIDF coefficients for velocity control (per motor)
     double kP = 0.18;
@@ -72,8 +72,8 @@ public class LauncherOpModePDIF extends OpMode {
     @Override
     public void loop() {
         // ===== Target presets =====
-        if (gamepad2.a) targetVelocity = 1200;
-        if (gamepad2.b) targetVelocity = 1600;
+        if (gamepad2.a) targetVelocity = 500;
+        if (gamepad2.b) targetVelocity = 1000;
         if (gamepad2.y) targetVelocity = 2000;
         if (gamepad2.x) targetVelocity = 0;
 
