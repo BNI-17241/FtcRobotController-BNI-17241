@@ -239,8 +239,12 @@ public class TeleOp17241_Andrew extends OpMode {
         if (gamepad1.left_trigger > 0.5) {
             singleFeedState = org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Workspaces.Andrew.TeleOp17241_Andrew.singleFeedStates.START;
         } else if (gamepad1.right_trigger > 0.5) {
-            multipleFeedState = org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Workspaces.Andrew.TeleOp17241_Andrew.multipleFeedStates.START_1;
+            decBot.feedArtifact(-1.0);
         }
+
+        /*else if (gamepad1.right_trigger > 0.5) {
+            multipleFeedState = org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Workspaces.Andrew.TeleOp17241_Andrew.multipleFeedStates.START_1;
+        }*/
     }
 
     // State Method for Single Feeding into fly wheels
