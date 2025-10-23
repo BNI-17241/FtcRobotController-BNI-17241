@@ -118,16 +118,9 @@ public class DecodeBot_Andrew {
         intakeServo.setPower(power);
     }
 
-    public void flylaunch(boolean isOn, double speed){
-        if (isOn == true){
-            leftFlyWheel.setPower(speed);
-            rightFlyWheel.setPower(speed);
-        }
-            else{
-            leftFlyWheel.setPower(0);
-            rightFlyWheel.setPower(0);
-        }
-
+    public void flylaunch(double speed){
+        leftFlyWheel.setPower(speed);
+        rightFlyWheel.setPower(speed);
     }
     public void feedArtifact(double speed){
 

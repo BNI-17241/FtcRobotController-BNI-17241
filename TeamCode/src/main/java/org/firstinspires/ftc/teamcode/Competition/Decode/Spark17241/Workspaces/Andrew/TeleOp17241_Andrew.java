@@ -24,6 +24,13 @@ public class TeleOp17241_Andrew extends OpMode {
     public double speedMultiply = 0.75;
 
 
+
+    // Flywheel & Feed Variables
+    public double targetVelocity = 1600;
+    public double feedingDuration = 0.4;
+    public double feedingDurationLong = 0.7;
+
+
     public int flyPos;
     public double motorRevolutions;
 
@@ -91,7 +98,7 @@ public class TeleOp17241_Andrew extends OpMode {
         //Launching Controls
         beltControl();
         flyWheelControl();
-        flyEncoderData();
+        //flyEncoderData();
         feedStateController();
         feedStatesSingleLoad();
         feedStatesMultipleLoad();
@@ -175,7 +182,7 @@ public class TeleOp17241_Andrew extends OpMode {
 
     // ***** Helper Method for Speed Control
     public void speedControl() {
-        if (gamepad1.dpad_up) {
+        /*if (gamepad1.dpad_up) {
             speedMultiply = 0.5;
         } else if (gamepad1.dpad_right) {
             speedMultiply = 0.75;
@@ -183,7 +190,8 @@ public class TeleOp17241_Andrew extends OpMode {
             speedMultiply = 0.25;
         } else if (gamepad1.dpad_left) {
             speedMultiply = 1;
-        }
+        }*/
+        speedMultiply = .75;
     }
 
     //****************** Flywheel Encoder Data ****************
@@ -213,22 +221,14 @@ public class TeleOp17241_Andrew extends OpMode {
 
     public void flyWheelControl() {
 
-        /*if (gamepad1.x) {
-            decBot.flylaunch(true, .2);
-        } else if (gamepad1.a) {
-            decBot.flylaunch(true, .4);
-        } else if (gamepad1.b) {
-            decBot.flylaunch(true, .6);
-        }
+        if (gamepad2.x) { targetVelocity = 800; }
+        if (gamepad2.a) { targetVelocity = 1200; }
+        if (gamepad2.b) { targetVelocity = 1600; }
+        if (gamepad2.dpad_up) targetVelocity += 1;
+        if (gamepad2.dpad_down) targetVelocity -= 1;
+        if (gamepad2.right_bumper) { targetVelocity = 0; }
 
-        if (gamepad1.right_bumper) {
-            decBot.flylaunch(false, 0);
-        }*/
-
-        /*if(gamepad1.x)
-        {
-            decBot.leftFlyWheel.setVelocity(200):
-        }*/
+        decBot.flylaunch(targetVelocity);
     }
 
 
