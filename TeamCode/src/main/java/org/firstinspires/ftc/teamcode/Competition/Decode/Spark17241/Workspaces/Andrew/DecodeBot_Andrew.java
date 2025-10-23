@@ -26,6 +26,8 @@ public class DecodeBot_Andrew {
 
     public CRServo intakeServo;
 
+    public CRServo LED;
+
     public Pinpoint odo = new Pinpoint();
 
 
@@ -110,6 +112,13 @@ public class DecodeBot_Andrew {
     public void runBelt(double power)
     {
         intakeServo.setPower(power);
+    }
+
+    public void LEDCon(int color)
+    {
+        float n = new float[]{0, .279f, .333f, .388f, .5f, .611f, .722f}[color];
+        LED.setPower(n);
+
     }
 
     public void flylaunch(double velocity){

@@ -102,6 +102,8 @@ public class TeleOp17241_Andrew extends OpMode {
         feedStateController();
         feedStatesSingleLoad();
         feedStatesMultipleLoad();
+        //LED
+        LEDDriver();
         // Helper Controls
         telemetryOutput();
     }
@@ -200,7 +202,11 @@ public class TeleOp17241_Andrew extends OpMode {
         flyPos = decBot.leftFlyWheel.getCurrentPosition();
     }
 
-
+    //*****************LED Control**********************
+    public void LEDDriver()
+    {
+        decBot.LEDCon(1);
+    }
 
 
     //***************Run 360 Servo********************
