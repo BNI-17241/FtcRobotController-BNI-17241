@@ -163,6 +163,7 @@ public class TeleOp17241_States_Velocity extends OpMode {
     public void telemetryOutput() {
         telemetry.addData("Single Feed State: ", singleFeedState);
         telemetry.addData("Multiple Feed State: ", multipleFeedState);
+        telemetry.addData("Target Velocity: ", targetVelocity);
         telemetry.addData("Left Fly Wheel Velocity: ", decBot.leftFlyWheel.getVelocity());
         telemetry.addData("Right Fly Wheel Velocity: ", decBot.rightFlyWheel.getVelocity());
         telemetry.update();
