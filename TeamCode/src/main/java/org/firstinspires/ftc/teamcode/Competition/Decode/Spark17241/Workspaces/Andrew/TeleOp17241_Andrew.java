@@ -174,9 +174,9 @@ public class TeleOp17241_Andrew extends OpMode {
     public void telemetryOutput() {
         telemetry.addData("Single Feed State: ", singleFeedState);
         telemetry.addData("Multiple Feed State: ", multipleFeedState);
-        telemetry.addData("Left Fly Wheel: ", decBot.leftFlyWheel.getPower());
-        telemetry.addData("Right Fly Wheel: ", decBot.rightFlyWheel.getPower());
-        telemetry.addData("Left Flywheel Pos: ", flyPos);
+        telemetry.addData("Target Velocity: ", targetVelocity);
+        telemetry.addData("Left Fly Wheel Velocity: ", decBot.leftFlyWheel.getVelocity());
+        telemetry.addData("Right Fly Wheel Velocity: ", decBot.rightFlyWheel.getVelocity());
         telemetry.update();
     }
 
@@ -221,9 +221,9 @@ public class TeleOp17241_Andrew extends OpMode {
 
     public void flyWheelControl() {
 
-        if (gamepad2.x) { targetVelocity = 800; }
-        if (gamepad2.a) { targetVelocity = 1200; }
-        if (gamepad2.b) { targetVelocity = 1600; }
+        if (gamepad2.x) { targetVelocity = 1000; }
+        if (gamepad2.a) { targetVelocity = 1100; }
+        if (gamepad2.b) { targetVelocity = 1254; }
         if (gamepad2.dpad_up) targetVelocity += 1;
         if (gamepad2.dpad_down) targetVelocity -= 1;
         if (gamepad2.right_bumper) { targetVelocity = 0; }

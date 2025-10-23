@@ -30,7 +30,7 @@ public class TeleOp17241_States_Velocity extends OpMode {
     public double speedMultiply = 0.75;
 
     // Flywheel & Feed Variables
-    public double targetVelocity = 1600;
+    public double targetVelocity = 1100;
     public double feedingDuration = 0.4;
     public double feedingDurationLong = 0.7;
 
