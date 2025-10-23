@@ -31,7 +31,8 @@ public class TeleOp17241_States_Velocity extends OpMode {
 
     // Flywheel & Feed Variables
     public double targetVelocity = 1600;
-    public double feedingDuration = 0.3;
+    public double feedingDuration = 0.4;
+    public double feedingDurationLong = 0.7;
 
     // Machine State Variables, Timers & Enums for Control of Feeder
 
@@ -257,7 +258,7 @@ public class TeleOp17241_States_Velocity extends OpMode {
                 multipleFeedState = multipleFeedStates.PAUSE_2;
                 break;
             case PAUSE_2:
-                if (timer.time() >feedingDuration) {
+                if (timer.time() >feedingDurationLong) {
                     multipleFeedState = multipleFeedStates.STOP_2;
                 }
                 break;
@@ -277,7 +278,7 @@ public class TeleOp17241_States_Velocity extends OpMode {
                 multipleFeedState = multipleFeedStates.PAUSE_3;
                 break;
             case PAUSE_3:
-                if (timer.time() > feedingDuration) {
+                if (timer.time() > feedingDurationLong) {
                     multipleFeedState = multipleFeedStates.STOP_3;
                 }
                 break;
