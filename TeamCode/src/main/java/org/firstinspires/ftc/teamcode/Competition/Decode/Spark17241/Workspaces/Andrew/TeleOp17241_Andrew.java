@@ -236,11 +236,13 @@ public class TeleOp17241_Andrew extends OpMode {
 
     // Feed Controller using States
     public void feedStateController() {
-        if (gamepad1.left_trigger > 0.5) {
+        if (gamepad2.left_trigger > 0.5) {
             decBot.feedArtifact(1.0);
             //singleFeedState = org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Workspaces.Andrew.TeleOp17241_Andrew.singleFeedStates.START;
-        } else if (gamepad1.right_trigger > 0.5) {
+        } else if (gamepad2.right_trigger > 0.5) {
             decBot.feedArtifact(-1.0);
+        } else {
+            decBot.feedArtifact(0);
         }
 
         /*else if (gamepad1.right_trigger > 0.5) {
