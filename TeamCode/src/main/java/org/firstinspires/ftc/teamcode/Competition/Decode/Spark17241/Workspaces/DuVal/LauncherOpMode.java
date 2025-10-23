@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 
-@TeleOp(name = "Two Motor Launcher Tester", group = "Lab")
+@TeleOp(name = "Tester: Two Motor Velocity", group = "Lab")
 
 
 public class LauncherOpMode extends OpMode {

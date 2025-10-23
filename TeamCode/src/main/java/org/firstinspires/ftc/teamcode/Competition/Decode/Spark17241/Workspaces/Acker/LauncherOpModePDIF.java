@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-@TeleOp(name = "Launcher Velocity Gate Tester", group = "Lab")
+@TeleOp(name = "Tester: Velocity with Gate", group = "Lab")
 
 
 public class LauncherOpModePDIF extends OpMode {
@@ -28,7 +28,7 @@ public class LauncherOpModePDIF extends OpMode {
 
     // Feed action
     double feederPower = 1.0;             // power for feeder wheel (0..1)
-    long   feedMs = 180;                  // how long to run feeder
+    long   feedMs = 700;                  // how long to run feeder
 
     // Shot-drop compensation (temporary target bump while feeding)
     double boostFactor = 1.02;            // +2% target during feed

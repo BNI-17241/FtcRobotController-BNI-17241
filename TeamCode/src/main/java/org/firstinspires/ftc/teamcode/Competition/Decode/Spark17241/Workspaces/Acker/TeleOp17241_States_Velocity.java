@@ -11,10 +11,11 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
+
 import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Robots.DecodeBot;
 
-@TeleOp(name = "DecodeBot Acker:Power", group = "Drive")
-public class TeleOp17241_States extends OpMode {
+@TeleOp(name = "DecodeBot Acker:Velocity", group = "Drive")
+public class TeleOp17241_States_Velocity extends OpMode {
     public double leftStickYVal;
     public double leftStickXVal;
     public double rightStickYVal;
@@ -68,7 +69,7 @@ public class TeleOp17241_States extends OpMode {
     public int currentProfile = PROFILE_1;
 
     // Robot Constructor
-    public DecodeBot decBot = new DecodeBot();
+    public DecodeBot_Acker decBot = new DecodeBot_Acker();
 
     // Initialization Method for Hardware
     @Override
