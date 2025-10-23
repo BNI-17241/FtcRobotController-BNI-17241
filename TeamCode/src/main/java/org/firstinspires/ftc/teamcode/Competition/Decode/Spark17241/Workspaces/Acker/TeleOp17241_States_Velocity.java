@@ -29,6 +29,8 @@ public class TeleOp17241_States_Velocity extends OpMode {
     public double powerThreshold;
     public double speedMultiply = 0.75;
 
+    public double targetVelocity = 1600;
+
 
     // Machine State Variables, Timers & Enums for Control of Feeder
 
@@ -160,8 +162,8 @@ public class TeleOp17241_States_Velocity extends OpMode {
     public void telemetryOutput() {
         telemetry.addData("Single Feed State: ", singleFeedState);
         telemetry.addData("Multiple Feed State: ", multipleFeedState);
-        telemetry.addData("Left Fly Wheel: ", decBot.leftFlyWheel.getPower());
-        telemetry.addData("Right Fly Wheel: ", decBot.rightFlyWheel.getPower());
+        telemetry.addData("Left Fly Wheel Velocity: ", decBot.leftFlyWheel.getVelocity());
+        telemetry.addData("Right Fly Wheel Velocity: ", decBot.rightFlyWheel.getVelocity());
         telemetry.update();
     }
     // ***** Helper Method for Speed Control
@@ -178,32 +180,24 @@ public class TeleOp17241_States_Velocity extends OpMode {
     }
 
 
-    //************ Control surface interfaces******************
-
+    //************ Controls for Launching *****************
 
     public void flyWheelControl(){
 
-        if(gamepad1.x){
-            decBot.flylaunch(true, .2);
-        }
-        else if(gamepad1.a){
-            decBot.flylaunch(true, .4);
-        }
-        else if(gamepad1.b){
-            decBot.flylaunch(true, .6);
-        }
+        if (gamepad2.x) { targetVelocity = 800; }
+        if (gamepad2.a) { targetVelocity = 1200; }
+        if (gamepad2.b) { targetVelocity = 1600; }
+        if (gamepad2.right_bumper) { targetVelocity = 0; }
 
-        if(gamepad1.right_bumper){
-            decBot.flylaunch(false, 0);}
+        decBot.flylaunch(targetVelocity);
     }
-
 
     // Feed Controller using States
     public void feedStateController() {
-        if (gamepad1.left_trigger > 0.5) {
+        if (gamepad2.left_trigger > 0.5) {
             singleFeedState = singleFeedStates.START;
         }
-        else if (gamepad1.right_trigger > 0.5)  {
+        else if (gamepad2.right_trigger > 0.5)  {
             multipleFeedState = multipleFeedStates.START_1;
         }
     }
