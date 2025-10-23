@@ -29,8 +29,9 @@ public class TeleOp17241_States_Velocity extends OpMode {
     public double powerThreshold;
     public double speedMultiply = 0.75;
 
+    // Flywheel & Feed Variables
     public double targetVelocity = 1600;
-
+    public double feedingDuration = 0.3;
 
     // Machine State Variables, Timers & Enums for Control of Feeder
 
@@ -187,6 +188,8 @@ public class TeleOp17241_States_Velocity extends OpMode {
         if (gamepad2.x) { targetVelocity = 800; }
         if (gamepad2.a) { targetVelocity = 1200; }
         if (gamepad2.b) { targetVelocity = 1600; }
+        if (gamepad2.dpad_up) targetVelocity += 1;
+        if (gamepad2.dpad_down) targetVelocity -= 1;
         if (gamepad2.right_bumper) { targetVelocity = 0; }
 
         decBot.flylaunch(targetVelocity);
@@ -211,7 +214,7 @@ public class TeleOp17241_States_Velocity extends OpMode {
                 singleFeedState = singleFeedStates.PAUSE;
                 break;
             case PAUSE:
-                if (timer.time() > 0.3) {
+                if (timer.time() > feedingDuration) {
                     singleFeedState = singleFeedStates.STOP;
                 }
                 break;
@@ -233,7 +236,7 @@ public class TeleOp17241_States_Velocity extends OpMode {
                 multipleFeedState = multipleFeedStates.PAUSE_1;
                 break;
             case PAUSE_1:
-                if (timer.time() > 0.3) {
+                if (timer.time() > feedingDuration) {
                     multipleFeedState = multipleFeedStates.STOP_1;
                 }
                 break;
@@ -253,7 +256,7 @@ public class TeleOp17241_States_Velocity extends OpMode {
                 multipleFeedState = multipleFeedStates.PAUSE_2;
                 break;
             case PAUSE_2:
-                if (timer.time() > 0.3) {
+                if (timer.time() >feedingDuration) {
                     multipleFeedState = multipleFeedStates.STOP_2;
                 }
                 break;
@@ -273,7 +276,7 @@ public class TeleOp17241_States_Velocity extends OpMode {
                 multipleFeedState = multipleFeedStates.PAUSE_3;
                 break;
             case PAUSE_3:
-                if (timer.time() > 0.3) {
+                if (timer.time() > feedingDuration) {
                     multipleFeedState = multipleFeedStates.STOP_3;
                 }
                 break;
