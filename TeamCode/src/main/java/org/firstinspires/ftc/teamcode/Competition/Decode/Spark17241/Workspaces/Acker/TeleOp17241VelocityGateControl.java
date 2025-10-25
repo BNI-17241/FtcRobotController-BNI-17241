@@ -162,7 +162,7 @@ public class TeleOp17241VelocityGateControl extends OpMode {
         if (gamepad2.x) { targetVelocity = 876; }
         if (gamepad2.a) { targetVelocity = 934; }
         if (gamepad2.b) { targetVelocity = 1003; }
-        if (gamepad2.y) { targetVelocity = 1254; }
+        if (gamepad2.y) { targetVelocity = 1126; }
         if (gamepad2.dpad_up) targetVelocity += 1;
         if (gamepad2.dpad_down) targetVelocity -= 1;
         if (gamepad2.left_bumper) { targetVelocity = 0; }
