@@ -252,7 +252,7 @@ public class TeleOp17241VelocityGateControl extends OpMode {
         else if (gamepad2.right_trigger > 0.5) {
             decBot.feedArtifact(-1.0);
         }
-        else {
+        else if(gamepad2.left_stick_button){
             decBot.feedArtifact(0);
         }
 
