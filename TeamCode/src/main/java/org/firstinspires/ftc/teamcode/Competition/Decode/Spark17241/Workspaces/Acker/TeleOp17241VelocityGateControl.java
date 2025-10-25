@@ -47,9 +47,9 @@ public class TeleOp17241VelocityGateControl extends OpMode {
     ShootState state = ShootState.IDLE;
     ElapsedTime timer = new ElapsedTime();
 
-    boolean rb = gamepad2.right_bumper;
-    boolean rbPressed = false;
-    boolean prevRb = false;
+    boolean rb;
+    boolean rbPressed;
+    boolean prevRb;
 
 
     double nominalTarget = 0;             // remembers non-boosted target
