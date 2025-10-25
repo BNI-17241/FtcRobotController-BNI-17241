@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Robots.DecodeBot;
 
-@TeleOp(name = "Tester: TeleOp Gate Control", group = "Lab")
+@TeleOp(name = "Decode TeleOp Gate Control", group = "Drive")
 public class TeleOp17241VelocityGateControl extends OpMode {
 
     // Drivetrain Variables
@@ -25,8 +25,6 @@ public class TeleOp17241VelocityGateControl extends OpMode {
 
     // Flywheel & Feed Wheel Variables
     public double targetVelocity = 0;
-    public double feedingDuration = 0.4;
-    public double feedingDurationLong = 0.7;
 
     // Drive Profile Control Variables
     public static final int PROFILE_1 = 1;  //User 1
@@ -44,15 +42,16 @@ public class TeleOp17241VelocityGateControl extends OpMode {
     double boostFactor = 1.02;            // +2% target during feed
     long   boostMs = 180;                 // usually ~150–250 ms
 
-    // ===== Internal State Control =====
+    // ===== Feeder FlyWheel Gate State Control =====
     enum ShootState { IDLE, WAIT_FOR_GATE, FEEDING, RECOVERING }
     ShootState state = ShootState.IDLE;
+    ElapsedTime timer = new ElapsedTime();
 
     boolean rb = false;
     boolean rbPressed = false;
-
     boolean prevRb = false;
-    ElapsedTime timer = new ElapsedTime();
+
+
     double nominalTarget = 0;             // remembers non-boosted target
     double tolerance; // floor to 10 ticks per secibd
     boolean leftInGateStatus = false;
@@ -163,10 +162,10 @@ public class TeleOp17241VelocityGateControl extends OpMode {
         if (gamepad2.x) { targetVelocity = 876; }
         if (gamepad2.a) { targetVelocity = 934; }
         if (gamepad2.b) { targetVelocity = 1003; }
-        if (gamepad2.b) { targetVelocity = 1254; }
+        if (gamepad2.y) { targetVelocity = 1254; }
         if (gamepad2.dpad_up) targetVelocity += 1;
         if (gamepad2.dpad_down) targetVelocity -= 1;
-        if (gamepad2.right_bumper) { targetVelocity = 0; }
+        if (gamepad2.left_bumper) { targetVelocity = 0; }
 
 
         decBot.flylaunch(targetVelocity);
