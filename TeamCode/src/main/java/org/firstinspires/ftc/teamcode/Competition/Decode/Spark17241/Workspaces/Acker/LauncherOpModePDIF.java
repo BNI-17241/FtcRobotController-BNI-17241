@@ -72,9 +72,9 @@ public class LauncherOpModePDIF extends OpMode {
     @Override
     public void loop() {
         // ===== Target presets =====
-        if (gamepad2.a) targetVelocity = 500;
-        if (gamepad2.b) targetVelocity = 1000;
-        if (gamepad2.y) targetVelocity = 2000;
+        if (gamepad2.a) targetVelocity = 1000;
+        if (gamepad2.b) targetVelocity = 1100;
+        if (gamepad2.y) targetVelocity = 1254;
         if (gamepad2.x) targetVelocity = 0;
 
         // Fine adjust

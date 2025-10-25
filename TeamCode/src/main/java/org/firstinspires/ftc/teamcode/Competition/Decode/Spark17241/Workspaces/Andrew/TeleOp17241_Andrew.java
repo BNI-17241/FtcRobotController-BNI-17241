@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Robots.DecodeBot;
 
-@TeleOp(name = "DecodeBot Andrew", group = "Drive")
+@TeleOp(name = "DecodeBot Andrew", group = "Lab")
 public class TeleOp17241_Andrew extends OpMode {
     public double leftStickYVal;
     public double leftStickXVal;
@@ -233,6 +233,7 @@ public class TeleOp17241_Andrew extends OpMode {
         if (gamepad2.dpad_up) targetVelocity += 1;
         if (gamepad2.dpad_down) targetVelocity -= 1;
         if (gamepad2.right_bumper) { targetVelocity = 0; }
+        if (gamepad2.left_bumper) { targetVelocity = -500; }
 
         decBot.flylaunch(targetVelocity);
     }

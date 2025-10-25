@@ -9,44 +9,37 @@ import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Robots.Decod
 
 @TeleOp(name = "DecodeBot Comp", group = "Drive")
 public class TeleOp17241 extends OpMode {
+
+    // Drivetrain Variables
     double leftStickYVal;
     double leftStickXVal;
     double rightStickYVal;
     double rightStickXVal;
-    //
     double frontLeftSpeed;
     double frontRightSpeed;
     double rearLeftSpeed;
     double rearRightSpeed;
-
     double powerThreshold;
     double speedMultiply = 0.75;
 
-    boolean flywheelIsOn = false;
-    double flywheelSpeed = 1;
-    final double SPEED_INCREMENT = 0.01;
-    boolean previousDpadUp = false;
+    // Flywheel & Feed Wheel Variables
+    public double targetVelocity = 0;
+    public double feedingDuration = 0.4;
+    public double feedingDurationLong = 0.7;
+
+    // Drive Profile Control Variables
+    public static final int PROFILE_1 = 1;  //User 1
+    public static final int PROFILE_2 = 2; //user 2
+    public int currentProfile = PROFILE_1;
 
 
-    boolean feedWheelIsOn = false;
-    boolean previousDpadDown = false;
-    boolean feedIsOn = false;
-
-    private static final int PROFILE_1 = 1;  //User 1
-    private static final int PROFILE_2 = 2; //user 2
-    private int currentProfile = PROFILE_1;
-
+    // Instantiation of Robot using Robot Class Constructor
     public DecodeBot decBot = new DecodeBot();
 
-    //public Pinpoint odo = new Pinpoint();
-
-    //double botHeading = decBot.imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
 
     @Override
     public void init() {
         decBot.initRobot(hardwareMap);
-        //odo.initPinpoint(hardwareMap);
-        // resetHeading();                       // PINPOINT
         decBot.imu.resetYaw();                   // REV
     }
 
@@ -55,82 +48,18 @@ public class TeleOp17241 extends OpMode {
     public void loop() {
         speedControl();
         telemetryOutput();
-        RobotCentricDrive();
-        FlyWheelControl();
-        feed();
-
-        //fieldCentricDrive();
-        //imuStart();
-        //driveCases();
-        //transferControl();
+        robotCentricDrive();
+        flyWheelControl();
+        feedWheelManualControl();
     }
 
 
 
-
-
-//    // ********* TeleOp Control Methods **************
-
-    // ****** Helper method to set Motor Power
-    public void setMotorPower(DcMotor motor, double speed, double threshold, double multiplier) {
-        if (speed <= threshold && speed >= -threshold) {
-            motor.setPower(0);
-        } else {
-            motor.setPower(speed * multiplier);
-        }
-    }
-    public void imuStart(){
-        if(gamepad1.options){
-            decBot.imu.resetYaw();
-        }
-    }
-
-    //*********  Driver 1 and Driver 2 Control Methods
-
-
-    // ********  Legacy Drive Control Methods
-//
-//    public void fieldCentricDrive() {
-//        if (gamepad1.options) {
-//            decBot.imu.resetYaw();
-//        }
-//        double y = -gamepad1.left_stick_y; // Remember, Y stick value is reversed
-//        double x = gamepad1.left_stick_x;
-//        double rx = gamepad1.right_stick_x;
-//
-//        // This button choice was made so that it is hard to hit on accident,
-//        // it can be freely changed based on preference.
-//        // The equivalent button is start on Xbox-style controllers.
-//        if (gamepad1.options) {
-//            decBot.imu.resetYaw();
-//        }
-//
-//        double botHeading = decBot.imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
-//
-//        // Rotate the movement direction counter to the bot's rotation
-//        double rotX = x * Math.cos(-botHeading) - y * Math.sin(-botHeading);
-//        double rotY = x * Math.sin(-botHeading) + y * Math.cos(-botHeading);
-//
-//        rotX = rotX * 1.1;  // Counteract imperfect strafing
-//
-//        // Denominator is the largest motor power (absolute value) or 1
-//        // This ensures all the powers maintain the same ratio,
-//        // but only if at least one is out of the range [-1, 1]
-//        double denominator = Math.max(Math.abs(rotY) + Math.abs(rotX) + Math.abs(rx), 1);
-//        double frontLeftPower = (rotY + rotX + rx) / denominator;
-//        double backLeftPower = (rotY - rotX + rx) / denominator;
-//        double frontRightPower = (rotY - rotX - rx) / denominator;
-//        double backRightPower = (rotY + rotX - rx) / denominator;
-//
-//        decBot.frontLeftMotor.setPower(frontLeftPower);
-//        decBot.rearLeftMotor.setPower(backLeftPower);
-//        decBot.frontRightMotor.setPower(frontRightPower);
-//        decBot.rearRightMotor.setPower(backRightPower);
-//    }
+    //*********  Driver 1 Control Methods *****************
 
 
     // Robot Centric Drive Method
-    public void RobotCentricDrive() {
+    public void robotCentricDrive() {
         //reverse drive
         leftStickYVal = -gamepad1.left_stick_y;
 
@@ -182,18 +111,6 @@ public class TeleOp17241 extends OpMode {
         setMotorPower(decBot.rearRightMotor, rearRightSpeed, powerThreshold, speedMultiply);
     }
 
-    // ***** Helper Method for Telemetry
-    public void telemetryOutput() {
-        // telemetry.addData("Heading: ",  getHeading());
-        // telemetry.addData("Current X Pos: ", odo.getPosition().getX(DistanceUnit.INCH));
-        // telemetry.addData("Current Y Pos: ", odo.getPosition().getY(DistanceUnit.INCH));
-        //telemetry.addData("Hue Value: ", sensor.hsvValues[0]);
-//        telemetry.addData("Left Odo", decBot.leftEncoder.getCurrentPosition());
-//        telemetry.addData("Right Odo", decBot.rightEncoder.getCurrentPosition());
-//        telemetry.addData("Center Odo", decBot.centerEncoder.getCurrentPosition());
-
-        telemetry.update();
-    }
     // ***** Helper Method for Speed Control
     public void speedControl() {
         if (gamepad1.dpad_up) {
@@ -207,56 +124,54 @@ public class TeleOp17241 extends OpMode {
         }
     }
 
-
-    //************ Control surface interfaces******************
-
-
-    public void FlyWheelControl(){
-        //Toggle
-//        if (gamepad1.dpad_up && !previousDpadUp) {
-//            flywheelIsOn = !flywheelIsOn;
-//        }
-//        previousDpadUp = gamepad1.dpad_up;
-
-        /*
-        if (flywheelIsOn) {
-            decBot.flylaunch(true, flywheelSpeed);
-        } else {
-            decBot.flylaunch(false, 0);
-        }
-
-        if (gamepad1.dpad_right) {
-            if (flywheelSpeed <= 1) {
-                flywheelSpeed += SPEED_INCREMENT;
-            }
-        }
-        if (gamepad1.dpad_left) {
-            if (flywheelSpeed >= 0) {
-                flywheelSpeed -= SPEED_INCREMENT;
-            }
-        }*/
+    //*********  Driver 2 Control Methods *****************
 
 
-        if(gamepad1.x){decBot.flylaunch(true, .3);}
-        else if(gamepad1.a){decBot.flylaunch(true, .4);}
-        else if(gamepad1.b){decBot.flylaunch(true, .6);}
+    // Fly Wheel Control
+    public void flyWheelControl() {
 
-        if(gamepad1.right_bumper){decBot.flylaunch(false, 0);}
+        if (gamepad2.x) { targetVelocity = 1000; }
+        if (gamepad2.a) { targetVelocity = 1100; }
+        if (gamepad2.b) { targetVelocity = 1254; }
+        if (gamepad2.dpad_up) targetVelocity += 1;
+        if (gamepad2.dpad_down) targetVelocity -= 1;
+        if (gamepad2.right_bumper) { targetVelocity = 0; }
+        if (gamepad2.left_bumper) { targetVelocity = -500; }
+        decBot.flylaunch(targetVelocity);
     }
-    public void feed(){
-//        if (gamepad1.dpad_down && !previousDpadDown) {
-//            feedIsOn = !feedWheelIsOn;
-//        }
-//        previousDpadDown = gamepad1.dpad_down;
 
-
-        if (gamepad1.left_trigger > 0.5) {
-            decBot.feedArtifact( 1.0);
-        } else if(gamepad1.left_bumper)  {
+    // ***** Manual Feeder Wheel Controller
+    public void feedWheelManualControl() {
+        if (gamepad2.left_trigger > 0.5) {
+            decBot.feedArtifact(1.0);
+        }
+        else if (gamepad2.right_trigger > 0.5) {
+            decBot.feedArtifact(-1.0);
+        }
+        else {
             decBot.feedArtifact(0);
         }
+
     }
 
+
+    // ***** Helper Method for Telemetry
+    public void telemetryOutput() {
+        telemetry.addData("Target Velocity: ", targetVelocity);
+        telemetry.addData("Left Fly Wheel Velocity: ", decBot.leftFlyWheel.getVelocity());
+        telemetry.addData("Right Fly Wheel Velocity: ", decBot.rightFlyWheel.getVelocity());
+        telemetry.update();
+    }
+
+
+    // ****** Helper method to set Motor Power
+    public void setMotorPower(DcMotor motor, double speed, double threshold, double multiplier) {
+        if (speed <= threshold && speed >= -threshold) {
+            motor.setPower(0);
+        } else {
+            motor.setPower(speed * multiplier);
+        }
+    }
 
 
 

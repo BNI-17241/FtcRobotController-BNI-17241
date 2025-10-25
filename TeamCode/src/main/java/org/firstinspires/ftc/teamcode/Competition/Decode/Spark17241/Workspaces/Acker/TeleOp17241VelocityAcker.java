@@ -11,10 +11,9 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
-import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Robots.DecodeBot;
 
-@TeleOp(name = "DecodeBot Acker:Power", group = "Drive")
-public class TeleOp17241_States extends OpMode {
+@TeleOp(name = "Tester: Velocity States", group = "Lab")
+public class TeleOp17241VelocityAcker extends OpMode {
     public double leftStickYVal;
     public double leftStickXVal;
     public double rightStickYVal;
@@ -28,6 +27,10 @@ public class TeleOp17241_States extends OpMode {
     public double powerThreshold;
     public double speedMultiply = 0.75;
 
+    // Flywheel & Feed Variables
+    public double targetVelocity = 1100;
+    public double feedingDuration = 0.4;
+    public double feedingDurationLong = 0.7;
 
     // Machine State Variables, Timers & Enums for Control of Feeder
 
@@ -68,7 +71,7 @@ public class TeleOp17241_States extends OpMode {
     public int currentProfile = PROFILE_1;
 
     // Robot Constructor
-    public DecodeBot decBot = new DecodeBot();
+    public DecodeBot_Acker decBot = new DecodeBot_Acker();
 
     // Initialization Method for Hardware
     @Override
@@ -159,8 +162,9 @@ public class TeleOp17241_States extends OpMode {
     public void telemetryOutput() {
         telemetry.addData("Single Feed State: ", singleFeedState);
         telemetry.addData("Multiple Feed State: ", multipleFeedState);
-        telemetry.addData("Left Fly Wheel: ", decBot.leftFlyWheel.getPower());
-        telemetry.addData("Right Fly Wheel: ", decBot.rightFlyWheel.getPower());
+        telemetry.addData("Target Velocity: ", targetVelocity);
+        telemetry.addData("Left Fly Wheel Velocity: ", decBot.leftFlyWheel.getVelocity());
+        telemetry.addData("Right Fly Wheel Velocity: ", decBot.rightFlyWheel.getVelocity());
         telemetry.update();
     }
     // ***** Helper Method for Speed Control
@@ -177,32 +181,26 @@ public class TeleOp17241_States extends OpMode {
     }
 
 
-    //************ Control surface interfaces******************
-
+    //************ Controls for Launching *****************
 
     public void flyWheelControl(){
 
-        if(gamepad1.x){
-            decBot.flylaunch(true, .2);
-        }
-        else if(gamepad1.a){
-            decBot.flylaunch(true, .4);
-        }
-        else if(gamepad1.b){
-            decBot.flylaunch(true, .55);
-        }
+        if (gamepad2.x) { targetVelocity = 1000; }
+        if (gamepad2.a) { targetVelocity = 1100; }
+        if (gamepad2.b) { targetVelocity = 1254; }
+        if (gamepad2.dpad_up) targetVelocity += 1;
+        if (gamepad2.dpad_down) targetVelocity -= 1;
+        if (gamepad2.right_bumper) { targetVelocity = 0; }
 
-        if(gamepad1.right_bumper){
-            decBot.flylaunch(false, 0);}
+        decBot.flylaunch(targetVelocity);
     }
-
 
     // Feed Controller using States
     public void feedStateController() {
-        if (gamepad1.left_trigger > 0.5) {
+        if (gamepad2.left_trigger > 0.5) {
             singleFeedState = singleFeedStates.START;
         }
-        else if (gamepad1.right_trigger > 0.5)  {
+        else if (gamepad2.right_trigger > 0.5)  {
             multipleFeedState = multipleFeedStates.START_1;
         }
     }
@@ -216,7 +214,7 @@ public class TeleOp17241_States extends OpMode {
                 singleFeedState = singleFeedStates.PAUSE;
                 break;
             case PAUSE:
-                if (timer.time() > 0.4) {
+                if (timer.time() > feedingDuration) {
                     singleFeedState = singleFeedStates.STOP;
                 }
                 break;
@@ -238,7 +236,7 @@ public class TeleOp17241_States extends OpMode {
                 multipleFeedState = multipleFeedStates.PAUSE_1;
                 break;
             case PAUSE_1:
-                if (timer.time() > 0.4) {
+                if (timer.time() > feedingDuration) {
                     multipleFeedState = multipleFeedStates.STOP_1;
                 }
                 break;
@@ -258,7 +256,7 @@ public class TeleOp17241_States extends OpMode {
                 multipleFeedState = multipleFeedStates.PAUSE_2;
                 break;
             case PAUSE_2:
-                if (timer.time() > 0.7) {
+                if (timer.time() >feedingDurationLong) {
                     multipleFeedState = multipleFeedStates.STOP_2;
                 }
                 break;
@@ -278,7 +276,7 @@ public class TeleOp17241_States extends OpMode {
                 multipleFeedState = multipleFeedStates.PAUSE_3;
                 break;
             case PAUSE_3:
-                if (timer.time() > 0.7) {
+                if (timer.time() > feedingDurationLong) {
                     multipleFeedState = multipleFeedStates.STOP_3;
                 }
                 break;

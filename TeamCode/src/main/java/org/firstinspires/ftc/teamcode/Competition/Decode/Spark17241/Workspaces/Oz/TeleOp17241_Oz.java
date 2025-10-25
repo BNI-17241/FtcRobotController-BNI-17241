@@ -12,7 +12,7 @@ import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Pinpoint.Pin
 import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Workspaces.Oz.DecodeBot_oz;
 import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Workspaces.Oz.TeleOp17241_Oz;
 
-@TeleOp(name = "DecodeBot Oz", group = "Drive")
+@TeleOp(name = "DecodeBot Oz", group = "Lab")
 public class TeleOp17241_Oz extends OpMode {
 
 
