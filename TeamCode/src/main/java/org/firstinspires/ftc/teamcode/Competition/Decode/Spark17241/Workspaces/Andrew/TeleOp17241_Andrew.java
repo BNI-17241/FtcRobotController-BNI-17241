@@ -206,7 +206,7 @@ public class TeleOp17241_Andrew extends OpMode {
     //*****************LED Control**********************
     public void LEDDriver()
     {
-        ledCycle += 1;
+        if(gamepad1.left_stick_button){ledCycle += 1;}
         if(ledCycle > 6){ledCycle = 0;}
         decBot.LEDCon(ledCycle);
     }
