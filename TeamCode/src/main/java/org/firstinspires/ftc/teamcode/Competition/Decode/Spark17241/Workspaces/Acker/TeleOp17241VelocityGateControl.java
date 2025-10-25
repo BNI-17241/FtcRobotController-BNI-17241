@@ -36,7 +36,7 @@ public class TeleOp17241VelocityGateControl extends OpMode {
 
     // Feed action
     double feederPower = 1.0;             // power for feeder wheel (0..1)
-    long   feedMs = 1000;                  // how long to run feeder
+    long   feedMs = 700;                  // how long to run feeder
 
     // Shot-drop compensation (temporary target bump while feeding)
     double boostFactor = 1.02;            // +2% target during feed
