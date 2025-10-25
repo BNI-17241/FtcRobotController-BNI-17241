@@ -82,11 +82,12 @@ public class TeleOp17241 extends OpMode {
                 rearRightSpeed = leftStickYVal + rightStickXVal - leftStickXVal;
                 break;
             case PROFILE_2:
-                // This is copy of profile one
-                frontLeftSpeed = leftStickYVal + rightStickXVal + leftStickXVal;    // Vertical + Rotation + Staffing
-                frontRightSpeed = leftStickYVal - rightStickXVal - leftStickXVal;   // Vertical - Rotation - Strafing(sign in front is the way the motor is turning in relation to the others)
-                rearLeftSpeed = leftStickYVal - rightStickXVal + leftStickXVal;
-                rearRightSpeed = leftStickYVal + rightStickXVal - leftStickXVal;
+                //leftStickXVal controls strafing, and rightStickXVal controls rotation.
+                frontLeftSpeed = leftStickYVal + leftStickXVal + rightStickXVal;
+                frontRightSpeed = leftStickYVal - leftStickXVal - rightStickXVal;
+                rearLeftSpeed = leftStickYVal - leftStickXVal + rightStickXVal;
+                rearRightSpeed = leftStickYVal + leftStickXVal - rightStickXVal;
+                break;
 
                 // Default Driver Profile
             default:
@@ -137,6 +138,7 @@ public class TeleOp17241 extends OpMode {
         if (gamepad2.dpad_down) targetVelocity -= 1;
         if (gamepad2.right_bumper) { targetVelocity = 0; }
         if (gamepad2.left_bumper) { targetVelocity = -500; }
+
         decBot.flylaunch(targetVelocity);
     }
 

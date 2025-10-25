@@ -129,11 +129,12 @@ public class TeleOp17241VelocityAcker extends OpMode {
                 rearRightSpeed = leftStickYVal + rightStickXVal - leftStickXVal;
                 break;
             case PROFILE_2:
-                // This is copy of profile one
-                frontLeftSpeed = leftStickYVal + rightStickXVal + leftStickXVal;    // Vertical + Rotation + Staffing
-                frontRightSpeed = leftStickYVal - rightStickXVal - leftStickXVal;   // Vertical - Rotation - Strafing(sign in front is the way the motor is turning in relation to the others)
-                rearLeftSpeed = leftStickYVal - rightStickXVal + leftStickXVal;
-                rearRightSpeed = leftStickYVal + rightStickXVal - leftStickXVal;
+                //leftStickXVal controls strafing, and rightStickXVal controls rotation.
+                frontLeftSpeed = leftStickYVal + leftStickXVal + rightStickXVal;
+                frontRightSpeed = leftStickYVal - leftStickXVal - rightStickXVal;
+                rearLeftSpeed = leftStickYVal - leftStickXVal + rightStickXVal;
+                rearRightSpeed = leftStickYVal + leftStickXVal - rightStickXVal;
+                break;
 
             // Default Driver Profile
             default:
