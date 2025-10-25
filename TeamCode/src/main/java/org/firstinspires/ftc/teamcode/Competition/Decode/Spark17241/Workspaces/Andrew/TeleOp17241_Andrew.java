@@ -100,8 +100,8 @@ public class TeleOp17241_Andrew extends OpMode {
         flyWheelControl();
         //flyEncoderData();
         feedStateController();
-        feedStatesSingleLoad();
-        feedStatesMultipleLoad();
+       // feedStatesSingleLoad();
+        //feedStatesMultipleLoad();
         //LED
         LEDDriver();
         // Helper Controls
