@@ -67,6 +67,8 @@ public class DecodeBot_Andrew {
         rightFlyWheel = hwBot.get(DcMotorEx.class, "right_fly_wheel");//Port ex 1
         feederWheel = hwBot.dcMotor.get("feeder_wheel"); //Port ex 2
 
+        LED = hwBot.crservo.get("led");
+
         // Drivetrain Motor direction mapping
         frontLeftMotor.setDirection(DcMotor.Direction.REVERSE);
         frontRightMotor.setDirection(DcMotor.Direction.FORWARD);
