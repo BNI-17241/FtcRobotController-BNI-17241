@@ -23,6 +23,7 @@ public class TeleOp17241_Andrew extends OpMode {
     public double powerThreshold;
     public double speedMultiply = 0.75;
 
+    public int ledCycle = 0;
 
 
     // Flywheel & Feed Variables
@@ -100,8 +101,8 @@ public class TeleOp17241_Andrew extends OpMode {
         flyWheelControl();
         //flyEncoderData();
         feedStateController();
-        feedStatesSingleLoad();
-        feedStatesMultipleLoad();
+       // feedStatesSingleLoad();
+        //feedStatesMultipleLoad();
         //LED
         LEDDriver();
         // Helper Controls
@@ -205,7 +206,9 @@ public class TeleOp17241_Andrew extends OpMode {
     //*****************LED Control**********************
     public void LEDDriver()
     {
-        decBot.LEDCon(1);
+        ledCycle += 1;
+        if(ledCycle > 6){ledCycle = 0;}
+        decBot.LEDCon(ledCycle);
     }
 
 
