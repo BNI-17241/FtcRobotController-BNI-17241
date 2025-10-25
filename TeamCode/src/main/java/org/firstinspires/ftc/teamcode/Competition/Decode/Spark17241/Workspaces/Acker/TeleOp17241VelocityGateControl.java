@@ -78,6 +78,7 @@ public class TeleOp17241VelocityGateControl extends OpMode {
         telemetryOutput();
         robotCentricDrive();
         flyWheelControl();
+        flyWheelStateControl();
         feedWheelManualControl();
     }
 
