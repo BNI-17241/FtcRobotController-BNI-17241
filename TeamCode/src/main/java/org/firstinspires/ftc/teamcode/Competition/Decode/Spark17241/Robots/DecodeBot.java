@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
-
+import com.qualcomm.robotcore.hardware.Servo;
 import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Drivetrain.MecanumDrive;
 import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Pinpoint.GoBildaPinpointDriver;
 import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Pinpoint.Pinpoint;
@@ -26,6 +26,7 @@ public class DecodeBot{
     public DcMotorEx leftFlyWheel;
     public DcMotorEx rightFlyWheel;
     public DcMotor feederWheel;
+    public Servo LED;
 
     public Pinpoint odo = new Pinpoint();
 
@@ -65,6 +66,8 @@ public class DecodeBot{
         leftFlyWheel = hwBot.get(DcMotorEx.class, "left_fly_wheel");;//Port ex 0
         rightFlyWheel = hwBot.get(DcMotorEx.class, "right_fly_wheel");//Port ex 1
         feederWheel = hwBot.get(DcMotorEx.class,"feeder_wheel");//Port ex 2
+
+        LED = hwBot.servo.get("led");//Servo 1 Control
 
         // Drivetrain Motor direction mapping
         frontLeftMotor.setDirection(DcMotor.Direction.REVERSE);
@@ -108,6 +111,12 @@ public class DecodeBot{
         // Adjust the orientation parameters to match your robot
         imu.initialize(new IMU.Parameters(orientationOnRobot));
 
+    }
+
+    public void LEDCon(int color)
+    {
+        float n = new float[]{0, .279f, .333f, .388f, .5f, .611f, .722f}[color];
+        LED.setPosition(n);
     }
 
     public void flylaunch(double velocity ){

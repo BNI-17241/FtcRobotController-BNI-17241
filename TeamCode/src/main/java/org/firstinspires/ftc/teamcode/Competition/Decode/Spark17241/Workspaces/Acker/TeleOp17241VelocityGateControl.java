@@ -80,6 +80,7 @@ public class TeleOp17241VelocityGateControl extends OpMode {
         flyWheelControl();
         flyWheelStateControl();
         feedWheelManualControl();
+        LEDDriver();
     }
 
 
@@ -287,7 +288,12 @@ public class TeleOp17241VelocityGateControl extends OpMode {
         }
     }
 
-
+    // ****** Led Controller
+    public void LEDDriver()
+    {
+        if(leftInGateStatus && rightInGateStatus){decBot.LEDCon(4);}
+        else{decBot.LEDCon(1);}
+    }
 
 
 }

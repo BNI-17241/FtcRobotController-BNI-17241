@@ -121,7 +121,6 @@ public class DecodeBot_Andrew {
     {
         float n = new float[]{0, .279f, .333f, .388f, .5f, .611f, .722f}[color];
         LED.setPosition(n);
-
     }
 
     public void flylaunch(double velocity){
