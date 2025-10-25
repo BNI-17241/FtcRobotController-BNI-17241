@@ -215,7 +215,7 @@ public class TeleOp17241VelocityGateControl extends OpMode {
                     state = ShootState.FEEDING;
                 }
                 // If driver cancels by pressing X (stop), go idle
-                if (gamepad2.x) {
+                if (gamepad2.yWasPressed()) {
                     state = ShootState.IDLE;
                     targetVelocity = nominalTarget;
                 }
