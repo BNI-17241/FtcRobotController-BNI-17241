@@ -200,7 +200,7 @@ public class TeleOp17241VelocityGateControl extends OpMode {
         switch (state) {
             case IDLE:
                 decBot.feederWheel.setPower(0);
-                if (rbPressed) {
+                if (true) {
                     state = ShootState.WAIT_FOR_GATE;
                 }
                 break;
