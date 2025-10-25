@@ -34,14 +34,15 @@ public class LauncherOpModePDIF extends OpMode {
     double boostFactor = 1.02;            // +2% target during feed
     long   boostMs = 180;                 // usually ~150–250 ms
 
-    boolean rb = false;
+    boolean rb = gamepad2.right_bumper;
     boolean rbPressed = false;
+    boolean prevRb = false;
 
     // ===== Internal =====
     enum ShootState { IDLE, WAIT_FOR_GATE, FEEDING, RECOVERING }
     ShootState state = ShootState.IDLE;
 
-    boolean prevRb = false;
+
     ElapsedTime   timer = new ElapsedTime();
     double nominalTarget = 0;             // remembers non-boosted target
 

@@ -36,7 +36,7 @@ public class TeleOp17241VelocityGateControl extends OpMode {
 
     // Feed action
     double feederPower = 1.0;             // power for feeder wheel (0..1)
-    long   feedMs = 700;                  // how long to run feeder
+    long   feedMs = 1000;                  // how long to run feeder
 
     // Shot-drop compensation (temporary target bump while feeding)
     double boostFactor = 1.02;            // +2% target during feed
@@ -47,7 +47,7 @@ public class TeleOp17241VelocityGateControl extends OpMode {
     ShootState state = ShootState.IDLE;
     ElapsedTime timer = new ElapsedTime();
 
-    boolean rb = false;
+    boolean rb = gamepad2.right_bumper;
     boolean rbPressed = false;
     boolean prevRb = false;
 
@@ -167,7 +167,6 @@ public class TeleOp17241VelocityGateControl extends OpMode {
         if (gamepad2.dpad_up) targetVelocity += 1;
         if (gamepad2.dpad_down) targetVelocity -= 1;
         if (gamepad2.left_bumper) { targetVelocity = 0; }
-
 
         decBot.flylaunch(targetVelocity);
 
