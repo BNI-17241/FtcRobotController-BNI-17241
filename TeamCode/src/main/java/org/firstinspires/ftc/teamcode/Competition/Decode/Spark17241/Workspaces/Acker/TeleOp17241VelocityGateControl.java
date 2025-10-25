@@ -168,7 +168,6 @@ public class TeleOp17241VelocityGateControl extends OpMode {
         if (gamepad2.dpad_down) targetVelocity -= 1;
         if (gamepad2.left_bumper) { targetVelocity = 0; }
 
-
         decBot.flylaunch(targetVelocity);
 
         // Keep nominalTarget synced unless we’re in a boost
