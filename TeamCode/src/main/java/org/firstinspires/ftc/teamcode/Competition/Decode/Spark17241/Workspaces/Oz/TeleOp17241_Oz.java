@@ -9,6 +9,7 @@ import com.qualcomm.robotcore.util.Range;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Pinpoint.GoBildaPinpointDriver;
 import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Pinpoint.Pinpoint;
+import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Robots.DecodeBot;
 import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Workspaces.Oz.DecodeBot_oz;
 import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Workspaces.Oz.TeleOp17241_Oz;
 
@@ -28,6 +29,12 @@ public class TeleOp17241_Oz extends OpMode {
 
     double powerThreshold;
     double speedMultiply = 0.75;
+
+    // Flywheel & Feed Wheel Variables
+    public double targetVelocity = 0;
+    public double feedingDuration = 0.4;
+    public double feedingDurationLong = 0.7;
+
 
     private static final int PROFILE_1 = 1;  //User 1
     private static final int PROFILE_2 = 2; //user 2
@@ -81,14 +88,11 @@ public class TeleOp17241_Oz extends OpMode {
     public void loop() {
         speedControl();
         telemetryOutput();
-        RobotCentricDrive();
+        robotCentricDrive();
         flyWheelControl();
-        feedStateController();
-        feedStatesSingleLoad();
-        feedStatesMultipleLoad();
+        feedWheelManualControl();
 
         //fieldCentricDrive();
-        imuStart();
         //driveCases();
         //transferControl();
     }
@@ -96,27 +100,11 @@ public class TeleOp17241_Oz extends OpMode {
 
 
 
+    //*********  Driver 1 Control Methods *****************
 
-//    // ********* TeleOp Control Methods **************
-
-    // ****** Helper method to set Motor Power
-    public void setMotorPower(DcMotor motor, double speed, double threshold, double multiplier) {
-        if (speed <= threshold && speed >= -threshold) {
-            motor.setPower(0);
-        } else {
-            motor.setPower(speed * multiplier);
-        }
-    }
-    public void imuStart(){
-        if(gamepad1.options){
-            decBot.imu.resetYaw();
-        }
-    }
-
-    //*********  Driver 1 and Driver 2 Control Methods
 
     // Robot Centric Drive Method
-    public void RobotCentricDrive() {
+    public void robotCentricDrive() {
         //reverse drive
         leftStickYVal = -gamepad1.left_stick_y;
 
@@ -139,11 +127,12 @@ public class TeleOp17241_Oz extends OpMode {
                 rearRightSpeed = leftStickYVal + rightStickXVal - leftStickXVal;
                 break;
             case PROFILE_2:
-                // This is copy of profile one
-                frontLeftSpeed = leftStickYVal + rightStickXVal + leftStickXVal;    // Vertical + Rotation + Staffing
-                frontRightSpeed = leftStickYVal - rightStickXVal - leftStickXVal;   // Vertical - Rotation - Strafing(sign in front is the way the motor is turning in relation to the others)
-                rearLeftSpeed = leftStickYVal - rightStickXVal + leftStickXVal;
-                rearRightSpeed = leftStickYVal + rightStickXVal - leftStickXVal;
+                //leftStickXVal controls strafing, and rightStickXVal controls rotation.
+                frontLeftSpeed = leftStickYVal + leftStickXVal + rightStickXVal;
+                frontRightSpeed = leftStickYVal - leftStickXVal - rightStickXVal;
+                rearLeftSpeed = leftStickYVal - leftStickXVal + rightStickXVal;
+                rearRightSpeed = leftStickYVal + leftStickXVal - rightStickXVal;
+                break;
 
             // Default Driver Profile
             default:
@@ -168,22 +157,6 @@ public class TeleOp17241_Oz extends OpMode {
         setMotorPower(decBot.rearRightMotor, rearRightSpeed, powerThreshold, speedMultiply);
     }
 
-    // ***** Helper Method for Telemetry
-    public void telemetryOutput() {
-       // telemetry.addData("Heading: ",  getHeading());
-       // telemetry.addData("Current X Pos: ", odo.getPosition().getX(DistanceUnit.INCH));
-       // telemetry.addData("Current Y Pos: ", odo.getPosition().getY(DistanceUnit.INCH));
-        telemetry.addData("Single Feed State: ", singleFeedState);
-        telemetry.addData("Multiple Feed State: ", multipleFeedState);
-        telemetry.addData("Left Fly Wheel: ", decBot.leftFlyWheel.getPower());
-        telemetry.addData("Right Fly Wheel: ", decBot.rightFlyWheel.getPower());
-
-
-        telemetry.addData("get Position", odo.getPosition());
-
-
-        telemetry.update();
-    }
     // ***** Helper Method for Speed Control
     public void speedControl() {
         if (gamepad1.dpad_up) {
@@ -197,130 +170,68 @@ public class TeleOp17241_Oz extends OpMode {
         }
     }
 
+    //*********  Driver 2 Control Methods *****************
 
-    //************ Control surface interfaces******************
 
-    public void flyWheelControl(){
+    // Fly Wheel Control
+    public void flyWheelControl() {
 
-        if(gamepad1.x){
-            decBot.flylaunch(true, .2);
+        if (gamepad2.x) { targetVelocity = 1000; }
+        if (gamepad2.a) { targetVelocity = 1100; }
+        if (gamepad2.b) { targetVelocity = 1254; }
+        if (gamepad2.dpad_up) targetVelocity += 1;
+        if (gamepad2.dpad_down) targetVelocity -= 1;
+        if (gamepad2.right_bumper) { targetVelocity = 0; }
+        if (gamepad2.left_bumper) { targetVelocity = -500; }
+
+        decBot.flyLaunch(targetVelocity);
+    }
+
+    // ***** Manual Feeder Wheel Controller
+    public void feedWheelManualControl() {
+        if (gamepad2.left_trigger > 0.5) {
+            decBot.feedArtifact(1.0);
         }
-        else if(gamepad1.a){
-            decBot.flylaunch(true, .4);
+        else if (gamepad2.right_trigger > 0.5) {
+            decBot.feedArtifact(-1.0);
         }
-        else if(gamepad1.b){
-            decBot.flylaunch(true, .6);
+        else {
+            decBot.feedArtifact(0);
         }
 
-        if(gamepad1.right_bumper){
-            decBot.flylaunch(false, 0);}
     }
 
 
-    // Feed Controller using States
-    public void feedStateController() {
-        if (gamepad1.left_trigger > 0.5) {
-            singleFeedState = TeleOp17241_Oz.singleFeedStates.START;
-        }
-        else if (gamepad1.right_trigger > 0.5)  {
-            multipleFeedState = TeleOp17241_Oz.multipleFeedStates.START_1;
+    // ***** Helper Method for Telemetry
+    public void telemetryOutput() {
+        telemetry.addData("Current X Pos: ", odo.getPosition().getX(DistanceUnit.INCH));
+        telemetry.addData("Current Y Pos: ", odo.getPosition().getY(DistanceUnit.INCH));
+        telemetry.addData("Target Velocity: ", targetVelocity);
+        telemetry.addData("Left Fly Wheel Velocity: ", decBot.leftFlyWheel.getVelocity());
+        telemetry.addData("Right Fly Wheel Velocity: ", decBot.rightFlyWheel.getVelocity());
+        telemetry.update();
+    }
+
+
+    // ****** Helper method to set Motor Power
+    public void setMotorPower(DcMotor motor, double speed, double threshold, double multiplier) {
+        if (speed <= threshold && speed >= -threshold) {
+            motor.setPower(0);
+        } else {
+            motor.setPower(speed * multiplier);
         }
     }
 
-    // State Method for Single Feeding into fly wheels
-    public void feedStatesSingleLoad() {
-        switch (singleFeedState) {
-            case START:
-                decBot.feedArtifact( 1.0);
-                timer.reset();
-                singleFeedState = TeleOp17241_Oz.singleFeedStates.PAUSE;
-                break;
-            case PAUSE:
-                if (timer.time() > 0.5) {
-                    singleFeedState = TeleOp17241_Oz.singleFeedStates.STOP;
-                }
-                break;
-            case STOP:
-                decBot.feedArtifact( 0.0);
-                singleFeedState = TeleOp17241_Oz.singleFeedStates.READY;
-                break;
-            case READY:
-                break;
-        }
-    }
-
-    // State Method for Multiple Feeding into fly wheels
-    public void feedStatesMultipleLoad() {
-        switch (multipleFeedState) {
-            case START_1:
-                decBot.feedArtifact( 1.0);
-                timer.reset();
-                multipleFeedState = TeleOp17241_Oz.multipleFeedStates.PAUSE_1;
-                break;
-            case PAUSE_1:
-                if (timer.time() > 0.5) {
-                    multipleFeedState = TeleOp17241_Oz.multipleFeedStates.STOP_1;
-                }
-                break;
-            case STOP_1:
-                decBot.feedArtifact( 0.0);
-                timer.reset();
-                multipleFeedState = TeleOp17241_Oz.multipleFeedStates.WAIT_1;
-                break;
-            case WAIT_1:
-                if (timer.time() > 0.5) {
-                    multipleFeedState = TeleOp17241_Oz.multipleFeedStates.START_2;
-                }
-                break;
-            case START_2:
-                decBot.feedArtifact( 1.0);
-                timer.reset();
-                multipleFeedState = TeleOp17241_Oz.multipleFeedStates.PAUSE_2;
-                break;
-            case PAUSE_2:
-                if (timer.time() > 0.5) {
-                    multipleFeedState = TeleOp17241_Oz.multipleFeedStates.STOP_2;
-                }
-                break;
-            case STOP_2:
-                decBot.feedArtifact( 0.0);
-                timer.reset();
-                multipleFeedState = TeleOp17241_Oz.multipleFeedStates.WAIT_2;
-                break;
-            case WAIT_2:
-                if (timer.time() > 0.50) {
-                    multipleFeedState = TeleOp17241_Oz.multipleFeedStates.START_3;
-                }
-                break;
-            case START_3:
-                decBot.feedArtifact( 1.0);
-                timer.reset();
-                multipleFeedState = TeleOp17241_Oz.multipleFeedStates.PAUSE_3;
-                break;
-            case PAUSE_3:
-                if (timer.time() > 0.5) {
-                    multipleFeedState = TeleOp17241_Oz.multipleFeedStates.STOP_3;
-                }
-                break;
-            case STOP_3:
-                decBot.feedArtifact( 0.0);
-                timer.reset();
-                multipleFeedState = TeleOp17241_Oz.multipleFeedStates.READY;
-                break;
-            case READY:
-                break;
-        }
-    }
-public void intake(){
-        if(gamepad1.y){
-            decBot.setIntakeServo(true); // prob do toogle later-oz
-            decBot.setIntakemotor(true);
-        }
-        else{
-            decBot.setIntakeServo(false);
-            decBot.setIntakemotor(true);
-        }
-}
+//    public void intake(){
+//        if(gamepad1.y){
+//            decBot.setIntakeServo(true);
+//            decBot.setIntakemotor(true);
+//        }
+//        else{
+//            decBot.setIntakeServo(false);
+//            decBot.setIntakemotor(true);
+//        }
+// }
 
 
 }
