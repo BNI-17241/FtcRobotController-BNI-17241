@@ -17,7 +17,7 @@ public class Constants {
     public static FollowerConstants followerConstants = new FollowerConstants()
             .mass(10.2);   // Kilograms of Robot Weighed on 10/28
 
-    // Drivetrain Constants
+    // Drivetrain Constants based on DecBot
     public static MecanumConstants driveConstants = new MecanumConstants()
             .maxPower(1)
             .rightFrontMotorName("front_right_motor")
@@ -31,8 +31,8 @@ public class Constants {
 
     // Localization (Pinpoint Two Wheel Odometry Constants
     public static PinpointConstants localizerConstants = new PinpointConstants()
-            .forwardPodY(-5)
-            .strafePodX(0.5)
+            .forwardPodY(1)         // Measured on 10/28
+            .strafePodX(0.0)        // Measured on 10/28
             .distanceUnit(DistanceUnit.INCH)
             .hardwareMapName("odo")
             .encoderResolution(com.qualcomm.hardware.gobilda.GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_4_BAR_POD)
