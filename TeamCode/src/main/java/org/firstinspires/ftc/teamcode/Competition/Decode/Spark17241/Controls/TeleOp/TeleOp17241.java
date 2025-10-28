@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Robots.DecodeBot;
 
-@TeleOp(name = "DecodeBot Comp", group = "Drive")
+@TeleOp(name = "DecodeBot TeleOp Old", group = "Drive")
 public class TeleOp17241 extends OpMode {
 
     // Drivetrain Variables
