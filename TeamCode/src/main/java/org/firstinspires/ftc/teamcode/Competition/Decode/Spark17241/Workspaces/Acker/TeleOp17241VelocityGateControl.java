@@ -32,7 +32,7 @@ public class TeleOp17241VelocityGateControl extends OpMode {
     public int currentProfile = PROFILE_1;
 
     // Velocity gate
-    double gatePercent = 0.03;            // ±3% gate window
+    double gatePercent = 0.05;            // ±5`     % gate window
 
     // Feed action
     double feederPower = 1.0;             // power for feeder wheel (0..1)
