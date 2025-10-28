@@ -6,12 +6,13 @@
 
 package org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Workspaces.Acker;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
-
+@Disabled
 @TeleOp(name = "Tester: Velocity States", group = "Lab")
 public class TeleOp17241VelocityAcker extends OpMode {
     public double leftStickYVal;
