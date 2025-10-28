@@ -12,9 +12,12 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 public class Constants {
-    public static FollowerConstants followerConstants = new FollowerConstants()
-            .mass(5);   //Update Kilograms of Robot
 
+    // Weight of Robot
+    public static FollowerConstants followerConstants = new FollowerConstants()
+            .mass(10.2);   // Kilograms of Robot Weighed on 10/28
+
+    // Drivetrain Constants
     public static MecanumConstants driveConstants = new MecanumConstants()
             .maxPower(1)
             .rightFrontMotorName("front_right_motor")
@@ -26,6 +29,7 @@ public class Constants {
             .rightFrontMotorDirection(DcMotorSimple.Direction.FORWARD)
             .rightRearMotorDirection(DcMotorSimple.Direction.FORWARD);
 
+    // Localization (Pinpoint Two Wheel Odometry Constants
     public static PinpointConstants localizerConstants = new PinpointConstants()
             .forwardPodY(-5)
             .strafePodX(0.5)
