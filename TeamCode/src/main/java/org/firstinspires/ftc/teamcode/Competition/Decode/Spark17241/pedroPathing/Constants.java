@@ -16,7 +16,9 @@ public class Constants {
 
     // Weight of Robot
     public static FollowerConstants followerConstants = new FollowerConstants()
-            .mass(10.2);   // Kilograms of Robot Weighed on 10/28
+            .mass(10.2)   // Kilograms of Robot Weighed on 10/28
+            .forwardZeroPowerAcceleration(-33.8697)    // Tested on 10/30
+            .lateralZeroPowerAcceleration(-65.6387);   // Tested on 10/30
 
     // Drivetrain Constants based on DecBot
     public static MecanumConstants driveConstants = new MecanumConstants()
@@ -28,7 +30,11 @@ public class Constants {
             .leftFrontMotorDirection(DcMotorSimple.Direction.REVERSE)
             .leftRearMotorDirection(DcMotorSimple.Direction.REVERSE)
             .rightFrontMotorDirection(DcMotorSimple.Direction.FORWARD)
-            .rightRearMotorDirection(DcMotorSimple.Direction.FORWARD);
+            .rightRearMotorDirection(DcMotorSimple.Direction.FORWARD)
+            .xVelocity(61.8028)    // Tested on 10/30
+            .yVelocity(45.3907);   // Tested on 10/30
+
+
 
     // Localization (Pinpoint Two Wheel Odometry Constants
     // Use the Qualcom GoBiilda Drive, not local package
