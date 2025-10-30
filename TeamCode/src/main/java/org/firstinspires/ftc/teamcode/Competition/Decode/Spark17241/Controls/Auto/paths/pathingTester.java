@@ -18,20 +18,16 @@ public class pathingTester extends OpMode {
     private Timer pathTimer, actionTimer, opmodeTimer;
 
     // Used Visualizer to determine pose
-    private final Pose startPose = new Pose(56, 8, Math.toRadians(90)); // Start Pose of robot.
-    private final Pose scorePose = new Pose(90, 90, Math.toRadians(50)); // Scoring Pose of robot. It is facing the goal at a 135 degree angle.
-
-
-    // From example... Poses not correct
-    private final Pose pickup1Pose = new Pose(37, 121, Math.toRadians(0)); // Highest (First Set) of Artifacts from the Spike Mark.
-    private final Pose pickup2Pose = new Pose(43, 130, Math.toRadians(0)); // Middle (Second Set) of Artifacts from the Spike Mark.
-    private final Pose pickup3Pose = new Pose(49, 135, Math.toRadians(0)); // Lowest (Third Set) of Artifacts from the Spike Mark.
+    private final Pose startPose = new Pose(56, 8, Math.toRadians(90)); // Start Pose of robot (Red Far Launch Zone).
+    private final Pose scorePose = new Pose(90, 90, Math.toRadians(50)); // Red Goal Scoring Pose of robot.
+    private final Pose parkHomePose = new Pose(50, 40, Math.toRadians(180)); // Red Home
 
     private Path scorePreload;
-    private PathChain grabPickup1, scorePickup1;
+    private PathChain goPark, scorePickup1;
 
-    public enum pathingState { SCORE_PRELOAD, PICKUP, SCORE_PICKUP, READY }
+    public enum pathingState { START, SCORE_PRELOAD, PARK_HOME, READY }
     pathingState pathState = pathingState.READY;
+
 
 
 
@@ -77,34 +73,28 @@ public class pathingTester extends OpMode {
     // Build our Paths using the various Poses
 
     public void buildPaths() {
-        /* This is our scorePreload path. We are using a BezierLine. */
+        /* From Start and To Score Preload Path. We are using a BezierLine. */
         scorePreload = new Path(new BezierLine(startPose, scorePose));
         scorePreload.setLinearHeadingInterpolation(startPose.getHeading(), scorePose.getHeading());
 
-        // Not used
-        /* This is our grabPickup1 PathChain. We are using a single path with a BezierLine. */
-        grabPickup1 = follower.pathBuilder()
-                .addPath(new BezierLine(scorePose, pickup1Pose))
-                .setLinearHeadingInterpolation(scorePose.getHeading(), pickup1Pose.getHeading())
+        /* From Score and Tp Park Home  Path.  We are using a single path with a BezierLine. */
+        goPark = follower.pathBuilder()
+                .addPath(new BezierLine(scorePose, parkHomePose))
+                .setLinearHeadingInterpolation(scorePose.getHeading(), parkHomePose.getHeading())
                 .build();
 
-        /* This is our scorePickup1 PathChain. We are using a single path with a BezierLine. */
-        scorePickup1 = follower.pathBuilder()
-                .addPath(new BezierLine(pickup1Pose, scorePose))
-                .setLinearHeadingInterpolation(pickup1Pose.getHeading(), scorePose.getHeading())
-                .build();
 
     }
 
 
     public void autonomousPathUpdate() {
         switch (pathState) {
-            case SCORE_PRELOAD:
+            case START:
                 follower.followPath(scorePreload);
-                setPathState(pathingState.READY);
+                setPathState(pathingState.SCORE_PRELOAD);
                 break;
 
-            case PICKUP:
+            case SCORE_PRELOAD:
             /* You could check for
             - Follower State: "if(!follower.isBusy()) {}"
             - Time: "if(pathTimer.getElapsedTimeSeconds() > 1) {}"
@@ -112,18 +102,11 @@ public class pathingTester extends OpMode {
             */
                 /* This case checks the robot's position and will wait until the robot position is close (1 inch away) from the scorePose's position */
                 if(!follower.isBusy()) {
-                    /* Score Preload */
+
+                    /* NEED TO INSERT CODE TO SCORE PRELOAD ARTIFACTS */
+
                     /* Since this is a pathChain, we can have Pedro hold the end point while we are grabbing the sample */
-                    follower.followPath(grabPickup1,true);
-                    setPathState(pathingState.SCORE_PICKUP);
-                }
-                break;
-            case SCORE_PICKUP:
-                /* This case checks the robot's position and will wait until the robot position is close (1 inch away) from the pickup1Pose's position */
-                if(!follower.isBusy()) {
-                    /* Grab Sample */
-                    /* Since this is a pathChain, we can have Pedro hold the end point while we are scoring the sample */
-                    follower.followPath(scorePickup1,true);
+                    follower.followPath(goPark,true);
                     setPathState(pathingState.READY);
                 }
                 break;
