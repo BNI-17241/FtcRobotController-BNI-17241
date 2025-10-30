@@ -21,6 +21,8 @@ public class pathingTester extends OpMode {
     private final Pose startPose = new Pose(28.5, 128, Math.toRadians(180)); // Start Pose of robot.
     private final Pose scorePose = new Pose(60, 85, Math.toRadians(135)); // Scoring Pose of robot. It is facing the goal at a 135 degree angle.
     private final Pose pickup1Pose = new Pose(37, 121, Math.toRadians(0)); // Highest (First Set) of Artifacts from the Spike Mark.
+    private final Pose pickup2Pose = new Pose(43, 130, Math.toRadians(0)); // Middle (Second Set) of Artifacts from the Spike Mark.
+    private final Pose pickup3Pose = new Pose(49, 135, Math.toRadians(0)); // Lowest (Third Set) of Artifacts from the Spike Mark.
 
     private Path scorePreload;
     private PathChain grabPickup1, scorePickup1;
@@ -98,7 +100,7 @@ public class pathingTester extends OpMode {
                     /* Score Preload */
                     /* Since this is a pathChain, we can have Pedro hold the end point while we are grabbing the sample */
                     follower.followPath(grabPickup1,true);
-                    setPathState(pathingState.READY);
+                    setPathState(pathingState.SCORE_PICKUP);
                 }
                 break;
             case SCORE_PICKUP:
