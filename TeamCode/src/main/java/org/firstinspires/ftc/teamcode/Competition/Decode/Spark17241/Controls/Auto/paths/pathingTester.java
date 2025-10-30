@@ -30,6 +30,10 @@ public class pathingTester extends OpMode {
     public enum pathingState { SCORE_PRELOAD, PICKUP, SCORE_PICKUP, READY }
     pathingState pathState = pathingState.READY;
 
+
+
+
+
     @Override
     public void loop() {
         // These loop the movements of the robot, these must be called continuously in order to work
@@ -66,6 +70,9 @@ public class pathingTester extends OpMode {
     @Override
     public void stop() {}
 
+
+    // Build our Paths using the various Poses
+
     public void buildPaths() {
         /* This is our scorePreload path. We are using a BezierLine, which is a straight line. */
         scorePreload = new Path(new BezierLine(startPose, scorePose));
@@ -83,6 +90,8 @@ public class pathingTester extends OpMode {
                 .build();
 
     }
+
+
     public void autonomousPathUpdate() {
         switch (pathState) {
             case SCORE_PRELOAD:
