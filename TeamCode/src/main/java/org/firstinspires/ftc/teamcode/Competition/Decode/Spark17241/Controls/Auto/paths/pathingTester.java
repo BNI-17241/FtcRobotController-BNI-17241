@@ -17,9 +17,12 @@ public class pathingTester extends OpMode {
     private Follower follower;
     private Timer pathTimer, actionTimer, opmodeTimer;
 
+    // Used Visualizer to determine pose
+    private final Pose startPose = new Pose(56, 8, Math.toRadians(90)); // Start Pose of robot.
+    private final Pose scorePose = new Pose(90, 90, Math.toRadians(50)); // Scoring Pose of robot. It is facing the goal at a 135 degree angle.
 
-    private final Pose startPose = new Pose(28.5, 128, Math.toRadians(180)); // Start Pose of robot.
-    private final Pose scorePose = new Pose(60, 85, Math.toRadians(135)); // Scoring Pose of robot. It is facing the goal at a 135 degree angle.
+
+    // From example... Poses not correct
     private final Pose pickup1Pose = new Pose(37, 121, Math.toRadians(0)); // Highest (First Set) of Artifacts from the Spike Mark.
     private final Pose pickup2Pose = new Pose(43, 130, Math.toRadians(0)); // Middle (Second Set) of Artifacts from the Spike Mark.
     private final Pose pickup3Pose = new Pose(49, 135, Math.toRadians(0)); // Lowest (Third Set) of Artifacts from the Spike Mark.
@@ -74,16 +77,18 @@ public class pathingTester extends OpMode {
     // Build our Paths using the various Poses
 
     public void buildPaths() {
-        /* This is our scorePreload path. We are using a BezierLine, which is a straight line. */
+        /* This is our scorePreload path. We are using a BezierLine. */
         scorePreload = new Path(new BezierLine(startPose, scorePose));
         scorePreload.setLinearHeadingInterpolation(startPose.getHeading(), scorePose.getHeading());
 
-        /* This is our grabPickup1 PathChain. We are using a single path with a BezierLine, which is a straight line. */
+        // Not used
+        /* This is our grabPickup1 PathChain. We are using a single path with a BezierLine. */
         grabPickup1 = follower.pathBuilder()
                 .addPath(new BezierLine(scorePose, pickup1Pose))
                 .setLinearHeadingInterpolation(scorePose.getHeading(), pickup1Pose.getHeading())
                 .build();
-        /* This is our scorePickup1 PathChain. We are using a single path with a BezierLine, which is a straight line. */
+
+        /* This is our scorePickup1 PathChain. We are using a single path with a BezierLine. */
         scorePickup1 = follower.pathBuilder()
                 .addPath(new BezierLine(pickup1Pose, scorePose))
                 .setLinearHeadingInterpolation(pickup1Pose.getHeading(), scorePose.getHeading())
@@ -96,8 +101,9 @@ public class pathingTester extends OpMode {
         switch (pathState) {
             case SCORE_PRELOAD:
                 follower.followPath(scorePreload);
-                setPathState(pathingState.SCORE_PRELOAD);
+                setPathState(pathingState.READY);
                 break;
+
             case PICKUP:
             /* You could check for
             - Follower State: "if(!follower.isBusy()) {}"
