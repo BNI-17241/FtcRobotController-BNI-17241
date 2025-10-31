@@ -25,8 +25,10 @@ public class autoFarLaunchRedAllianceParkHome extends AutoMain {
     public Path scorePreload;
     public PathChain goPark;
 
-    public enum pathingState { START, SCORE_PRELOAD, GO_PARK, READY }
-    pathingState pathState = pathingState.READY;
+public enum pathingState { START, SCORE_PRELOAD, GO_PARK, READY }
+pathingState pathState = pathingState.READY;
+private boolean parkPathStarted = false;
+
 
     //****************  Required OpMode Auto Control Methods  ********************
 
@@ -55,6 +57,7 @@ public class autoFarLaunchRedAllianceParkHome extends AutoMain {
 
         autoScoreComplete = false;
         shotsFired = 0;
+        parkPathStarted = false;
     }
 
     @Override
@@ -94,14 +97,16 @@ public class autoFarLaunchRedAllianceParkHome extends AutoMain {
                 break;
 
             case GO_PARK:
-                // Start the park path once (only when we first enter)
-                if (follower.isBusy() == false) {
+                // Start the park path exactly once upon entering this state
+                if (!parkPathStarted) {
                     follower.followPath(goPark);
+                    parkPathStarted = true;
                 }
                 launchZone = LaunchZone.NONE;    // spin down while driving to park
                 onLoopStart();
                 updateFlywheelAndGate();         // harmless when NONE
-                if (!follower.isBusy()) {
+                // When park path finishes, advance to READY
+                if (parkPathStarted && !follower.isBusy()) {
                     pathState = pathingState.READY;
                 }
                 break;
