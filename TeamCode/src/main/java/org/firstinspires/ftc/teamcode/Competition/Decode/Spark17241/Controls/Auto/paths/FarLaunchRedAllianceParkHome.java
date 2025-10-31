@@ -12,15 +12,15 @@ import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Controls.Aut
 import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.pedroPathing.Constants;
 
 @Autonomous(name = "Red:Far Launch:Park Home", group = "Drive")
-public class autoFarLaunchRedAllianceParkHome extends AutoMain {
+public class FarLaunchRedAllianceParkHome extends AutoMain {
 
     // ********** Pedro Pathing Variables, Poses, Paths & States *******************
     public Follower follower;
     public Timer pathTimer, opmodeTimer;
 
-    public final Pose startPose = new Pose(56, 8, Math.toRadians(90));     // Red Far Launch Zone start
-    public final Pose scorePose = new Pose(90, 90, Math.toRadians(50));    // Red goal scoring pose
-    public final Pose parkHomePose = new Pose(50, 40, Math.toRadians(180)); // Red Home (park)
+    public final Pose startPose = new Pose(100, 8, Math.toRadians(90));     // Red Far Launch Zone start
+    public final Pose scorePose = new Pose(80, 80, Math.toRadians(45));    // Red goal scoring pose
+    public final Pose parkHomePose = new Pose(90, 40, Math.toRadians(0)); // Red Home (park)
 
     public Path scorePreload;
     public PathChain goPark;

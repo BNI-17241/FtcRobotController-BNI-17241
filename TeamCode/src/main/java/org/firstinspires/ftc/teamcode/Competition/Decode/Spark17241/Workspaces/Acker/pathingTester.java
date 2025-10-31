@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Controls.Auto.paths;
+package org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Workspaces.Acker;
 
 import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.BezierLine;
