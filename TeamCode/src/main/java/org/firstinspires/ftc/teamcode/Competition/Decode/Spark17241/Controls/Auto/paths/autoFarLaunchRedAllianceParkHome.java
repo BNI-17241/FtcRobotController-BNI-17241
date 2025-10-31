@@ -110,7 +110,7 @@ private boolean parkPathStarted = false;
                     pathState = pathingState.READY;
                 }
                 break;
-
+//
             case READY:
                 // Do nothing, keep robot safe
                 onLoopStart();
