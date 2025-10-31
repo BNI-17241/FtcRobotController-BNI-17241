@@ -193,19 +193,14 @@ public class pathingTester extends OpMode {
                 break;
         }
     }
-    /** These change the states of the paths and actions. It will also reset the timers of the individual switches **/
-    public void setPathState(pathingState pState) {
-        pathState = pState;
-        pathTimer.resetTimer();
-    }
 
 
     //****************  Scoring Control Methods  ********************
 
     // Fly Wheel Control
-    public void flyWheelControl(LaunchZone zone) {
+   public void flyWheelControl(LaunchZone zone) {
 
-        if (zone == LaunchZone.NEAR) { targetVelocity = 1003; }
+         if (zone == LaunchZone.NEAR) { targetVelocity = 1003; }
         if (zone == LaunchZone.FAR) { targetVelocity = 1125; }
         if (zone == LaunchZone.NONE) { targetVelocity = 0; }
 
@@ -228,7 +223,6 @@ public class pathingTester extends OpMode {
         leftInGateStatus  = Math.abs(currentVelocityLeft - nominalTarget) <= tolerance;
         rightInGateStatus = Math.abs(currentVelocityRight - nominalTarget) <= tolerance;
         inGate = leftInGateStatus && rightInGateStatus;
-
 
     }
 
