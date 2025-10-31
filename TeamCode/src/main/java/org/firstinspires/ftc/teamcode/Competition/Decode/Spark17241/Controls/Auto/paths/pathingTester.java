@@ -54,7 +54,7 @@ public class pathingTester extends OpMode {
     ElapsedTime timer = new ElapsedTime();
 
     int maxShots = 4;
-    int shotsFired = 0;                /
+    int shotsFired = 0;
     scoreState prevScoringState = scoreState.IDLE;
     boolean parkPathStarted = false;
     double parkLeaveTime = 25.0;
