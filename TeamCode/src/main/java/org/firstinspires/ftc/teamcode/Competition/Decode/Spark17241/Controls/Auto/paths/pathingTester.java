@@ -29,7 +29,7 @@ public class pathingTester extends OpMode {
     private Path scorePreload;
     private PathChain goPark, scorePickup1;
 
-    public enum pathingState { START, SCORE_PRELOAD, PARK_HOME, READY }
+    public enum pathingState { START, SCORE_PRELOAD, SCORE_COUNT, GO_PARK, READY }
     pathingState pathState = pathingState.READY;
 
     // ********** FlyWheel and Intake Control Variables, Constants and States *******************
@@ -53,8 +53,12 @@ public class pathingTester extends OpMode {
     scoreState scoringState = scoreState.IDLE;
     ElapsedTime timer = new ElapsedTime();
 
-    int shotCounter = 1;
-    int shotCapacity = 4;
+    int maxShots = 4;
+    int shotsFired = 0;                /
+    scoreState prevScoringState = scoreState.IDLE;
+    boolean parkPathStarted = false;
+    double parkLeaveTime = 25.0;
+
     boolean autoScoreComplete;
     enum LaunchZone {FAR, NEAR, NONE}
     LaunchZone launchZone = LaunchZone.NEAR;
@@ -90,9 +94,13 @@ public class pathingTester extends OpMode {
     @Override
     public void start() {
         opmodeTimer.resetTimer();
-        setPathState(pathingState.SCORE_PRELOAD);
+        pathState = pathingState.START;
+        pathTimer.resetTimer();
         scoringState = scoreState.READY;
-        boolean autoScoreComplete = false;
+        launchZone = LaunchZone.NONE;
+        autoScoreComplete = false;
+        shotsFired = 0;
+        parkPathStarted = false;
     }
 
 
@@ -100,7 +108,8 @@ public class pathingTester extends OpMode {
     public void loop() {
         follower.update();
         autonomousPathUpdate();
-        flyWheelControl(LaunchZone.NEAR);
+        flyWheelControl(launchZone);
+        prevScoringState = scoringState;
         automaticFeedControl();
         telemetryUpdate();
 
@@ -128,22 +137,56 @@ public class pathingTester extends OpMode {
 
     public void autonomousPathUpdate() {
         switch (pathState) {
+
             case START:
                 follower.followPath(scorePreload);
-                scoringState = scoreState.IDLE;
-                setPathState(pathingState.SCORE_PRELOAD);
+                launchZone = LaunchZone.NEAR;               // Starts the spin up on the way
+                scoringState = scoreState.IDLE;             // not arming until we arrive
+                pathState = pathingState.SCORE_PRELOAD;
+                pathTimer.resetTimer();
                 break;
 
             case SCORE_PRELOAD:
-                /* Since this is a pathChain, we can have Pedro hold the end point while we are grabbing the sample */
-                if (!follower.isBusy() || autoScoreComplete || pathTimer.getElapsedTimeSeconds() > 20) {
-                    flyWheelControl(LaunchZone.NONE);
-                    scoringState = scoreState.EMPTY;
-                    follower.followPath(goPark, true);
+                // if we are still driving, we keep spinning up flywheels
+                if (!follower.isBusy() ) {
+                    launchZone = LaunchZone.NEAR;
+                    break;
+                }
+
+                // We've arrived at the scoring pose: run inner scoring until done/time
+                launchZone = LaunchZone.NEAR;          // keep flywheels hot while scoring
+
+                // Arm the inner state machine if it's idle/ready
+                if (scoringState == scoreState.IDLE || scoringState == scoreState.READY) {
+                    scoringState = scoreState.WAIT_FOR_GATE;
+                }
+
+                // Exit condition: out of time to still park OR finished 4 shots
+                boolean timeToLeave = opmodeTimer.getElapsedTimeSeconds() >= parkLeaveTime;
+                if (shotsFired >= maxShots || timeToLeave) {
+                    launchZone = LaunchZone.NONE;      // spin down
+                    scoringState = scoreState.EMPTY;   // freeze feeder
+                    pathState = pathingState.GO_PARK;
+                    parkPathStarted = false;           // allow starting the park path
+                    pathTimer.resetTimer();
                 }
                 break;
 
-                case READY:
+            case GO_PARK:
+                // Kick off the park path once
+                if (!parkPathStarted) {
+                    follower.followPath(goPark);
+                    parkPathStarted = true;
+                }
+                launchZone = LaunchZone.NONE;          // flywheels off while driving to park
+
+                if (!follower.isBusy()) {
+                    pathState = pathingState.READY;
+                    pathTimer.resetTimer();
+                }
+                break;
+
+            case READY:
                 break;
         }
     }
@@ -191,22 +234,16 @@ public class pathingTester extends OpMode {
         switch (scoringState) {
             case IDLE:
                 decBot.feederWheel.setPower(0);
-                if (!autoScoreComplete) {
-                    scoringState = scoreState.WAIT_FOR_GATE;
-                }
                 break;
 
             case WAIT_FOR_GATE:
                 decBot.feederWheel.setPower(0);
-                if (inGate && shotCounter < shotCapacity) {
-                    // Apply brief boost and feed
+                if (inGate ) {
+                    nominalTarget = targetVelocity;         // lock in current nominal
                     targetVelocity = nominalTarget * boostFactor;
                     timer.reset();
                     decBot.feederWheel.setPower(feederPower);
                     scoringState = scoreState.FEEDING;
-                }
-                else {
-                    scoringState = scoreState.EMPTY;
                 }
                 break;
 
@@ -218,7 +255,6 @@ public class pathingTester extends OpMode {
                     // Start recovery (let wheel return to nominal target)
                     targetVelocity = nominalTarget;
                     timer.reset();
-                    shotCounter += 1;
                     scoringState = scoreState.RECOVERING;
                 }
                 break;
@@ -226,17 +262,17 @@ public class pathingTester extends OpMode {
             case RECOVERING:
                 // Give the wheel a short window to re-settle; you can also re-arm immediately.
                 if (timer.milliseconds() >= boostMs) {
-                    scoringState = scoreState.IDLE;
+                    scoringState = scoreState.WAIT_FOR_GATE;
                 }
-                break;
-
-            case READY:
-                autoScoreComplete = false;
                 break;
 
             case EMPTY:
                 autoScoreComplete = true;
                 break;
+        }
+        // ===== Count shot when FEEDING completes (first frame entering RECOVERING) =====
+        if (prevScoringState == scoreState.FEEDING && scoringState == scoreState.RECOVERING) {
+            shotsFired++;
         }
 
     }
@@ -254,6 +290,11 @@ public class pathingTester extends OpMode {
         telemetry.addData("Gate Tolerance ±%", gatePercent * 100.0);
         telemetry.addData("Left Fly Wheel velocity", currentVelocityLeft);
         telemetry.addData("Right Fly Wheel velocity", currentVelocityRight);
+        telemetry.addData("Shots Fired / Max", "%d / %d", shotsFired, maxShots);
+        telemetry.addData("Prev->Curr ScoreState", "%s -> %s", prevScoringState, scoringState);
+        telemetry.addData("At goal?", !follower.isBusy());
+        telemetry.addData("Auto Time (s)", "%.1f", opmodeTimer.getElapsedTimeSeconds());
+        telemetry.addData("Leaving to park at (s)", parkLeaveTime);
         telemetry.update();
     }
 
