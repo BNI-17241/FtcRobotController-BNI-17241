@@ -85,10 +85,8 @@ public class pathingTester extends OpMode {
         follower = Constants.createFollower(hardwareMap);
         buildPaths();
         follower.setStartingPose(startPose);
+        decBot.initRobot(hardwareMap);
     }
-    @Override
-    public void init_loop() {}
-
 
     @Override
     public void start() {
