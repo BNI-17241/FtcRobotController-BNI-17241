@@ -18,16 +18,15 @@ public class pathingTester extends OpMode {
 
     // ********** Pedro Pathing Variables, Poses, Paths & States *******************
 
-    private Follower follower;
-    private Timer pathTimer, actionTimer, opmodeTimer;
+    public Follower follower;
+    public Timer pathTimer, actionTimer, opmodeTimer;
 
-    // Used Visualizer to determine pose
-    private final Pose startPose = new Pose(56, 8, Math.toRadians(90)); // Start Pose of robot (Red Far Launch Zone).
-    private final Pose scorePose = new Pose(90, 90, Math.toRadians(50)); // Red Goal Scoring Pose of robot.
-    private final Pose parkHomePose = new Pose(50, 40, Math.toRadians(180)); // Red Home
+    public final Pose startPose = new Pose(56, 8, Math.toRadians(90)); // Start Pose of robot (Red Far Launch Zone).
+    public final Pose scorePose = new Pose(90, 90, Math.toRadians(50)); // Red Goal Scoring Pose of robot.
+    public final Pose parkHomePose = new Pose(50, 40, Math.toRadians(180)); // Red Home
 
-    private Path scorePreload;
-    private PathChain goPark, scorePickup1;
+    public Path scorePreload;
+    public PathChain goPark, scorePickup1;
 
     public enum pathingState { START, SCORE_PRELOAD, GO_PARK, READY }
     pathingState pathState = pathingState.READY;
@@ -38,40 +37,40 @@ public class pathingTester extends OpMode {
     public double targetVelocity = 0;
 
     // Velocity gate
-    double gatePercent = 0.05;            // ±5`     % gate window
+    public double gatePercent = 0.05;            // ±5`     % gate window
 
     // Feed action
-    double feederPower = 1.0;             // power for feeder wheel (0..1)
-    long   feedMs = 700;                  // how long to run feeder
+    public double feederPower = 1.0;             // power for feeder wheel (0..1)
+    public long   feedMs = 700;                  // how long to run feeder
 
     // Shot-drop compensation (temporary target bump while feeding)
-    double boostFactor = 1.02;            // +2% target during feed
-    long   boostMs = 180;                 // usually ~150–250 ms
+    public double boostFactor = 1.02;            // +2% target during feed
+    public long   boostMs = 180;                 // usually ~150–250 ms
 
     // Feeder FlyWheel Gate State Control
-    enum scoreState { READY, IDLE, WAIT_FOR_GATE, FEEDING, RECOVERING, EMPTY }
+    public enum scoreState { READY, IDLE, WAIT_FOR_GATE, FEEDING, RECOVERING, EMPTY }
     scoreState scoringState = scoreState.IDLE;
     ElapsedTime timer = new ElapsedTime();
 
-    int maxShots = 4;
-    int shotsFired = 0;
+    public int maxShots = 4;
+    public int shotsFired = 0;
     scoreState prevScoringState = scoreState.IDLE;
-    boolean parkPathStarted = false;
-    double parkLeaveTime = 25.0;
+    public boolean parkPathStarted = false;
+    public double parkLeaveTime = 25.0;
 
-    boolean autoScoreComplete;
-    enum LaunchZone {FAR, NEAR, NONE}
+    public boolean autoScoreComplete;
+    public enum LaunchZone {FAR, NEAR, NONE}
     LaunchZone launchZone = LaunchZone.NEAR;
 
 
-    double nominalTarget = 0;             // remembers non-boosted target
-    double tolerance; // floor to 10 ticks per secibd
-    boolean leftInGateStatus = false;
-    boolean rightInGateStatus = false;
-    boolean inGate = false;
+    public double nominalTarget = 0;             // remembers non-boosted target
+    public double tolerance; // floor to 10 ticks per secibd
+    public boolean leftInGateStatus = false;
+    public boolean rightInGateStatus = false;
+    public boolean inGate = false;
 
-    double currentVelocityLeft;
-    double currentVelocityRight;
+    public double currentVelocityLeft;
+    public double currentVelocityRight;
 
     // Constructor for Physical Robot
     public DecodeBot decBot = new DecodeBot();
