@@ -29,7 +29,7 @@ public class pathingTester extends OpMode {
     private Path scorePreload;
     private PathChain goPark, scorePickup1;
 
-    public enum pathingState { START, SCORE_PRELOAD, SCORE_COUNT, GO_PARK, READY }
+    public enum pathingState { START, SCORE_PRELOAD, GO_PARK, READY }
     pathingState pathState = pathingState.READY;
 
     // ********** FlyWheel and Intake Control Variables, Constants and States *******************
@@ -148,7 +148,7 @@ public class pathingTester extends OpMode {
 
             case SCORE_PRELOAD:
                 // if we are still driving, we keep spinning up flywheels
-                if (!follower.isBusy() ) {
+                if (follower.isBusy() ) {
                     launchZone = LaunchZone.NEAR;
                     break;
                 }
