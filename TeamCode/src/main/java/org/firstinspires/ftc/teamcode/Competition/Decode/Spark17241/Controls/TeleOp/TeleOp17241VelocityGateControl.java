@@ -275,7 +275,6 @@ public class TeleOp17241VelocityGateControl extends OpMode {
         telemetry.addData("Left|Right inGate Status", "%b | %b", leftInGateStatus, rightInGateStatus);
         telemetry.addData("Feeder Wheel Power", decBot.feederWheel.getPower());
         telemetry.update();
-        telemetry.update();
     }
 
 

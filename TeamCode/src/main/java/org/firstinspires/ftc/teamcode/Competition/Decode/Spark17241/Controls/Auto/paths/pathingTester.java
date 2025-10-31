@@ -8,11 +8,15 @@ import com.pedropathing.paths.PathChain;
 import com.pedropathing.util.Timer;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import  com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Robots.DecodeBot;
 import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.pedroPathing.Constants;
 
 @Autonomous(name = "Pathing Tester", group = "Lab")
 public class pathingTester extends OpMode {
+
+    // ********** Pedro Pathing Variables, Poses, Paths & States *******************
 
     private Follower follower;
     private Timer pathTimer, actionTimer, opmodeTimer;
@@ -28,24 +32,48 @@ public class pathingTester extends OpMode {
     public enum pathingState { START, SCORE_PRELOAD, PARK_HOME, READY }
     pathingState pathState = pathingState.READY;
 
+    // ********** FlyWheel and Intake Control Variables, Constants and States *******************
+
+    // Flywheel & Feed Wheel Variables
+    public double targetVelocity = 0;
+
+    // Velocity gate
+    double gatePercent = 0.05;            // ±5`     % gate window
+
+    // Feed action
+    double feederPower = 1.0;             // power for feeder wheel (0..1)
+    long   feedMs = 700;                  // how long to run feeder
+
+    // Shot-drop compensation (temporary target bump while feeding)
+    double boostFactor = 1.02;            // +2% target during feed
+    long   boostMs = 180;                 // usually ~150–250 ms
+
+    // Feeder FlyWheel Gate State Control
+    enum scoreState { READY, IDLE, WAIT_FOR_GATE, FEEDING, RECOVERING, EMPTY }
+    scoreState scoringState = scoreState.IDLE;
+    ElapsedTime timer = new ElapsedTime();
+
+    int shotCounter = 1;
+    int shotCapacity = 4;
+    boolean autoScoreComplete = true;
+    enum LaunchZone {FAR, NEAR, NONE}
+    LaunchZone launchZone = LaunchZone.NEAR;
 
 
+    double nominalTarget = 0;             // remembers non-boosted target
+    double tolerance; // floor to 10 ticks per secibd
+    boolean leftInGateStatus = false;
+    boolean rightInGateStatus = false;
+    boolean inGate = false;
 
+    double currentVelocityLeft;
+    double currentVelocityRight;
 
+    // Constructor for Physical Robot
+    public DecodeBot decBot = new DecodeBot();
 
-    @Override
-    public void loop() {
-        // These loop the movements of the robot, these must be called continuously in order to work
-        follower.update();
-        autonomousPathUpdate();
-        // Feedback to Driver Hub for debugging
-        telemetry.addData("path state", pathState);
-        telemetry.addData("x", follower.getPose().getX());
-        telemetry.addData("y", follower.getPose().getY());
-        telemetry.addData("heading", follower.getPose().getHeading());
-        telemetry.update();
-    }
-    /** This method is called once at the init of the OpMode. **/
+    //****************  Required OpMode Auto Control Methods  ********************
+
     @Override
     public void init() {
         pathTimer = new Timer();
@@ -55,22 +83,35 @@ public class pathingTester extends OpMode {
         buildPaths();
         follower.setStartingPose(startPose);
     }
-    /** This method is called continuously after Init while waiting for "play". **/
     @Override
     public void init_loop() {}
-    /** This method is called once at the start of the OpMode.
-     * It runs all the setup actions, including building paths and starting the path system **/
+
+
     @Override
     public void start() {
         opmodeTimer.resetTimer();
         setPathState(pathingState.SCORE_PRELOAD);
+        scoringState = scoreState.READY
+        ;
     }
-    /** We do not use this because everything should automatically disable **/
+
+
+    @Override
+    public void loop() {
+        // These loop the movements of the robot, these must be called continuously in order to work
+        follower.update();
+        autonomousPathUpdate();
+        flyWheelControl(LaunchZone.NEAR);
+        automaticFeedControl();
+        telemetryUpdate();
+
+    }
+
     @Override
     public void stop() {}
 
 
-    // Build our Paths using the various Poses
+    //****************  Pedro Pathing Control Methods  ********************
 
     public void buildPaths() {
         /* From Start and To Score Preload Path. We are using a BezierLine. */
@@ -86,31 +127,24 @@ public class pathingTester extends OpMode {
 
     }
 
-
     public void autonomousPathUpdate() {
         switch (pathState) {
             case START:
                 follower.followPath(scorePreload);
+                scoringState = scoreState.IDLE;
                 setPathState(pathingState.SCORE_PRELOAD);
                 break;
 
             case SCORE_PRELOAD:
-            /* You could check for
-            - Follower State: "if(!follower.isBusy()) {}"
-            - Time: "if(pathTimer.getElapsedTimeSeconds() > 1) {}"
-            - Robot Position: "if(follower.getPose().getX() > 36) {}"
-            */
-                /* This case checks the robot's position and will wait until the robot position is close (1 inch away) from the scorePose's position */
-                if(!follower.isBusy()) {
-
-                    /* NEED TO INSERT CODE TO SCORE PRELOAD ARTIFACTS */
-
-                    /* Since this is a pathChain, we can have Pedro hold the end point while we are grabbing the sample */
-                    follower.followPath(goPark,true);
-                    setPathState(pathingState.READY);
+                /* Since this is a pathChain, we can have Pedro hold the end point while we are grabbing the sample */
+                if (!follower.isBusy() || autoScoreComplete || pathTimer.getElapsedTimeSeconds() > 20) {
+                    flyWheelControl(LaunchZone.NONE);
+                    scoringState = scoreState.EMPTY;
+                    follower.followPath(goPark, true);
                 }
                 break;
-            case READY:
+
+                case READY:
                 break;
         }
     }
@@ -118,6 +152,110 @@ public class pathingTester extends OpMode {
     public void setPathState(pathingState pState) {
         pathState = pState;
         pathTimer.resetTimer();
+    }
+
+
+    //****************  Scoring Control Methods  ********************
+
+    // Fly Wheel Control
+    public void flyWheelControl(LaunchZone zone) {
+
+        if (zone == LaunchZone.NEAR) { targetVelocity = 1003; }
+        if (zone == LaunchZone.FAR) { targetVelocity = 1125; }
+        if (zone == LaunchZone.NONE) { targetVelocity = 0; }
+
+        decBot.flylaunch(targetVelocity);
+
+        // Keep nominalTarget synced unless we’re in a boost
+        if (scoringState == scoreState.IDLE || scoringState == scoreState.WAIT_FOR_GATE) {
+            nominalTarget = targetVelocity;
+        }
+
+        // Always command velocity each loop
+        decBot.leftFlyWheel.setVelocity(targetVelocity);
+        decBot.rightFlyWheel.setVelocity(targetVelocity);
+
+        // ===== Read velocities & gate =====
+        currentVelocityLeft = decBot.leftFlyWheel.getVelocity();
+        currentVelocityRight = decBot.rightFlyWheel.getVelocity();
+
+        tolerance = Math.max(10.0, Math.abs(nominalTarget) * gatePercent); // floor to 10 ticks per secibd
+        leftInGateStatus  = Math.abs(currentVelocityLeft - nominalTarget) <= tolerance;
+        rightInGateStatus = Math.abs(currentVelocityRight - nominalTarget) <= tolerance;
+        inGate = leftInGateStatus && rightInGateStatus;
+
+
+    }
+
+    public void automaticFeedControl() {
+        // ===== State machine =====
+        switch (scoringState) {
+            case IDLE:
+                decBot.feederWheel.setPower(0);
+                if (!autoScoreComplete) {
+                    scoringState = scoreState.WAIT_FOR_GATE;
+                }
+                break;
+
+            case WAIT_FOR_GATE:
+                decBot.feederWheel.setPower(0);
+                if (inGate && shotCounter < shotCapacity) {
+                    // Apply brief boost and feed
+                    targetVelocity = nominalTarget * boostFactor;
+                    timer.reset();
+                    decBot.feederWheel.setPower(feederPower);
+                    scoringState = scoreState.FEEDING;
+                }
+                else {
+                    scoringState = scoreState.EMPTY;
+                }
+                break;
+
+            case FEEDING:
+                // Maintain boost while feeding
+                targetVelocity = nominalTarget * boostFactor;
+                if (timer.milliseconds() >= feedMs) {
+                    decBot.feederWheel.setPower(0);
+                    // Start recovery (let wheel return to nominal target)
+                    targetVelocity = nominalTarget;
+                    timer.reset();
+                    shotCounter += 1;
+                    scoringState = scoreState.RECOVERING;
+                }
+                break;
+
+            case RECOVERING:
+                // Give the wheel a short window to re-settle; you can also re-arm immediately.
+                if (timer.milliseconds() >= boostMs) {
+                    scoringState = scoreState.IDLE;
+                }
+                break;
+
+            case READY:
+                autoScoreComplete = false;
+                break;
+
+            case EMPTY:
+                autoScoreComplete = true;
+                break;
+        }
+
+    }
+
+    // Feedback to Driver Hub for debugging
+    public void telemetryUpdate() {
+        telemetry.addData("Pathing State", pathState);
+        telemetry.addData("Launching State", scoringState);
+        telemetry.addData("inGate Status", "%b | %b", leftInGateStatus, rightInGateStatus);
+        telemetry.addData("x", follower.getPose().getX());
+        telemetry.addData("y", follower.getPose().getY());
+        telemetry.addData("heading", follower.getPose().getHeading());
+        telemetry.addData("Target Velocity: ", targetVelocity);
+        telemetry.addData("Target (nominal velocity)", nominalTarget);
+        telemetry.addData("Gate Tolerance ±%", gatePercent * 100.0);
+        telemetry.addData("Left Fly Wheel velocity", currentVelocityLeft);
+        telemetry.addData("Right Fly Wheel velocity", currentVelocityRight);
+        telemetry.update();
     }
 
 }
