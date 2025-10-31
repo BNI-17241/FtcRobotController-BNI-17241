@@ -55,7 +55,7 @@ public class pathingTester extends OpMode {
 
     int shotCounter = 1;
     int shotCapacity = 4;
-    boolean autoScoreComplete = true;
+    boolean autoScoreComplete;
     enum LaunchZone {FAR, NEAR, NONE}
     LaunchZone launchZone = LaunchZone.NEAR;
 
@@ -91,14 +91,13 @@ public class pathingTester extends OpMode {
     public void start() {
         opmodeTimer.resetTimer();
         setPathState(pathingState.SCORE_PRELOAD);
-        scoringState = scoreState.READY
-        ;
+        scoringState = scoreState.READY;
+        boolean autoScoreComplete = false;
     }
 
 
     @Override
     public void loop() {
-        // These loop the movements of the robot, these must be called continuously in order to work
         follower.update();
         autonomousPathUpdate();
         flyWheelControl(LaunchZone.NEAR);
