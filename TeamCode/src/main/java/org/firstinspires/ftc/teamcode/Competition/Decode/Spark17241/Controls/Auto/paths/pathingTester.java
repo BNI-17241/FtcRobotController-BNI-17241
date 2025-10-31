@@ -52,6 +52,7 @@ public class pathingTester extends OpMode {
     scoreState scoringState = scoreState.IDLE;
     ElapsedTime timer = new ElapsedTime();
 
+
     public int maxShots = 4;
     public int shotsFired = 0;
     scoreState prevScoringState = scoreState.IDLE;
@@ -81,7 +82,6 @@ public class pathingTester extends OpMode {
     public void init() {
         pathTimer = new Timer();
         opmodeTimer = new Timer();
-        opmodeTimer.resetTimer();
         follower = Constants.createFollower(hardwareMap);
         buildPaths();
         follower.setStartingPose(startPose);
@@ -92,11 +92,14 @@ public class pathingTester extends OpMode {
 
     @Override
     public void start() {
+        // Initialize and Reset Timers
         opmodeTimer.resetTimer();
-        pathState = pathingState.START;
         pathTimer.resetTimer();
+        // Initialize States for Pathing and Scoring
+        pathState = pathingState.START;
         scoringState = scoreState.READY;
         launchZone = LaunchZone.NONE;
+        // Initialize Variables for Scoring
         autoScoreComplete = false;
         shotsFired = 0;
         parkPathStarted = false;
@@ -105,11 +108,14 @@ public class pathingTester extends OpMode {
 
     @Override
     public void loop() {
+        // Pathing Control Methods
         follower.update();
         autonomousPathUpdate();
+        // Flywheel and Scoring Control Methods
         flyWheelControl(launchZone);
         prevScoringState = scoringState;
         automaticFeedControl();
+        // Telemetry Control Method
         telemetryUpdate();
 
     }
