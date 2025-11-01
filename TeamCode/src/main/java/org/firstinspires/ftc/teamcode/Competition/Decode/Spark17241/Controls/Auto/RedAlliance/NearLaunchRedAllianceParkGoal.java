@@ -11,7 +11,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Controls.Auto.AutoMain;
 import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.pedroPathing.Constants;
-@Disabled
+//@Disabled
 @Autonomous(name = "Red:Near Launch:Park Goal", group = "Drive")
 public class NearLaunchRedAllianceParkGoal extends AutoMain {
 
