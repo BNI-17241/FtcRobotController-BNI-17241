@@ -16,7 +16,7 @@ public abstract class AutoMain extends OpMode {
 
     /**  Flywheel / Feeder Variables  */
     protected double targetVelocity = 0;
-    protected double gatePercent = 0.03;     // ±5% gate window
+    protected double gatePercent = 0.02;     // ±5% gate window
     protected double feederPower = 1.0;      // feeder wheel power (0..1)
     protected long   feedMs = 700;           // ms to run feeder during a shot
     protected double boostFactor = 1.0;     // temporary +2% velocity during feed
