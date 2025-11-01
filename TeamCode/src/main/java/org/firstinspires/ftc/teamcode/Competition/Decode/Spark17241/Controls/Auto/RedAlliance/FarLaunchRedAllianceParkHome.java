@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Controls.Auto.paths;
+package org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Controls.Auto.RedAlliance;
 
 import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.BezierLine;
@@ -14,7 +14,7 @@ import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.pedroPathing
 @Autonomous(name = "Red:Far Launch:Park Home", group = "Drive")
 public class FarLaunchRedAllianceParkHome extends AutoMain {
 
-    // ********** Pedro Pathing Variables, Poses, Paths & States *******************
+    /**  Pedro Pathing Variables, Poses, Paths & States */
     public Follower follower;
     public Timer pathTimer, opmodeTimer;
 
@@ -25,12 +25,12 @@ public class FarLaunchRedAllianceParkHome extends AutoMain {
     public Path scorePreload;
     public PathChain goPark;
 
-public enum pathingState { START, SCORE_PRELOAD, GO_PARK, READY }
-pathingState pathState = pathingState.READY;
-private boolean parkPathStarted = false;
+    public enum pathingState { START, SCORE_PRELOAD, GO_PARK, READY }
+    pathingState pathState = pathingState.READY;
+    private boolean parkPathStarted = false;
 
 
-    //****************  Required OpMode Auto Control Methods  ********************
+    /**  Required OpMode Autonomous Control Methods  */
 
     @Override
     public void init() {
@@ -41,9 +41,9 @@ private boolean parkPathStarted = false;
         follower.setStartingPose(startPose);
         decBot.initRobot(hardwareMap);
 
-        // Optional per-path tuning:
-        maxShots = 4;
-        parkLeaveTime = 25.0;  // adjust if this path is long
+        /**  Optional per-path tuning */
+        maxShots = 4;                       // Adjust for shot attempts
+        parkLeaveTime = 25.0;               // Adjust if this path is long
     }
 
     @Override
@@ -72,7 +72,7 @@ private boolean parkPathStarted = false;
                 break;
 
             case SCORE_PRELOAD:
-                // If still driving to goal, optionally spin up early
+                /**  If still driving to goal, optionally spin up early */
                 if (follower.isBusy()) {
                     launchZone = LaunchZone.NEAR;
                     onLoopStart();
@@ -80,13 +80,13 @@ private boolean parkPathStarted = false;
                     break;
                 }
 
-                // Arrived: begin scoring session once
+                /**  Begin scoring session. Adjust for number of shots and time limit */
                 if (!isScoringActive()) {
-                    // NEAR zone, 4 shots, up to ~8 seconds at goal (tune if needed)
+
                     startScoring(LaunchZone.NEAR, 4, 8.0, opmodeTimer.getElapsedTimeSeconds());
                 }
 
-                // Continue scoring until finished or time to leave to park
+                /**  Edge Case Handling for Max Shots or Out of Autonomous Time  */
                 boolean done = updateScoring(opmodeTimer.getElapsedTimeSeconds());
                 boolean timeToLeave = opmodeTimer.getElapsedTimeSeconds() >= parkLeaveTime;
 
@@ -97,7 +97,7 @@ private boolean parkPathStarted = false;
                 break;
 
             case GO_PARK:
-                // Start the park path exactly once upon entering this state
+                /** Start the park path exactly once upon entering this state */
                 if (!parkPathStarted) {
                     follower.followPath(goPark);
                     parkPathStarted = true;
@@ -118,7 +118,8 @@ private boolean parkPathStarted = false;
                 break;
         }
 
-        // Telemetry
+        /**  Telemetry: Include Base Telementry and add additional for Pathing */
+
         baseTelemetry();
         telemetry.addData("Pathing State", pathState);
         telemetry.addData("At goal?", !follower.isBusy());
@@ -130,14 +131,14 @@ private boolean parkPathStarted = false;
     @Override
     public void stop() { }
 
-    //****************  Pedro Pathing Control Methods  ********************
+    /**  Pedro Pathing Control Methods  */
 
     public void buildPaths() {
-        // Start -> Score
+        // Start Pose -> Score Pose
         scorePreload = new Path(new BezierLine(startPose, scorePose));
         scorePreload.setLinearHeadingInterpolation(startPose.getHeading(), scorePose.getHeading());
 
-        // Score -> Park Home
+        // Score Pose -> Park Home Pose
         goPark = follower.pathBuilder()
                 .addPath(new BezierLine(scorePose, parkHomePose))
                 .setLinearHeadingInterpolation(scorePose.getHeading(), parkHomePose.getHeading())

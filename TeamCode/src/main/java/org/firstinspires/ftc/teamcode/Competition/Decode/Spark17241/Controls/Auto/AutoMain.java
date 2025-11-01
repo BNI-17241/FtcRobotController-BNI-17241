@@ -2,21 +2,19 @@ package org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Controls.Au
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
-
 import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Robots.DecodeBot;
 
 /**
  * Abstract base OpMode for Autonomous pathing.
- * Holds ALL shooter/flywheel/feeder logic so per-path OpModes only define paths and call the scoring session.
+ * Holds ALL shooter/flywheel/feeder logic so per-path OpModes only define paths and call the scoring methods.
  *
  */
+
 public abstract class AutoMain extends OpMode {
 
-    // ===== Scoring Constants (independent of pathing states) =====
-    public enum scoreState { READY, IDLE, WAIT_FOR_GATE, FEEDING, RECOVERING, EMPTY }
-    public enum LaunchZone { FAR, NEAR, NONE }
 
-    // ===== Flywheel / Feeder Variables =====
+
+    /**  Flywheel / Feeder Variables  */
     protected double targetVelocity = 0;
     protected double gatePercent = 0.05;     // ±5% gate window
     protected double feederPower = 1.0;      // feeder wheel power (0..1)
@@ -24,18 +22,21 @@ public abstract class AutoMain extends OpMode {
     protected double boostFactor = 1.02;     // temporary +2% velocity during feed
     protected long   boostMs = 180;          // recovery delay after feed
 
-    // ===== Scoring state machine =====
+    /**  Scoring State Machine Variables and Constants (Independent of Pathing States) ===== */
+    protected enum scoreState { READY, IDLE, WAIT_FOR_GATE, FEEDING, RECOVERING, EMPTY }
     protected scoreState scoringState = scoreState.IDLE;
     protected scoreState prevScoringState = scoreState.IDLE;
     protected ElapsedTime timer = new ElapsedTime();
 
-    // ===== Global counters / flags =====
+    /**  Global counters / Flags to tracker number of shots on goal */
     protected int maxShots = 4;
     protected int shotsFired = 0;
     protected boolean autoScoreComplete;
 
-    // ===== Launching Variables  =====
+    /**  Launching Fly Wheel and Feeder Wheel Variables  */
+    protected enum LaunchZone { FAR, NEAR, NONE }
     protected LaunchZone launchZone = LaunchZone.NEAR;
+
     protected double nominalTarget = 0;
     protected double tolerance;
     protected boolean leftInGateStatus = false;
@@ -44,21 +45,17 @@ public abstract class AutoMain extends OpMode {
     protected double currentVelocityLeft;
     protected double currentVelocityRight;
 
-    // ===== Parking timing helper (subclasses can override) =====
+    /** Parking timing helper  */
     protected double parkLeaveTime = 25.0;  // seconds into auto to guarantee time to park
 
-    // ===== Robot instance (motors/sensors accessed here) =====
+    /**  Robot instance (motors/sensors accessed here) */
     protected DecodeBot decBot = new DecodeBot();
 
-    // --------------------------------------------------------------------------------------------------
-    // Reusable base methods
-    // --------------------------------------------------------------------------------------------------
-
-    // Called at the very start of your OpMode.loop() in subclasses to snapshot the previous scoring state.
+    /** Called at the start of OpMode.loop() to snapshot the previous scoring state. */
     protected void onLoopStart() {
         prevScoringState = scoringState;
     }
-    // Flywheel velocity control and gate computation. Subclasses set `launchZone` before calling.
+    /** Flywheel Velocity Control and Gate Control based on Launch Zone */
     protected void updateFlywheelAndGate() {
         if (launchZone == LaunchZone.NEAR) {
             targetVelocity = 1003;
@@ -86,7 +83,7 @@ public abstract class AutoMain extends OpMode {
         inGate = leftInGateStatus && rightInGateStatus;
     }
 
-    // Feeder Wheel State Machine. Does not count shots; use `justCompletedFeed()` for edge-detect.
+    /** Feeder Wheel State Machine. Uses `justCompletedFeed()` for edge-detect. */
     protected void runAutoFeederCycle() {
         switch (scoringState) {
             case IDLE:
@@ -130,16 +127,17 @@ public abstract class AutoMain extends OpMode {
         }
     }
 
-    // True exactly when FEEDING → RECOVERING (one shot finished). */
+    /**  True when  FEEDING → RECOVERING (one shot finished). */
     protected boolean justCompletedFeed() {
         return (prevScoringState == scoreState.FEEDING) && (scoringState == scoreState.RECOVERING);
     }
 
+    /**  True when Scoring process is active. */
     protected boolean isScoringActive() {
         return scoring.active;
     }
 
-    /** Optional shared telemetry */
+    /** Shared telemetry */
     protected void baseTelemetry() {
         telemetry.addData("LaunchZone", launchZone);
         telemetry.addData("Score State", scoringState);
@@ -153,9 +151,7 @@ public abstract class AutoMain extends OpMode {
         telemetry.addData("R Vel", currentVelocityRight);
     }
 
-    // --------------------------------------------------------------------------------------------------
-    // Scoring Session Orchestrator (template-method style)
-    // --------------------------------------------------------------------------------------------------
+    /** Scoring Session Tracking / Orchestrator */
 
     protected static class ScoringSession {
         boolean active = false;
@@ -168,7 +164,7 @@ public abstract class AutoMain extends OpMode {
 
     protected ScoringSession scoring = new ScoringSession();
 
-    // Call once when you arrive at the shooting pose. */
+    /** Called once when robot arrives at the scoring  pose. */
     protected void startScoring(LaunchZone zone, int shots, double timeLimitSec, double nowSec) {
         scoring.active = true;
         scoring.zone = zone;
@@ -181,10 +177,7 @@ public abstract class AutoMain extends OpMode {
         scoringState = scoreState.WAIT_FOR_GATE;
     }
 
-    /**
-     * Call every loop while scoring.active. Returns true when done (hit count or timed out).
-     * Encapsulates flywheel control + feeder FSM + shot edge counting.
-     */
+    /** Call every loop while scoring.active. Returns true when done (hit count or times out). */
     protected boolean updateScoring(double nowSec) {
         if (!scoring.active) return true;
 
@@ -209,7 +202,7 @@ public abstract class AutoMain extends OpMode {
         return false;
     }
 
-    /** Optional: force stop (if pathing needs to bail early). */
+    /** Optional: force stop (if pathing needs to force stop early). */
     protected void stopScoring() {
         scoring.active = false;
         launchZone = LaunchZone.NONE;
