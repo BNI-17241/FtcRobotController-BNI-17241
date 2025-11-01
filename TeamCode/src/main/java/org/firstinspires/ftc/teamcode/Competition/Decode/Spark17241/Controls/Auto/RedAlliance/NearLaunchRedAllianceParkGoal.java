@@ -19,9 +19,9 @@ public class NearLaunchRedAllianceParkGoal extends AutoMain {
     public Follower follower;
     public Timer pathTimer, opmodeTimer;
 
-    public final Pose startPose = new Pose(12, 116, Math.toRadians(130));     // Red Far Launch Zone start
-    public final Pose scorePose = new Pose(60, 60, Math.toRadians(275));    // Red goal scoring pose
-    public final Pose parkPose = new Pose(20, 1100, Math.toRadians(45)); // Red Home (park)
+    public final Pose startPose = new Pose(122, 122, Math.toRadians(45));     // Red Far Launch Zone start
+    public final Pose scorePose = new Pose(79, 75, Math.toRadians(45));    // Red goal scoring pose
+    public final Pose parkPose = new Pose(96, 130, Math.toRadians(270)); // Red Home (park)
 
     public Path scorePreload;
     public PathChain goPark;
