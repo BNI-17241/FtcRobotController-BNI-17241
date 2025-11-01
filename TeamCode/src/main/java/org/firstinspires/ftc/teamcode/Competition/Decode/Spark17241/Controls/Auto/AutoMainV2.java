@@ -48,8 +48,8 @@ public abstract class AutoMainV2 extends OpMode {
 
     // Gate stability + inter-shot lockout
     protected int gateStableCount = 0;
-    protected int gateStableNeeded = 2;      // require 2 consecutive in-gate frames
-    protected double minInterShotMs = 350;     // minimum delay between shots
+    protected int gateStableNeeded = 3;      // require 2 consecutive in-gate frames
+    protected double minInterShotMs = 600;     // minimum delay between shots
     protected double lastShotMs = 0;           // timestamp of last completed shot
     protected ElapsedTime shotClock = new ElapsedTime();
 
@@ -111,8 +111,10 @@ public abstract class AutoMainV2 extends OpMode {
 
             case WAIT_FOR_GATE:
                 decBot.feederWheel.setPower(0);
+
                 // Require stability + inter-shot lockout so we don't double-fire
                 boolean interShotOk = (lastShotMs == 0) || (shotClock.milliseconds() - lastShotMs >= minInterShotMs);
+
                 if (inGate && gateStableCount >= gateStableNeeded && interShotOk) {
                     // Lock nominal to current zone target (no drift)
                     nominalTarget = targetVelocity;
@@ -120,8 +122,8 @@ public abstract class AutoMainV2 extends OpMode {
                     targetVelocity = nominalTarget * boostFactor;
                     timer.reset();
                     decBot.feederWheel.setPower(feederPower);
-                    scoringState = scoreState.FEEDING;
                     gateStableCount = 0; // next shot must re-qualify
+                    scoringState = scoreState.FEEDING;
                 }
                 break;
 
