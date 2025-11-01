@@ -111,7 +111,7 @@ public class BlueStartHumanParkSpike_oz extends AutoMain {
                 onLoopStart();
                 updateFlywheelAndGate();         // harmless when NONE
                 // When park path finishes, advance to READY
-                if (parkPathStarted && !follower.isBusy()) {
+                if (!follower.isBusy()) {
                     pathState = pathingState.COLLECT;
                 }
                 break;
