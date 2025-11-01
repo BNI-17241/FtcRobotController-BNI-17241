@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Controls.Auto.RedAlliance;
+package org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Controls.Auto.BlueAlliance;
 
 import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.BezierLine;
@@ -7,21 +7,21 @@ import com.pedropathing.paths.Path;
 import com.pedropathing.paths.PathChain;
 import com.pedropathing.util.Timer;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Controls.Auto.AutoMain;
 import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.pedroPathing.Constants;
+
 //@Disabled
-@Autonomous(name = "Red:Start Goal:Park Goal", group = "Drive")
-public class NearLaunchRedAllianceParkGoal extends AutoMain {
+@Autonomous(name = "Blue:Start Goal:Park Goal", group = "Drive")
+public class BlueStartGoalParkGoal extends AutoMain {
 
     /**  Pedro Pathing Variables, Poses, Paths & States */
     public Follower follower;
     public Timer pathTimer, opmodeTimer;
 
-    public final Pose startPose = new Pose(122, 122, Math.toRadians(45));     // Red Far Launch Zone start
-    public final Pose scorePose = new Pose(85, 81, Math.toRadians(45));    // Red goal scoring pose
-    public final Pose parkPose = new Pose(96, 130, Math.toRadians(270)); // Red Home (park)
+    public final Pose startPose = new Pose(22, 122, Math.toRadians(135));     // Red Far Launch Zone start
+    public final Pose scorePose = new Pose(59, 81, Math.toRadians(135));    // Red goal scoring pose
+    public final Pose parkPose = new Pose(50, 130, Math.toRadians(270)); // Red Home (park)
 
     public Path scorePreload;
     public PathChain goPark;
