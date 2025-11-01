@@ -11,16 +11,16 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Controls.Auto.AutoMain;
 import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.pedroPathing.Constants;
 
-@Autonomous(name = "Red:Far Launch:Park Home", group = "Drive")
-public class FarLaunchRedAllianceParkHome extends AutoMain {
+@Autonomous(name = "Red:Near Launch:Park Goal", group = "Drive")
+public class NearLaunchRedAllianceParkGoal extends AutoMain {
 
     /**  Pedro Pathing Variables, Poses, Paths & States */
     public Follower follower;
     public Timer pathTimer, opmodeTimer;
 
-    public final Pose startPose = new Pose(100, 8, Math.toRadians(90));     // Red Far Launch Zone start
-    public final Pose scorePose = new Pose(80, 80, Math.toRadians(45));    // Red goal scoring pose
-    public final Pose parkPose = new Pose(90, 40, Math.toRadians(0)); // Red Home (park)
+    public final Pose startPose = new Pose(12, 116, Math.toRadians(130));     // Red Far Launch Zone start
+    public final Pose scorePose = new Pose(60, 60, Math.toRadians(275));    // Red goal scoring pose
+    public final Pose parkPose = new Pose(20, 1100, Math.toRadians(45)); // Red Home (park)
 
     public Path scorePreload;
     public PathChain goPark;
