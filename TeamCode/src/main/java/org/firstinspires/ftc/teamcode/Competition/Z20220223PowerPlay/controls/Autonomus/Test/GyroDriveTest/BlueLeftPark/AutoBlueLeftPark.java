@@ -1,11 +1,12 @@
 package org.firstinspires.ftc.teamcode.Competition.Z20220223PowerPlay.controls.Autonomus.Test.GyroDriveTest.BlueLeftPark;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import org.firstinspires.ftc.teamcode.Competition.Z20220223PowerPlay.Robots.CompetionBot;
 import org.firstinspires.ftc.teamcode.Competition.Z20220223PowerPlay.Robots.StraferBot;
 import org.firstinspires.ftc.teamcode.Competition.Z20220223PowerPlay.controls.Autonomus.Test.GyroDriveTest.AutoTargetZone;
-
+@Disabled
 @Autonomous (name = "GyroDrive Test - giughui")
 public class AutoBlueLeftPark extends BlueLeftPark {
 

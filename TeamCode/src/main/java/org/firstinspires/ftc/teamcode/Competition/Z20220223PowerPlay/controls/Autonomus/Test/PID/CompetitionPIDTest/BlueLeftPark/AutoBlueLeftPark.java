@@ -1,11 +1,12 @@
 package org.firstinspires.ftc.teamcode.Competition.Z20220223PowerPlay.controls.Autonomus.Test.PID.CompetitionPIDTest.BlueLeftPark;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import org.firstinspires.ftc.teamcode.Competition.Z20220223PowerPlay.Robots.CompetionBot;
 import org.firstinspires.ftc.teamcode.Competition.Z20220223PowerPlay.Robots.StraferBot;
 import org.firstinspires.ftc.teamcode.Competition.Z20220223PowerPlay.controls.Autonomus.Test.PID.CompetitionPIDTest.AutoTargetZone;
-
+@Disabled
 @Autonomous (name = "Detection - Blue Left || Red Left (P.I.D)")
 public class AutoBlueLeftPark extends BlueLeftPark {
 
