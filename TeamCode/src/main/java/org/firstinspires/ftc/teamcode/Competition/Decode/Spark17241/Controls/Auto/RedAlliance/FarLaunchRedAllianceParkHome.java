@@ -19,7 +19,7 @@ public class FarLaunchRedAllianceParkHome extends AutoMain {
     public Timer pathTimer, opmodeTimer;
 
     public final Pose startPose = new Pose(100, 8, Math.toRadians(90));     // Red Far Launch Zone start
-    public final Pose scorePose = new Pose(80, 80, Math.toRadians(45));    // Red goal scoring pose
+    public final Pose scorePose = new Pose(79, 75, Math.toRadians(45));    // Red goal scoring pose // 80 x 80
     public final Pose parkPose = new Pose(90, 40, Math.toRadians(0)); // Red Home (park)
 
     public Path scorePreload;
