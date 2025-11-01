@@ -10,7 +10,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Controls.Auto.AutoMain;
 import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.pedroPathing.Constants;
-
+//@Disabled
 @Autonomous(name = "Blue:Start Human:Park Spike", group = "Drive")
 public class FarLaunchBlueAllianceParkHome extends AutoMain {
 //
