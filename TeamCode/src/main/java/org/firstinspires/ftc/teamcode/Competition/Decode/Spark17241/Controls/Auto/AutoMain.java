@@ -29,7 +29,7 @@ public abstract class AutoMain extends OpMode {
     protected ElapsedTime timer = new ElapsedTime();
 
     /**  Global counters / Flags to tracker number of shots on goal */
-    protected int maxShots = 4;
+    protected int maxShots = 5;
     protected int shotsFired = 0;
     protected boolean autoScoreComplete;
 
@@ -58,7 +58,7 @@ public abstract class AutoMain extends OpMode {
     /** Flywheel Velocity Control and Gate Control based on Launch Zone */
     protected void updateFlywheelAndGate() {
         if (launchZone == LaunchZone.NEAR) {
-            targetVelocity = 934;                        //based on feedback 11/1
+            targetVelocity = 890;                        //based on feedback 11/1
         } else if (launchZone == LaunchZone.FAR) {
             targetVelocity = 1093;                         //based on feedback 11/1
         } else {
