@@ -55,6 +55,8 @@ public abstract class AutoMain extends OpMode {
     protected void onLoopStart() {
         prevScoringState = scoringState;
     }
+
+
     /** Flywheel Velocity Control and Gate Control based on Launch Zone */
     protected void updateFlywheelAndGate() {
         if (launchZone == LaunchZone.NEAR) {
@@ -207,5 +209,17 @@ public abstract class AutoMain extends OpMode {
         scoring.active = false;
         launchZone = LaunchZone.NONE;
         scoringState = scoreState.EMPTY;
+    }
+    // ****** Led Controller
+    public void LEDDriver()
+    {
+        if(targetVelocity == 0){decBot.LEDCon(5);}
+        else {
+            if (leftInGateStatus && rightInGateStatus) {
+                decBot.LEDCon(4);
+            } else {
+                decBot.LEDCon(1);
+            }
+        }
     }
 }

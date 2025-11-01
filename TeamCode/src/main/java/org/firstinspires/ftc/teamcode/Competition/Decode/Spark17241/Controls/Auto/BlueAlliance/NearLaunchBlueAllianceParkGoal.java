@@ -119,6 +119,9 @@ public class NearLaunchBlueAllianceParkGoal extends AutoMain {
                 break;
         }
 
+        /** LED Driver for Gate Control */
+        LEDDriver();
+
         /**  Telemetry: Include Base Telementry and add additional for Pathing */
 
         baseTelemetry();

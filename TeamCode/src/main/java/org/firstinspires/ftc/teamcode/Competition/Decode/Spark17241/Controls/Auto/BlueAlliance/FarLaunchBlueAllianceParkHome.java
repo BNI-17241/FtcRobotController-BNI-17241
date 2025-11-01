@@ -117,6 +117,8 @@ public class FarLaunchBlueAllianceParkHome extends AutoMain {
                 updateFlywheelAndGate();
                 break;
         }
+        /** LED Driver for Gate Control */
+        LEDDriver();
 
         /**  Telemetry: Include Base Telementry and add additional for Pathing */
 
