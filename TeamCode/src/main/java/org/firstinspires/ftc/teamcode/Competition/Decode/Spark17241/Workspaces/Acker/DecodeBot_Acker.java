@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Workspaces.Acker;
 
+import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -7,27 +8,30 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
+import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Pinpoint.Pinpoint;
+import org.firstinspires.ftc.teamcode.Competition.Z20232024CenterStage.Gold10219.Drivetrains.MecanumDrive;
 
-public class DecodeBot_Acker {
+public class DecodeBot_Acker extends MecanumDrive {
 
     public HardwareMap hwBot = null;
 
+    public Limelight3A limelight = null;
+
+    //Drivetrain Motors
     public DcMotor frontLeftMotor;
     public DcMotor frontRightMotor;
     public DcMotor rearLeftMotor;
     public DcMotor rearRightMotor;
 
+    // Fly Wheels and Variable Feeder Motors
     public DcMotorEx leftFlyWheel;
     public DcMotorEx rightFlyWheel;
-    public DcMotorEx feederWheel;
-
-    public Pinpoint odo = new Pinpoint();
-
+    public DcMotor feederWheel;
+    public Servo LED;
 
     public LinearOpMode LinearOp = null;
-
 
     public static final double TICKS_PER_ROTATION = 386.3;
     public static final double ODO_TICKS_PER_ROTATION = 2000;
@@ -51,6 +55,7 @@ public class DecodeBot_Acker {
     //Init Method
     public void initRobot(HardwareMap hwMap) {
         hwBot = hwMap;
+
         //Drivetrain Motors HW Mapping
         frontLeftMotor = hwBot.dcMotor.get("front_left_motor");//Port 0 Control
         frontRightMotor = hwBot.dcMotor.get("front_right_motor");//Port 1 Control
@@ -61,6 +66,8 @@ public class DecodeBot_Acker {
         leftFlyWheel = hwBot.get(DcMotorEx.class, "left_fly_wheel");;//Port ex 0
         rightFlyWheel = hwBot.get(DcMotorEx.class, "right_fly_wheel");//Port ex 1
         feederWheel = hwBot.get(DcMotorEx.class,"feeder_wheel");//Port ex 2
+
+        LED = hwBot.servo.get("led");//Servo 1 Control
 
         // Drivetrain Motor direction mapping
         frontLeftMotor.setDirection(DcMotor.Direction.REVERSE);
@@ -94,7 +101,9 @@ public class DecodeBot_Acker {
         rightFlyWheel.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         feederWheel.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-        RevHubOrientationOnRobot.LogoFacingDirection logoDirection = RevHubOrientationOnRobot.LogoFacingDirection.UP;
+
+        //IMU for Rev Robotics Control Hub
+        RevHubOrientationOnRobot.LogoFacingDirection logoDirection = RevHubOrientationOnRobot.LogoFacingDirection.RIGHT;
         RevHubOrientationOnRobot.UsbFacingDirection usbDirection = RevHubOrientationOnRobot.UsbFacingDirection.BACKWARD;
         RevHubOrientationOnRobot orientationOnRobot = new RevHubOrientationOnRobot(logoDirection, usbDirection);
 
@@ -104,17 +113,45 @@ public class DecodeBot_Acker {
 
     }
 
+    // Limelight Initialization  Methods
+    public void initLimelight(HardwareMap hwMap) {
+        hwBot = hwMap;
+        limelight = hwBot.get(Limelight3A.class, "limelight");
+
+    }
+
+    // Limelight Control  Methods
+    public void startLimelight() {
+
+        limelight.pipelineSwitch(0);
+        limelight.start();
+
+    }
+
+    public void stopLimelight() {
+        limelight.stop();
+
+    }
+
+
+    // LED Control Method
+    public void LEDCon(int color)
+    {
+        float n = new float[]{0, .279f, .333f, .388f, .5f, .611f, .722f}[color];
+        LED.setPosition(n);
+    }
+
+    // Fly Wheel Control Method
     public void flylaunch(double velocity ){
 
-            leftFlyWheel.setVelocity(velocity);
-            rightFlyWheel.setVelocity(velocity);
+        leftFlyWheel.setVelocity(velocity);
+        rightFlyWheel.setVelocity(velocity);
 
     }
-    public void feedArtifact(double speed){
 
+    // Feed Wheel Control Method
+    public void feedArtifact(double speed){
         feederWheel.setPower(speed);
 
-
     }
-
 }

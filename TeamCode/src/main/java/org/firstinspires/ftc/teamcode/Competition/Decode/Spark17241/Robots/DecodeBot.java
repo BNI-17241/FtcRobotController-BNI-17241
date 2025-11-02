@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Robots;
 
+import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -28,10 +29,7 @@ public class DecodeBot{
     public DcMotor feederWheel;
     public Servo LED;
 
-    public Pinpoint odo = new Pinpoint();
-
     public LinearOpMode LinearOp = null;
-
 
     public static final double TICKS_PER_ROTATION = 386.3;
     public static final double ODO_TICKS_PER_ROTATION = 2000;
