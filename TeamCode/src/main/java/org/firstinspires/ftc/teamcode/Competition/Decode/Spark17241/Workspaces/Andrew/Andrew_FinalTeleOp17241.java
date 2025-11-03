@@ -350,9 +350,8 @@ public class Andrew_FinalTeleOp17241 extends OpMode {
         {
             List<LLResultTypes.FiducialResult> fiducialResults = result.getFiducialResults();
             for (LLResultTypes.FiducialResult fr : fiducialResults) {
-                if(fr.getFiducialId() == 20)
+                if(fr.getFiducialId() == 20 || fr.getFiducialId() == 24)
                 {
-                    telemetry.addData("Found Blue = True", fr.getTargetXDegrees());
                     if(fr.getTargetXDegrees() < -autoVariation)
                     {
                         //Turn Left
