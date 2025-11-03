@@ -33,6 +33,14 @@ public class Andrew_FinalTeleOp17241 extends OpMode {
     double powerThreshold;
     double speedMultiply = 0.75;
 
+    //Auto Correct X Variation (In X values from limelight, approx +- 20 total)
+    double autoVariation = 3;
+    //Is targeting
+    public boolean target = false;
+
+    //Limelight Cam data
+    public LLResult result;
+
     // Flywheel & Feed Wheel Variables
     public double targetVelocity = 0;
 
@@ -88,6 +96,7 @@ public class Andrew_FinalTeleOp17241 extends OpMode {
     public void loop() {
         speedControl();
         limeLightData();
+        autoTarget();
         telemetryOutput();
         robotCentricDrive();
         flyWheelControl();
@@ -276,14 +285,14 @@ public class Andrew_FinalTeleOp17241 extends OpMode {
     //****************Limelight Data Collection
     public void limeLightData()
     {
-        LLResult result = limelight.getLatestResult();
+        result = limelight.getLatestResult();
         if (result.isValid()) {
             // Access general information
             Pose3D botpose = result.getBotpose();
             double captureLatency = result.getCaptureLatency();
             double targetingLatency = result.getTargetingLatency();
             double parseLatency = result.getParseLatency();
-            telemetry.addData("LL Latency", captureLatency + targetingLatency);
+            /*telemetry.addData("LL Latency", captureLatency + targetingLatency);
             telemetry.addData("Parse Latency", parseLatency);
             telemetry.addData("PythonOutput", java.util.Arrays.toString(result.getPythonOutput()));
 
@@ -311,24 +320,40 @@ public class Andrew_FinalTeleOp17241 extends OpMode {
             for (LLResultTypes.DetectorResult dr : detectorResults) {
                 telemetry.addData("Detector", "Class: %s, Area: %.2f", dr.getClassName(), dr.getTargetArea());
             }
-
+            */
             // Access fiducial results
             List<LLResultTypes.FiducialResult> fiducialResults = result.getFiducialResults();
             for (LLResultTypes.FiducialResult fr : fiducialResults) {
                 telemetry.addData("Fiducial", "ID: %d, Family: %s, X: %.2f, Y: %.2f", fr.getFiducialId(), fr.getFamily(), fr.getTargetXDegrees(), fr.getTargetYDegrees());
             }
-
+            /*
             // Access color results
             List<LLResultTypes.ColorResult> colorResults = result.getColorResults();
             for (LLResultTypes.ColorResult cr : colorResults) {
                 telemetry.addData("Color", "X: %.2f, Y: %.2f", cr.getTargetXDegrees(), cr.getTargetYDegrees());
-            }
+            }*/
         } else {
             telemetry.addData("Limelight", "No data available");
         }
 
     }
 
+
+    //Auto Correction
+    public void autoTarget()
+    {
+        if(gamepad1.left_stick_button && !target)
+        {
+            List<LLResultTypes.FiducialResult> fiducialResults = result.getFiducialResults();
+            for (LLResultTypes.FiducialResult fr : fiducialResults) {
+                if(fr.getFiducialId() == 20)
+                {
+                    telemetry.addData("Found Blue = True", fr.getTargetXDegrees());
+                }
+                //telemetry.addData("Fiducial", "ID: %d, Family: %s, X: %.2f, Y: %.2f", fr.getFiducialId(), fr.getFamily(), fr.getTargetXDegrees(), fr.getTargetYDegrees());
+            }
+        }
+    }
 
 
     // ***** Helper Method for Telemetry
