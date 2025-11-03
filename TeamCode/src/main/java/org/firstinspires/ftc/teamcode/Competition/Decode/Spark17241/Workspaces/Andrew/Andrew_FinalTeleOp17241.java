@@ -35,6 +35,10 @@ public class Andrew_FinalTeleOp17241 extends OpMode {
 
     //Auto Correct X Variation (In X values from limelight, approx +- 20 total)
     double autoVariation = 3;
+
+    //Autocorrect rotation speed
+    double autoSpeed = .5;
+
     //Is targeting
     public boolean target = false;
 
@@ -349,7 +353,25 @@ public class Andrew_FinalTeleOp17241 extends OpMode {
                 if(fr.getFiducialId() == 20)
                 {
                     telemetry.addData("Found Blue = True", fr.getTargetXDegrees());
+                    if(fr.getTargetXDegrees() > autoVariation)
+                    {
+                        //Turn Left
+                        setMotorPower(decBot.frontLeftMotor, -autoSpeed, powerThreshold, speedMultiply);
+                        setMotorPower(decBot.frontRightMotor, autoSpeed, powerThreshold, speedMultiply);
+                        setMotorPower(decBot.rearLeftMotor,  -autoSpeed, powerThreshold, speedMultiply);
+                        setMotorPower(decBot.rearRightMotor,  autoSpeed, powerThreshold, speedMultiply);
+
+                    }
+                    if(fr.getTargetXDegrees() < -autoVariation)
+                    {
+                        //Turn Right
+                        setMotorPower(decBot.frontLeftMotor,  autoSpeed, powerThreshold, speedMultiply);
+                        setMotorPower(decBot.frontRightMotor,-autoSpeed, powerThreshold, speedMultiply);
+                        setMotorPower(decBot.rearLeftMotor,   autoSpeed, powerThreshold, speedMultiply);
+                        setMotorPower(decBot.rearRightMotor, -autoSpeed, powerThreshold, speedMultiply);
+                    }
                 }
+                //telemetry.addData("Fiducial2:", "ID: %d, X: %.2f",fr.getFiducialId(), fr.getTargetXDegrees());
                 //telemetry.addData("Fiducial", "ID: %d, Family: %s, X: %.2f, Y: %.2f", fr.getFiducialId(), fr.getFamily(), fr.getTargetXDegrees(), fr.getTargetYDegrees());
             }
         }
