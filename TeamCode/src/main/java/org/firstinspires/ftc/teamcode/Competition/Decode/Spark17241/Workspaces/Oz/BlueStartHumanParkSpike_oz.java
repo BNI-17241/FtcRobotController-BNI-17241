@@ -35,7 +35,7 @@ public class BlueStartHumanParkSpike_oz extends AutoMain_oz {
     public PathChain collect;
     public PathChain pushBall;
     public PathChain backUp;
-    public ElapsedTime mRuntime = new ElapsedTime();
+
 
 
     public enum pathingState {Delay, START, SCORE_PRELOAD, LINE_UP, COLLECT, PUSH_BALL, BACK_UP, READY }
@@ -159,16 +159,8 @@ public class BlueStartHumanParkSpike_oz extends AutoMain_oz {
                 break;
 
         }
-        if (currentCountDownShot != 0){
-            if (!startCount){
-                startCount = true;
-                mRuntime.reset();
-            }
-        }
-        if (mRuntime.time() >= currentCountDownShot){
-            currentCountDownShot = 0;
-            startCount = false;
-        }
+
+
         /** LED Driver for Gate Control */
         LEDDriver();
 
@@ -180,6 +172,7 @@ public class BlueStartHumanParkSpike_oz extends AutoMain_oz {
         telemetry.addData("Auto Time (s)", "%.1f", opmodeTimer.getElapsedTimeSeconds());
         telemetry.addData("Leaving to park at (s)", LastTimeToLeave);
         telemetry.addData("count down", currentCountDownShot);
+        telemetry.addData("M Time", mRuntime);
         telemetry.update();
     }
 

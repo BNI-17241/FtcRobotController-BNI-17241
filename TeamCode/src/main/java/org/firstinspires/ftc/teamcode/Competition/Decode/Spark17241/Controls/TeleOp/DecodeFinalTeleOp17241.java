@@ -1,17 +1,24 @@
 package org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Controls.TeleOp;
 
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
+import com.qualcomm.hardware.limelightvision.LLResult;
+import com.qualcomm.hardware.limelightvision.LLResultTypes;
+import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
+import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
 import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Robots.DecodeBot;
-// Not used as of Monday 11/3 practice
-@Disabled
-@TeleOp(name = "Decode TeleOp Gate Control", group = "Drive")
-public class TeleOp17241VelocityGateControl extends OpMode {
+
+import java.util.List;
+
+@TeleOp(name = "Decode TeleOp", group = "Drive")
+public class DecodeFinalTeleOp17241 extends OpMode {
+
+    private Limelight3A limelight;
+
 
     // Drivetrain Variables
     double leftStickYVal;
@@ -24,6 +31,18 @@ public class TeleOp17241VelocityGateControl extends OpMode {
     double rearRightSpeed;
     double powerThreshold;
     double speedMultiply = 0.75;
+
+    //Auto Correct X Variation (In X values from limelight, approx +- 20 total)
+    double autoVariation = 3;
+
+    //Autocorrect rotation speed
+    double autoSpeed = .5;
+
+    //Is targeting
+    public boolean target = false;
+
+    //Limelight Cam data
+    public LLResult result;
 
     // Flywheel & Feed Wheel Variables
     public double targetVelocity = 0;
@@ -70,13 +89,17 @@ public class TeleOp17241VelocityGateControl extends OpMode {
     @Override
     public void init() {
         decBot.initRobot(hardwareMap);
-        decBot.imu.resetYaw();                   // REV
+        decBot.imu.resetYaw();// REV
+        limelight = hardwareMap.get(Limelight3A.class, "limelight");
+        limelight.pipelineSwitch(0);
+        limelight.start();
     }
-
 
     @Override
     public void loop() {
         speedControl();
+        limeLightData();
+        autoTarget();
         telemetryOutput();
         robotCentricDrive();
         flyWheelControl();
@@ -259,6 +282,97 @@ public class TeleOp17241VelocityGateControl extends OpMode {
             decBot.feedArtifact(0);
         }
 
+    }
+
+
+    //****************Limelight Data Collection
+    public void limeLightData()
+    {
+        result = limelight.getLatestResult();
+        if (result.isValid()) {
+            // Access general information
+            Pose3D botpose = result.getBotpose();
+            double captureLatency = result.getCaptureLatency();
+            double targetingLatency = result.getTargetingLatency();
+            double parseLatency = result.getParseLatency();
+            /*telemetry.addData("LL Latency", captureLatency + targetingLatency);
+            telemetry.addData("Parse Latency", parseLatency);
+            telemetry.addData("PythonOutput", java.util.Arrays.toString(result.getPythonOutput()));
+
+            telemetry.addData("tx", result.getTx());
+            telemetry.addData("txnc", result.getTxNC());
+            telemetry.addData("ty", result.getTy());
+            telemetry.addData("tync", result.getTyNC());
+
+            telemetry.addData("Botpose", botpose.toString());
+
+            // Access barcode results
+            List<LLResultTypes.BarcodeResult> barcodeResults = result.getBarcodeResults();
+            for (LLResultTypes.BarcodeResult br : barcodeResults) {
+                telemetry.addData("Barcode", "Data: %s", br.getData());
+            }
+
+            // Access classifier results
+            List<LLResultTypes.ClassifierResult> classifierResults = result.getClassifierResults();
+            for (LLResultTypes.ClassifierResult cr : classifierResults) {
+                telemetry.addData("Classifier", "Class: %s, Confidence: %.2f", cr.getClassName(), cr.getConfidence());
+            }
+
+            // Access detector results
+            List<LLResultTypes.DetectorResult> detectorResults = result.getDetectorResults();
+            for (LLResultTypes.DetectorResult dr : detectorResults) {
+                telemetry.addData("Detector", "Class: %s, Area: %.2f", dr.getClassName(), dr.getTargetArea());
+            }
+            */
+            // Access fiducial results
+            List<LLResultTypes.FiducialResult> fiducialResults = result.getFiducialResults();
+            for (LLResultTypes.FiducialResult fr : fiducialResults) {
+                telemetry.addData("Fiducial", "ID: %d, Family: %s, X: %.2f, Y: %.2f", fr.getFiducialId(), fr.getFamily(), fr.getTargetXDegrees(), fr.getTargetYDegrees());
+            }
+            /*
+            // Access color results
+            List<LLResultTypes.ColorResult> colorResults = result.getColorResults();
+            for (LLResultTypes.ColorResult cr : colorResults) {
+                telemetry.addData("Color", "X: %.2f, Y: %.2f", cr.getTargetXDegrees(), cr.getTargetYDegrees());
+            }*/
+        } else {
+            telemetry.addData("Limelight", "No data available");
+        }
+
+    }
+
+
+    //Auto Correction
+    public void autoTarget()
+    {
+        if(gamepad1.b)
+        {
+            List<LLResultTypes.FiducialResult> fiducialResults = result.getFiducialResults();
+            for (LLResultTypes.FiducialResult fr : fiducialResults) {
+                if(fr.getFiducialId() == 20 || fr.getFiducialId() == 24)
+                {
+                    if(fr.getTargetXDegrees() < -autoVariation)
+                    {
+                        //Turn Left
+                        setMotorPower(decBot.frontLeftMotor, -autoSpeed, powerThreshold, speedMultiply);
+                        setMotorPower(decBot.frontRightMotor, autoSpeed, powerThreshold, speedMultiply);
+                        setMotorPower(decBot.rearLeftMotor,  -autoSpeed, powerThreshold, speedMultiply);
+                        setMotorPower(decBot.rearRightMotor,  autoSpeed, powerThreshold, speedMultiply);
+
+                    }
+                    if(fr.getTargetXDegrees() > autoVariation)
+                    {
+                        //Turn Right
+                        setMotorPower(decBot.frontLeftMotor,  autoSpeed, powerThreshold, speedMultiply);
+                        setMotorPower(decBot.frontRightMotor,-autoSpeed, powerThreshold, speedMultiply);
+                        setMotorPower(decBot.rearLeftMotor,   autoSpeed, powerThreshold, speedMultiply);
+                        setMotorPower(decBot.rearRightMotor, -autoSpeed, powerThreshold, speedMultiply);
+                    }
+                }
+                //telemetry.addData("Fiducial2:", "ID: %d, X: %.2f",fr.getFiducialId(), fr.getTargetXDegrees());
+                //telemetry.addData("Fiducial", "ID: %d, Family: %s, X: %.2f, Y: %.2f", fr.getFiducialId(), fr.getFamily(), fr.getTargetXDegrees(), fr.getTargetYDegrees());
+            }
+        }
     }
 
 
