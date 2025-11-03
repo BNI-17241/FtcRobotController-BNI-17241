@@ -23,12 +23,13 @@ public class RedStartHumanParkSpike_oz extends AutoMain {
 
 
     //poses
-    public final Pose startPose = new Pose(-44, 8, Math.toRadians(90));     // Blue Far Launch Zone start (mirrored from Red Far Launch Zone start)
-    public final Pose scorePose = new Pose(-59, 81, Math.toRadians(135));    // Blue goal scoring pose (mirrored from Red goal scoring pose)
-    public final Pose LineUpPose = new Pose(-40, 35, Math.toRadians(180)); // Lines up with balls (mirrored)
-    public final Pose collectPose = new Pose(-20, 35, Math.toRadians(210)); // collects balls (mirrored)
-    public final Pose pushBallPose = new Pose(-14, 20, Math.toRadians(270)); // push ball into human area (mirrored)
-    public final Pose backUpPose = new Pose(-14, 40, Math.toRadians(270)); // backs up after pushing balls in (mirrored)
+    public final Pose startPose = new Pose(-44, 8, Math.toRadians(90));     // Blue Far Launch Zone start
+    public final Pose scorePose = new Pose(-59, 81, Math.toRadians(45));    // Blue goal scoring pose // 80 x 80
+    public final Pose LineUpPose = new Pose(-40, 35, Math.toRadians(0)); // Lines up with balls
+    public final Pose collectPose = new Pose(-20, 35, Math.toRadians(330)); // collects balls
+    public final Pose pushBallPose = new Pose(-14, 20, Math.toRadians(270)); // push ball into human area
+    public final Pose backUpPose = new Pose(-14, 40, Math.toRadians(270)); // backs up after pushing balls in
+
 
     public Path scorePreload;
     public PathChain LineUp;
