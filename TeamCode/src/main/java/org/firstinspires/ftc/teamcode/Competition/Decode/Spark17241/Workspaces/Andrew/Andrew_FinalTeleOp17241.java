@@ -346,7 +346,7 @@ public class Andrew_FinalTeleOp17241 extends OpMode {
     //Auto Correction
     public void autoTarget()
     {
-        if(gamepad1.left_stick_button && !target)
+        if(gamepad1.b)
         {
             List<LLResultTypes.FiducialResult> fiducialResults = result.getFiducialResults();
             for (LLResultTypes.FiducialResult fr : fiducialResults) {
