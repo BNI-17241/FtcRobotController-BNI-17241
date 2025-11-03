@@ -25,7 +25,7 @@ public class BlueStartHumanParkSpike_oz extends AutoMain_oz {
     public final Pose startPose = new Pose(44, 8, Math.toRadians(90));     // Red Far Launch Zone start
     public final Pose scorePose = new Pose(59, 81, Math.toRadians(135));
     public final Pose LineUpPose = new Pose(40, 35, Math.toRadians(180)); // Lines up with balls
-    public final Pose collectPose = new Pose(20, 35, Math.toRadians(210)); // collects balls
+    public final Pose collectPose = new Pose(20, 35, Math.toRadians(240)); // collects balls
     public final Pose pushBallPose = new Pose(15, 20, Math.toRadians(270)); // push ball into human area
     public final Pose backUpPose = new Pose(15, 40, Math.toRadians(270)); // backs up after pushing balls in
 
@@ -167,6 +167,7 @@ public class BlueStartHumanParkSpike_oz extends AutoMain_oz {
         }
         if (mRuntime.time() >= currentCountDownShot){
             currentCountDownShot = 0;
+            startCount = false;
         }
         /** LED Driver for Gate Control */
         LEDDriver();
@@ -178,6 +179,7 @@ public class BlueStartHumanParkSpike_oz extends AutoMain_oz {
         telemetry.addData("At goal?", !follower.isBusy());
         telemetry.addData("Auto Time (s)", "%.1f", opmodeTimer.getElapsedTimeSeconds());
         telemetry.addData("Leaving to park at (s)", LastTimeToLeave);
+        telemetry.addData("count down", currentCountDownShot);
         telemetry.update();
     }
 

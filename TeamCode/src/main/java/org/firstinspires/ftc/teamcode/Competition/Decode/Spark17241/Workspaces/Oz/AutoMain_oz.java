@@ -22,9 +22,9 @@ public abstract class AutoMain_oz extends OpMode {
     protected double feederPower = 1.0;      // feeder wheel power (0..1)
     protected long   feedMs = 700;           // ms to run feeder during a shot
     protected double boostFactor = 1.0;     // temporary +2% velocity during feed
-    protected long   boostMs = 180;          // recovery delay after feed
+    protected long   boostMs = 100;          // recovery delay after feed
 
-    double minTimeBetweenShots = 3.0;
+    double minTimeBetweenShots = 2.0;
     double currentCountDownShot = 0.0;
 
     boolean startCount = false;
