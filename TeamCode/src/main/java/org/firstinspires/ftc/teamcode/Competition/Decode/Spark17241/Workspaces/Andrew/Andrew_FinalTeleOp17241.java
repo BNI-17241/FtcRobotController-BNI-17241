@@ -15,7 +15,7 @@ import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Robots.Decod
 
 import java.util.List;
 
-@TeleOp(name = "AndrewFinalTeleOp", group = "Drive")
+@TeleOp(name = "AndrewFinalTeleOp", group = "Lab")
 public class Andrew_FinalTeleOp17241 extends OpMode {
 
     private Limelight3A limelight;
