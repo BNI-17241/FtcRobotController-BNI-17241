@@ -53,7 +53,7 @@ public abstract class AutoMain extends OpMode {
     protected double currentVelocityRight;
 
     /** Parking timing helper  */
-    protected double parkLeaveTime = 25.0;  // seconds into auto to guarantee time to park
+    protected double parkLeaveTime = 30.0;  // seconds into auto to guarantee time to park
 
     /**  Robot instance (motors/sensors accessed here) */
     protected DecodeBot decBot = new DecodeBot();
@@ -92,7 +92,7 @@ public abstract class AutoMain extends OpMode {
         inGate = leftInGateStatus && rightInGateStatus;
     }
 
-    /** Feeder Wheel State Machine. Uses `justCompletedFeed()` for edge-detect. */
+    /** Feeder Wheel State Machine. Uses `justCompletedFeed()` for edge-detect.    OZ says(I know this was written with chat)*/
     protected void runAutoFeederCycle() {
         switch (scoringState) {
             case IDLE:
@@ -122,7 +122,7 @@ public abstract class AutoMain extends OpMode {
 
             case RECOVERING:
                 if (timer.milliseconds() >= boostMs) {
-                    scoringState = scoreState.WAIT_FOR_GATE;
+                    scoringState = scoreState.IDLE;
                 }
                 break;
 
