@@ -7,14 +7,13 @@ import com.pedropathing.paths.Path;
 import com.pedropathing.paths.PathChain;
 import com.pedropathing.util.Timer;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Controls.Auto.AutoMain;
-import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Controls.Auto.BlueAlliance.BlueStartHumanParkSpike;
 import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.pedroPathing.Constants;
 
 //@Disabled
 @Autonomous(name = "tester Oz Blue:Start Human:Park Spike", group = "Drive")
-public class BlueStartHumanParkSpike_oz extends AutoMain {
+public class BlueStartHumanParkSpike_oz extends AutoMain_oz {
 //
     /**  Pedro Pathing Variables, Poses, Paths & States */
     public Follower follower;
@@ -27,8 +26,8 @@ public class BlueStartHumanParkSpike_oz extends AutoMain {
     public final Pose scorePose = new Pose(59, 81, Math.toRadians(135));
     public final Pose LineUpPose = new Pose(40, 35, Math.toRadians(180)); // Lines up with balls
     public final Pose collectPose = new Pose(20, 35, Math.toRadians(210)); // collects balls
-    public final Pose pushBallPose = new Pose(14, 20, Math.toRadians(270)); // push ball into human area
-    public final Pose backUpPose = new Pose(14, 40, Math.toRadians(270)); // backs up after pushing balls in
+    public final Pose pushBallPose = new Pose(15, 20, Math.toRadians(270)); // push ball into human area
+    public final Pose backUpPose = new Pose(15, 40, Math.toRadians(270)); // backs up after pushing balls in
 
 //
     public Path scorePreload;
@@ -36,6 +35,8 @@ public class BlueStartHumanParkSpike_oz extends AutoMain {
     public PathChain collect;
     public PathChain pushBall;
     public PathChain backUp;
+    public ElapsedTime mRuntime = new ElapsedTime();
+
 
     public enum pathingState {Delay, START, SCORE_PRELOAD, LINE_UP, COLLECT, PUSH_BALL, BACK_UP, READY }
     pathingState pathState = pathingState.READY;
@@ -46,6 +47,7 @@ public class BlueStartHumanParkSpike_oz extends AutoMain {
 
     @Override
     public void init() {
+
         pathTimer = new Timer();
         opmodeTimer = new Timer();
         follower = Constants.createFollower(hardwareMap);
@@ -55,7 +57,7 @@ public class BlueStartHumanParkSpike_oz extends AutoMain {
 
         /**  Optional per-path tuning */
         maxShots = 4;                       // Adjust for shot attempts
-        parkLeaveTime = 25.0;               // Adjust if this path is long
+        LastTimeToLeave = 25.0;               // Adjust if this path is long
     }
 
     @Override
@@ -63,7 +65,7 @@ public class BlueStartHumanParkSpike_oz extends AutoMain {
         opmodeTimer.resetTimer();
         pathTimer.resetTimer();
 
-        pathState = pathingState.Delay; // set to delay if you have delay
+        pathState = pathingState.Delay; // set to delay if you have delay IF YOU HAVE DELAYED DELAY then you MUST change one of the later pathstate = to delay and change the delay path = to the next one in line
         scoringState = scoreState.IDLE;
         launchZone = LaunchZone.NONE;
 
@@ -78,18 +80,22 @@ public class BlueStartHumanParkSpike_oz extends AutoMain {
 
         switch (pathState) {
             case Delay:
-                double startDelay = 10 * 1000; // in milliseconts
+                double startDelay = delayTime * 1000; // in milliseconts
 
                 try {
                     Thread.sleep((long) startDelay);
-                    pathState = pathingState.START;
+                    pathState = pathingState.START; // Change to what ever you want next to be in order
                 } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
+                    throw new RuntimeException(e); //
                 }
-                pathState = pathingState.START;
+                pathState = pathingState.START; // Change to what ever you want next to be in order
             case START:
+
+
                 follower.followPath(scorePreload);
                 pathState = pathingState.SCORE_PRELOAD;
+
+
                 break;
 
             case SCORE_PRELOAD:
@@ -103,12 +109,12 @@ public class BlueStartHumanParkSpike_oz extends AutoMain {
 
                 /**  Begin scoring session. Adjust for number of shots and time limit */
                 if (!isScoringActive()) {
-                    startScoring(LaunchZone.NEAR, 5, 8.0, opmodeTimer.getElapsedTimeSeconds());
+                    startScoring(LaunchZone.NEAR, 5, 12.0, opmodeTimer.getElapsedTimeSeconds());
                 }
 
                 /**  Edge Case Handling for Max Shots or Out of Autonomous Time  */
                 boolean done = updateScoring(opmodeTimer.getElapsedTimeSeconds());
-                boolean timeToLeave = opmodeTimer.getElapsedTimeSeconds() >= parkLeaveTime;
+                boolean timeToLeave = opmodeTimer.getElapsedTimeSeconds() >= LastTimeToLeave + delayTime;
 
                 if (done || timeToLeave) {
                     stopScoring(); // safe even if already inactive
@@ -151,6 +157,16 @@ public class BlueStartHumanParkSpike_oz extends AutoMain {
                 onLoopStart();
                 updateFlywheelAndGate();
                 break;
+
+        }
+        if (currentCountDownShot != 0){
+            if (!startCount){
+                startCount = true;
+                mRuntime.reset();
+            }
+        }
+        if (mRuntime.time() >= currentCountDownShot){
+            currentCountDownShot = 0;
         }
         /** LED Driver for Gate Control */
         LEDDriver();
@@ -161,7 +177,7 @@ public class BlueStartHumanParkSpike_oz extends AutoMain {
         telemetry.addData("Pathing State", pathState);
         telemetry.addData("At goal?", !follower.isBusy());
         telemetry.addData("Auto Time (s)", "%.1f", opmodeTimer.getElapsedTimeSeconds());
-        telemetry.addData("Leaving to park at (s)", parkLeaveTime);
+        telemetry.addData("Leaving to park at (s)", LastTimeToLeave);
         telemetry.update();
     }
 
