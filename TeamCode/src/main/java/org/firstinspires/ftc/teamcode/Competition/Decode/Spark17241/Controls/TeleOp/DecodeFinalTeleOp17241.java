@@ -32,6 +32,11 @@ public class DecodeFinalTeleOp17241 extends OpMode {
     double powerThreshold;
     double speedMultiply = 0.75;
 
+
+    //Check Limelight
+    public boolean limelightOn = false;
+
+
     //Auto Correct X Variation (In X values from limelight, approx +- 20 total)
     double autoVariation = 3;
 
@@ -290,6 +295,7 @@ public class DecodeFinalTeleOp17241 extends OpMode {
     {
         result = limelight.getLatestResult();
         if (result.isValid()) {
+            limelightOn = true;
             // Access general information
             Pose3D botpose = result.getBotpose();
             double captureLatency = result.getCaptureLatency();
@@ -406,12 +412,15 @@ public class DecodeFinalTeleOp17241 extends OpMode {
     // ****** Led Controller
     public void LEDDriver()
     {
-        if(targetVelocity == 0){decBot.LEDCon(5);}
+        if(targetVelocity == 0) {
+            if(!limelightOn) {decBot.LEDCon(6);}//Purple if Limelight is not on
+            else{decBot.LEDCon(5);}//Blue if 0 Velocity
+        }
         else {
             if (leftInGateStatus && rightInGateStatus) {
-                decBot.LEDCon(4);
+                decBot.LEDCon(4);//Green is good
             } else {
-                decBot.LEDCon(1);
+                decBot.LEDCon(1);//Red is not ready yet
             }
         }
     }
