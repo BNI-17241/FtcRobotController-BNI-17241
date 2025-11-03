@@ -26,8 +26,8 @@ public class BlueStartHumanParkSpike_oz extends AutoMain {
     public final Pose scorePose = new Pose(59, 81, Math.toRadians(135));    // Red goal scoring pose // 80 x 80
     public final Pose LineUpPose = new Pose(40, 35, Math.toRadians(180)); // Lines up with balls
     public final Pose collectPose = new Pose(20, 35, Math.toRadians(210)); // collects balls
-    public final Pose pushBallPose = new Pose(10, 20, Math.toRadians(270)); // push ball into human area
-    public final Pose backUpPose = new Pose(10, 40, Math.toRadians(270)); // backs up after pushing balls in
+    public final Pose pushBallPose = new Pose(14, 20, Math.toRadians(270)); // push ball into human area
+    public final Pose backUpPose = new Pose(14, 40, Math.toRadians(270)); // backs up after pushing balls in
 
 //
     public Path scorePreload;
@@ -93,7 +93,7 @@ public class BlueStartHumanParkSpike_oz extends AutoMain {
 
                 /**  Begin scoring session. Adjust for number of shots and time limit */
                 if (!isScoringActive()) {
-                    startScoring(LaunchZone.NEAR, 4, 8.0, opmodeTimer.getElapsedTimeSeconds());
+                    startScoring(LaunchZone.NEAR, 5, 8.0, opmodeTimer.getElapsedTimeSeconds());
                 }
 
                 /**  Edge Case Handling for Max Shots or Out of Autonomous Time  */
