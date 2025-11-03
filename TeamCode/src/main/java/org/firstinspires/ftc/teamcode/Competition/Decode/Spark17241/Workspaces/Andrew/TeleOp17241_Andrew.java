@@ -215,11 +215,11 @@ public class TeleOp17241_Andrew extends OpMode {
     //***************Run 360 Servo********************
 
     public void beltControl()
-    {
+    {/*
         if(gamepad1.dpad_up)
         {
             decBot.runBelt(1);
-        }
+        }*/
     }
 
 
