@@ -20,8 +20,9 @@ public class BlueStartHumanParkSpike_oz extends AutoMain {
     public Follower follower;
     public Timer pathTimer, opmodeTimer;
 
-    //poses
 
+
+    //poses
     public final Pose startPose = new Pose(44, 8, Math.toRadians(90));     // Red Far Launch Zone start
     public final Pose scorePose = new Pose(59, 81, Math.toRadians(135));    // Red goal scoring pose // 80 x 80
     public final Pose LineUpPose = new Pose(40, 35, Math.toRadians(180)); // Lines up with balls
@@ -36,7 +37,7 @@ public class BlueStartHumanParkSpike_oz extends AutoMain {
     public PathChain pushBall;
     public PathChain backUp;
 
-    public enum pathingState { START, SCORE_PRELOAD, LINE_UP, COLLECT, PUSH_BALL, BACK_UP, READY }
+    public enum pathingState {Delay, START, SCORE_PRELOAD, LINE_UP, COLLECT, PUSH_BALL, BACK_UP, READY }
     pathingState pathState = pathingState.READY;
     private boolean parkPathStarted = false;
 
@@ -62,7 +63,7 @@ public class BlueStartHumanParkSpike_oz extends AutoMain {
         opmodeTimer.resetTimer();
         pathTimer.resetTimer();
 
-        pathState = pathingState.START;
+        pathState = pathingState.Delay; // set to delay if you have delay
         scoringState = scoreState.IDLE;
         launchZone = LaunchZone.NONE;
 
@@ -76,6 +77,17 @@ public class BlueStartHumanParkSpike_oz extends AutoMain {
         follower.update();
 
         switch (pathState) {
+            case Delay:
+                double startDelay = 10 * 1000; // in milliseconts
+
+                try {
+                    Thread.sleep((long) startDelay);
+                    pathState = pathingState.START;
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+                pathState = pathingState.START;
+
 
             case START:
                 follower.followPath(scorePreload);
