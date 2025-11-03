@@ -353,7 +353,7 @@ public class Andrew_FinalTeleOp17241 extends OpMode {
                 if(fr.getFiducialId() == 20)
                 {
                     telemetry.addData("Found Blue = True", fr.getTargetXDegrees());
-                    if(fr.getTargetXDegrees() > autoVariation)
+                    if(fr.getTargetXDegrees() < -autoVariation)
                     {
                         //Turn Left
                         setMotorPower(decBot.frontLeftMotor, -autoSpeed, powerThreshold, speedMultiply);
@@ -362,7 +362,7 @@ public class Andrew_FinalTeleOp17241 extends OpMode {
                         setMotorPower(decBot.rearRightMotor,  autoSpeed, powerThreshold, speedMultiply);
 
                     }
-                    if(fr.getTargetXDegrees() < -autoVariation)
+                    if(fr.getTargetXDegrees() > autoVariation)
                     {
                         //Turn Right
                         setMotorPower(decBot.frontLeftMotor,  autoSpeed, powerThreshold, speedMultiply);
