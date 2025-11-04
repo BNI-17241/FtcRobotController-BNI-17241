@@ -31,8 +31,8 @@ public class RedStartHumanParkSpike extends AutoMain {
     private boolean parkPathStarted = false;
 
 
-    public double startDelay = 5.0;
-    public double postShootDelay = 10.0;
+    public int startDelay = 5;
+    public int postShootDelay = 10;
 
 
 
@@ -44,6 +44,7 @@ public class RedStartHumanParkSpike extends AutoMain {
         pathTimer = new Timer();
         opmodeTimer = new Timer();
         autoTimer = new Timer();
+
         follower = Constants.createFollower(hardwareMap);
         buildPaths();
         follower.setStartingPose(startPose);
@@ -81,6 +82,7 @@ public class RedStartHumanParkSpike extends AutoMain {
                     pathState = pathingState.START;
                     break;
                 }
+                break;
 
             case START:
                 follower.followPath(scorePreload);
@@ -120,6 +122,7 @@ public class RedStartHumanParkSpike extends AutoMain {
                     pathState = pathingState.GO_PARK;
                     break;
                 }
+                break;
 
             case GO_PARK:
                 /** Start the park path exactly once upon entering this state */
