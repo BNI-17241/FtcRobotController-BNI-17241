@@ -60,7 +60,7 @@ public class RedStartHumanParkSpike extends AutoMain {
         pathTimer.resetTimer();
         autoTimer.resetTimer();
 
-        pathState = pathingState.START;
+        pathState = pathingState.START_PAUSE;
         scoringState = scoreState.IDLE;
         launchZone = LaunchZone.NONE;
 
@@ -78,6 +78,7 @@ public class RedStartHumanParkSpike extends AutoMain {
             case START_PAUSE:
                 if(autoTimer.getElapsedTimeSeconds() >= startDelay)
                 {
+                    pathState = pathingState.START;
                     break;
                 }
 
@@ -107,7 +108,7 @@ public class RedStartHumanParkSpike extends AutoMain {
 
                 if (done || timeToLeave) {
                     stopScoring(); // safe even if already inactive
-                    pathState = pathingState.GO_PARK;
+                    pathState = pathingState.POST_SHOOT_PAUSE;
                 }
                 autoTimer.resetTimer();
                 break;
@@ -116,6 +117,7 @@ public class RedStartHumanParkSpike extends AutoMain {
             case POST_SHOOT_PAUSE:
                 if(autoTimer.getElapsedTimeSeconds() >= postShootDelay)
                 {
+                    pathState = pathingState.GO_PARK;
                     break;
                 }
 
@@ -147,6 +149,7 @@ public class RedStartHumanParkSpike extends AutoMain {
         /**  Telemetry: Include Base Telementry and add additional for Pathing */
 
         baseTelemetry();
+        telemetry.addData("AutoTimer", autoTimer.getElapsedTimeSeconds());
         telemetry.addData("Pathing State", pathState);
         telemetry.addData("At goal?", !follower.isBusy());
         telemetry.addData("Auto Time (s)", "%.1f", opmodeTimer.getElapsedTimeSeconds());
