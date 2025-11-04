@@ -69,7 +69,7 @@ public class TeleOp17241AprilTagLaunch extends OpMode {
     private ElapsedTime autoAlignTimer = new ElapsedTime();
 
     // Which tags matter for launching
-    private static final int TAG_A = 21, TAG_B = 22, TAG_C = 23;
+    private static final int BLUE_TAG = 20, RED_TAG = 24;
 
     // Vision targets (tune to your camera mount & shot)
     private double desiredTxDeg = 0.0;          // want tag centered sideways
@@ -368,21 +368,21 @@ public class TeleOp17241AprilTagLaunch extends OpMode {
     // ===== Auto-Align helpers (NEW) =====
 
     /** Return the latest LLResult if it includes at least one of our target tags; else null. */
-    private LLResult getLatestDesiredTagResult() {
+    public LLResult getLatestDesiredTagResult() {
         LLResult r = decBot.limelight.getLatestResult();
         if (r == null || r.getFiducialResults() == null || r.getFiducialResults().isEmpty()) return null;
 
-        // Prefer one of our tags (21/22/23)
+        // Prefer one of our tags (20 or 24)
         int n = r.getFiducialResults().size();
         for (int i = 0; i < n; i++) {
             int id = r.getFiducialResults().get(i).getFiducialId();
-            if (id == TAG_A || id == TAG_B || id == TAG_C) return r;
+            if (id == BLUE_TAG || id == RED_TAG) return r;
         }
         return null;
     }
 
     /** True if we’re within tolerance in both axes. */
-    private boolean isAligned(double txDeg, double ta) {
+    public boolean isAligned(double txDeg, double ta) {
         return Math.abs(txDeg - desiredTxDeg) <= txTolDeg &&
                 Math.abs(ta - desiredTa)       <= taTol;
     }
@@ -391,7 +391,7 @@ public class TeleOp17241AprilTagLaunch extends OpMode {
      * While LB held and sticks quiet, gently strafe from tx and drive from ta until aligned or timeout.
      * Returns true if this method commanded the drivetrain (i.e., assist took control this loop).
      */
-    private boolean runAutoAlignAssist() {
+    public boolean runAutoAlignAssist() {
         boolean wantAssist = gamepad1.left_bumper;
 
         double lx = gamepad1.left_stick_x;

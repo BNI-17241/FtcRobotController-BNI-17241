@@ -5,6 +5,7 @@ import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
 import com.pedropathing.paths.Path;
 import com.pedropathing.paths.PathChain;
+import com.pedropathing.paths.PathConstraints;
 import com.pedropathing.util.Timer;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
@@ -122,9 +123,7 @@ public class pathingTester extends OpMode {
     @Override
     public void stop() {}
 
-
-    //****************  Pedro Pathing Control Methods  ********************
-
+    
     public void buildPaths() {
         /* From Start and To Score Preload Path. We are using a BezierLine. */
         scorePreload = new Path(new BezierLine(startPose, scorePose));

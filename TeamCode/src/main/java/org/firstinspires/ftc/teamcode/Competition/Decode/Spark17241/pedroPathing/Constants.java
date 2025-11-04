@@ -34,8 +34,6 @@ public class Constants {
             .xVelocity(61.8028)    // Tested on 10/30
             .yVelocity(45.3907);   // Tested on 10/30
 
-
-
     // Localization (Pinpoint Two Wheel Odometry Constants
     // Use the Qualcom GoBiilda Drive, not local package
 
@@ -54,9 +52,31 @@ public class Constants {
         return new FollowerBuilder(followerConstants, hardwareMap)
                 .pinpointLocalizer(localizerConstants)
                 .pathConstraints(pathConstraints)
-                .mecanumDrivetrain(driveConstants)
+                .mecanumDrivetrain(driveConstants)   // Fast Constants
                 .build();
     }
 
+    // Slow Drive Constants and Slow Follower
+
+    public static MecanumConstants slowDriveConstants = new MecanumConstants()
+            .maxPower(.25)
+            .rightFrontMotorName("front_right_motor")
+            .rightRearMotorName("rear_right_motor")
+            .leftRearMotorName("rear_left_motor")
+            .leftFrontMotorName("front_left_motor")
+            .leftFrontMotorDirection(DcMotorSimple.Direction.REVERSE)
+            .leftRearMotorDirection(DcMotorSimple.Direction.REVERSE)
+            .rightFrontMotorDirection(DcMotorSimple.Direction.FORWARD)
+            .rightRearMotorDirection(DcMotorSimple.Direction.FORWARD)
+            .xVelocity(61.8028)    // Tested on 10/30
+            .yVelocity(45.3907);   // Tested on 10/30
+
+    public static Follower slowFollower(HardwareMap hardwareMap) {
+        return new FollowerBuilder(followerConstants, hardwareMap)
+                .pinpointLocalizer(localizerConstants)
+                .pathConstraints(pathConstraints)
+                .mecanumDrivetrain(slowDriveConstants)    // Slow Constants
+                .build();
+    }
 
 }
