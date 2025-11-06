@@ -194,9 +194,17 @@ public abstract class AutoMain extends OpMode {
         updateFlywheelAndGate();
         runAutoFeederCycle();
 
+        /*if (justCompletedFeed()) {
+            shotsFired++;
+        }*/
         if (justCompletedFeed()) {
             shotsFired++;
+            // Restart next shot if we haven't hit the limit yet
+            if ((shotsFired - scoring.shotsFiredAtStart) < scoring.targetShots) {
+                scoringState = scoreState.WAIT_FOR_GATE;
+            }
         }
+
 
         boolean hitCount = (shotsFired - scoring.shotsFiredAtStart) >= scoring.targetShots;
         boolean timedOut = (nowSec - scoring.startedAtSec) >= scoring.timeLimitSec;
