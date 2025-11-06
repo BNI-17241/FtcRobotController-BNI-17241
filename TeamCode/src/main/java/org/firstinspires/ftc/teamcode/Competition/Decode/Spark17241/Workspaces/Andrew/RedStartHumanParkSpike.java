@@ -101,7 +101,7 @@ public class RedStartHumanParkSpike extends AutoMain {
                 /**  Begin scoring session. Adjust for number of shots and time limit */
                 if (!isScoringActive()) {
 
-                    startScoring(LaunchZone.NEAR, 4, 8.0, opmodeTimer.getElapsedTimeSeconds());
+                    startScoring(LaunchZone.NEAR, 4, 20.0, opmodeTimer.getElapsedTimeSeconds());
                 }
 
                 /**  Edge Case Handling for Max Shots or Out of Autonomous Time  */
