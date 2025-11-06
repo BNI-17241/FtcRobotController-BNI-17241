@@ -12,7 +12,7 @@ import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Controls.Aut
 import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.pedroPathing.Constants;
 
 //@Disabled
-@Autonomous(name = "Blue:Start Human:Park Spike", group = "Drive")
+@Autonomous(name = "Blue:Start Human:Far launch", group = "Drive")
 public class BlueStartHumanFarLaunch extends AutoMain {
 //
     /**  Pedro Pathing Variables, Poses, Paths & States */
