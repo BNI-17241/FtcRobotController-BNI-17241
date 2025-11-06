@@ -187,6 +187,7 @@ public abstract class AutoMain extends OpMode {
     }
 
     /** Call every loop while scoring.active. Returns true when done (hit count or times out). */
+    /*
     protected boolean updateScoring(double nowSec) {
         if (!scoring.active) return true;
 
@@ -196,7 +197,7 @@ public abstract class AutoMain extends OpMode {
 
         /*if (justCompletedFeed()) {
             shotsFired++;
-        }*/
+        }
         if (justCompletedFeed()) {
             shotsFired++;
             // Restart next shot if we haven't hit the limit yet
@@ -218,6 +219,38 @@ public abstract class AutoMain extends OpMode {
         }
         return false;
     }
+    */
+    protected boolean updateScoring(double nowSec) {
+        if (!scoring.active) return true;
+
+        onLoopStart();
+        updateFlywheelAndGate();
+        runAutoFeederCycle();
+
+        // detect shot completion
+        if (justCompletedFeed()) {
+            shotsFired++;
+
+            // restart next shot if more remaining
+            if ((shotsFired - scoring.shotsFiredAtStart) < scoring.targetShots) {
+                scoringState = scoreState.WAIT_FOR_GATE;
+            }
+        }
+
+        // check if we’re done or timed out
+        boolean hitCount = (shotsFired - scoring.shotsFiredAtStart) >= scoring.targetShots;
+        boolean timedOut = (nowSec - scoring.startedAtSec) >= scoring.timeLimitSec;
+
+        if (hitCount || timedOut) {
+            launchZone = LaunchZone.NONE;
+            scoringState = scoreState.EMPTY;
+            scoring.active = false;
+            autoScoreComplete = true;
+            return true;
+        }
+        return false;
+    }
+
 
     /** Optional: force stop (if pathing needs to force stop early). */
     protected void stopScoring() {
