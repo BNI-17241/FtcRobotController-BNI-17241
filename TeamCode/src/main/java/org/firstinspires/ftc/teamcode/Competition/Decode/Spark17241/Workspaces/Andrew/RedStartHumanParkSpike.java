@@ -13,7 +13,7 @@ import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.pedroPathing
 
 //@Disabled
 @Autonomous(name = "Red:Start Human:Park Spike Andrew", group = "Drive")
-public class RedStartHumanParkSpike extends AutoMain {
+public class RedStartHumanParkSpike extends AutoMain_Andrew {
 //
     /**  Pedro Pathing Variables, Poses, Paths & States */
     public Follower follower;
