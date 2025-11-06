@@ -90,8 +90,8 @@ public class DecodeBot{
         feederWheel.setDirection(DcMotorSimple.Direction.FORWARD);
 
         // Flywheel & Feed Wheel Breaking
-        leftFlyWheel.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-        rightFlyWheel.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        leftFlyWheel.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        rightFlyWheel.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         feederWheel.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
 
         // Flywheel & Feed Wheel Encoding for Using Velocity
