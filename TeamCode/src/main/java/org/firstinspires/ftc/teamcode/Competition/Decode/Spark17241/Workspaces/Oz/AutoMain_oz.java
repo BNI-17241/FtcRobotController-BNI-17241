@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Workspaces.Oz;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -10,7 +11,7 @@ import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Robots.Decod
  * Holds ALL shooter/flywheel/feeder logic so per-path OpModes only define paths and call the scoring methods.
  *
  */
-
+@Disabled
 public abstract class AutoMain_oz extends OpMode {
 
     /** LimeLight and April Tags Variables, Constants  */
