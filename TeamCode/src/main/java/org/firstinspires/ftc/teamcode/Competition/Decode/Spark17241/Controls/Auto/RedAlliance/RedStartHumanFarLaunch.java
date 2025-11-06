@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Controls.Auto.BlueAlliance;
+package org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Controls.Auto.RedAlliance;
 
 import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.BezierLine;
@@ -12,16 +12,16 @@ import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Controls.Aut
 import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.pedroPathing.Constants;
 
 //@Disabled
-@Autonomous(name = "Blue:Start Human Far Launch", group = "Drive")
-public class BlueStartHumanFarLaunch extends AutoMain {
+@Autonomous(name = "Red:Start Human:Park Spike", group = "Drive")
+public class RedStartHumanFarLaunch extends AutoMain {
 //
     /**  Pedro Pathing Variables, Poses, Paths & States */
     public Follower follower;
     public Timer pathTimer, opmodeTimer;
 
-    public final Pose startPose = new Pose(44, 10, Math.toRadians(90));     // start pos
-    public final Pose scoreFarPose = new Pose(64, 20, Math.toRadians(110));    // blue shoot far
-    public final Pose parkPose = new Pose(56, 35, Math.toRadians(0)); // Red Home (park)
+    public final Pose startPose = new Pose(100, 10, Math.toRadians(90));     // Red Far Launch Zone start
+    public final Pose scorePose = new Pose(80, 20, Math.toRadians(70));    // Red goal scoring pose // 80 x 80
+    public final Pose parkPose = new Pose(90, 35, Math.toRadians(0)); // Red Home (park)
 
     public Path scorePreload;
     public PathChain goPark;
@@ -84,7 +84,7 @@ public class BlueStartHumanFarLaunch extends AutoMain {
                 /**  Begin scoring session. Adjust for number of shots and time limit */
                 if (!isScoringActive()) {
 
-                    startScoring(LaunchZone.FAR, 4, 9.0, opmodeTimer.getElapsedTimeSeconds());
+                    startScoring(LaunchZone.FAR, 4, 8.0, opmodeTimer.getElapsedTimeSeconds());
                 }
 
                 /**  Edge Case Handling for Max Shots or Out of Autonomous Time  */
@@ -118,6 +118,7 @@ public class BlueStartHumanFarLaunch extends AutoMain {
                 updateFlywheelAndGate();
                 break;
         }
+
         /** LED Driver for Gate Control */
         LEDDriver();
 
@@ -138,13 +139,13 @@ public class BlueStartHumanFarLaunch extends AutoMain {
 
     public void buildPaths() {
         // Start Pose -> Score Pose
-        scorePreload = new Path(new BezierLine(startPose, scoreFarPose));
-        scorePreload.setLinearHeadingInterpolation(startPose.getHeading(), scoreFarPose.getHeading());
+        scorePreload = new Path(new BezierLine(startPose, scorePose));
+        scorePreload.setLinearHeadingInterpolation(startPose.getHeading(), scorePose.getHeading());
 
         // Score Pose -> Park Home Pose
         goPark = follower.pathBuilder()
-                .addPath(new BezierLine(scoreFarPose, parkPose))
-                .setLinearHeadingInterpolation(scoreFarPose.getHeading(), parkPose.getHeading())
+                .addPath(new BezierLine(scorePose, parkPose))
+                .setLinearHeadingInterpolation(scorePose.getHeading(), parkPose.getHeading())
                 .build();
     }
 }
