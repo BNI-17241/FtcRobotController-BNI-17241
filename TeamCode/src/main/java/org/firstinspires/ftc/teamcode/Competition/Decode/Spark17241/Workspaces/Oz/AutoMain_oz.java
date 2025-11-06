@@ -21,19 +21,20 @@ public abstract class AutoMain_oz extends OpMode {
     protected double targetVelocity = 0;
     protected double gatePercent = 0.02;     // ±5% gate window
     protected double feederPower = 1.0;      // feeder wheel power (0..1)
-    protected long   feedMs = 700;           // ms to run feeder during a shot
+    protected long   feedMs = 500;           // ms to run feeder during a shot
     protected double boostFactor = 1.0;     // temporary +2% velocity during feed
-    protected long   boostMs = 100;          // recovery delay after feed
+    protected long   boostMs = 180;          // recovery delay after feed
 
     double minTimeBetweenShots = 2.0;
     double currentCountDownShot = 0.0;
 
     boolean startCount = false;
+    public ElapsedTime mRuntime = new ElapsedTime();
 
 
 
     /**  Scoring State Machine Variables and Constants (Independent of Pathing States) ===== */
-    protected enum scoreState { READY, IDLE, WAIT_FOR_GATE, FEEDING, RECOVERING, EMPTY }
+    protected enum scoreState { READY, IDLE, WAIT_FOR_GATE, WAITINGONTIME, FEEDING, RECOVERING, EMPTY }
     protected scoreState scoringState = scoreState.IDLE;
     protected scoreState prevScoringState = scoreState.IDLE;
     protected ElapsedTime timer = new ElapsedTime();
@@ -109,14 +110,27 @@ public abstract class AutoMain_oz extends OpMode {
                     nominalTarget = targetVelocity;
                     targetVelocity = nominalTarget * boostFactor;
                     timer.reset();
-                    if (currentCountDownShot == 0){
-                        scoringState = scoreState.FEEDING;
-                        currentCountDownShot = minTimeBetweenShots;
-                    }
+                        scoringState = scoreState.WAITINGONTIME;
+
+
 
                 }
                 break;
-
+            case WAITINGONTIME:
+                if (currentCountDownShot <= 0){
+                    currentCountDownShot = minTimeBetweenShots;
+                    scoringState = scoreState.FEEDING;
+                }
+                else {
+                    if (!startCount) {
+                        startCount = true;
+                        mRuntime.reset();
+                    }
+                    if (mRuntime.time() >= minTimeBetweenShots) {
+                        currentCountDownShot = 0;
+                        startCount = false;
+                    }
+                }
             case FEEDING:
                 decBot.feederWheel.setPower(feederPower);
                 targetVelocity = nominalTarget * boostFactor;
@@ -127,6 +141,8 @@ public abstract class AutoMain_oz extends OpMode {
                     scoringState = scoreState.RECOVERING;
                 }
                 break;
+
+
 
             case RECOVERING:
                 if (timer.milliseconds() >= boostMs) {

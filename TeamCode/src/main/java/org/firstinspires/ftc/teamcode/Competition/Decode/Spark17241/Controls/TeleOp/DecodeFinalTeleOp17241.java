@@ -1,22 +1,21 @@
-package org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Workspaces.Andrew;
+package org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Controls.TeleOp;
 
+import com.qualcomm.hardware.limelightvision.LLResult;
+import com.qualcomm.hardware.limelightvision.LLResultTypes;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
-import com.qualcomm.hardware.limelightvision.LLResult;
-import com.qualcomm.hardware.limelightvision.LLResultTypes;
-import com.qualcomm.hardware.limelightvision.LLStatus;
-import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
 
+import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
 import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Robots.DecodeBot;
 
 import java.util.List;
 
-@TeleOp(name = "AndrewFinalTeleOp", group = "Lab")
-public class Andrew_FinalTeleOp17241 extends OpMode {
+@TeleOp(name = "Decode TeleOp", group = "Drive")
+public class DecodeFinalTeleOp17241 extends OpMode {
 
     private Limelight3A limelight;
 
@@ -33,13 +32,16 @@ public class Andrew_FinalTeleOp17241 extends OpMode {
     double powerThreshold;
     double speedMultiply = 0.75;
 
+
+    //Check Limelight
+    public boolean limelightOn = false;
+
+
     //Auto Correct X Variation (In X values from limelight, approx +- 20 total)
     double autoVariation = 3;
 
     //Autocorrect rotation speed
     double autoSpeed = .5;
-    //Intake speed
-    double intakeSpeed = .5;
 
     //Is targeting
     public boolean target = false;
@@ -86,7 +88,7 @@ public class Andrew_FinalTeleOp17241 extends OpMode {
     double currentVelocityRight;
 
     // Instantiation of Robot using Robot Class Constructor
-    public AndrewDecodeBot decBot = new AndrewDecodeBot();
+    public DecodeBot decBot = new DecodeBot();
 
 
     @Override
@@ -105,7 +107,6 @@ public class Andrew_FinalTeleOp17241 extends OpMode {
         autoTarget();
         telemetryOutput();
         robotCentricDrive();
-        intakeControl();
         flyWheelControl();
         flyWheelStateControl();
         feedWheelManualControl();
@@ -294,6 +295,7 @@ public class Andrew_FinalTeleOp17241 extends OpMode {
     {
         result = limelight.getLatestResult();
         if (result.isValid()) {
+            limelightOn = true;
             // Access general information
             Pose3D botpose = result.getBotpose();
             double captureLatency = result.getCaptureLatency();
@@ -397,16 +399,6 @@ public class Andrew_FinalTeleOp17241 extends OpMode {
         telemetry.update();
     }
 
-    //*************************Intake Motor
-    public void intakeControl()
-    {
-        rightStickYVal = gamepad1.right_stick_y;
-        rightStickYVal = Range.clip(rightStickYVal, -1, 1);
-        decBot.feedIntake(rightStickYVal);
-    }
-
-
-
 
     // ****** Helper method to set Motor Power
     public void setMotorPower(DcMotor motor, double speed, double threshold, double multiplier) {
@@ -420,12 +412,15 @@ public class Andrew_FinalTeleOp17241 extends OpMode {
     // ****** Led Controller
     public void LEDDriver()
     {
-        if(targetVelocity == 0){decBot.LEDCon(5);}
+        if(targetVelocity == 0) {
+            if(!limelightOn) {decBot.LEDCon(6);}//Purple if Limelight is not on
+            else{decBot.LEDCon(5);}//Blue if 0 Velocity
+        }
         else {
             if (leftInGateStatus && rightInGateStatus) {
-                decBot.LEDCon(4);
+                decBot.LEDCon(4);//Green is good
             } else {
-                decBot.LEDCon(1);
+                decBot.LEDCon(1);//Red is not ready yet
             }
         }
     }

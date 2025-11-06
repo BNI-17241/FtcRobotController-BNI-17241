@@ -1,12 +1,14 @@
 package org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Controls.TeleOp;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Robots.DecodeBot;
-
+// Very Old.  Do not use
+@Disabled
 @TeleOp(name = "DecodeBot TeleOp Old", group = "Drive")
 public class TeleOp17241 extends OpMode {
 
