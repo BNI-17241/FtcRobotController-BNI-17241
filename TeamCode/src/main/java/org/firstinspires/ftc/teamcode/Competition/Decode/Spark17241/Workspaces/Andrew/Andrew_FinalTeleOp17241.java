@@ -38,6 +38,8 @@ public class Andrew_FinalTeleOp17241 extends OpMode {
 
     //Autocorrect rotation speed
     double autoSpeed = .5;
+    //Intake speed
+    double intakeSpeed = .5;
 
     //Is targeting
     public boolean target = false;
@@ -84,7 +86,7 @@ public class Andrew_FinalTeleOp17241 extends OpMode {
     double currentVelocityRight;
 
     // Instantiation of Robot using Robot Class Constructor
-    public DecodeBot decBot = new DecodeBot();
+    public AndrewDecodeBot decBot = new AndrewDecodeBot();
 
 
     @Override
@@ -103,6 +105,7 @@ public class Andrew_FinalTeleOp17241 extends OpMode {
         autoTarget();
         telemetryOutput();
         robotCentricDrive();
+        intakeControl();
         flyWheelControl();
         flyWheelStateControl();
         feedWheelManualControl();
@@ -393,6 +396,16 @@ public class Andrew_FinalTeleOp17241 extends OpMode {
         telemetry.addData("Feeder Wheel Power", decBot.feederWheel.getPower());
         telemetry.update();
     }
+
+    //*************************Intake Motor
+    public void intakeControl()
+    {
+        rightStickYVal = gamepad1.right_stick_y;
+        rightStickYVal = Range.clip(rightStickYVal, -1, 1);
+        decBot.feedIntake(rightStickYVal);
+    }
+
+
 
 
     // ****** Helper method to set Motor Power
