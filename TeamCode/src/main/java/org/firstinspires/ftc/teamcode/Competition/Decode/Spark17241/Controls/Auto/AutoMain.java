@@ -69,7 +69,7 @@ public abstract class AutoMain extends OpMode {
         if (launchZone == LaunchZone.NEAR) {
             targetVelocity = 890;                        //based on feedback 11/1
         } else if (launchZone == LaunchZone.FAR) {
-            targetVelocity = 1093;                         //based on feedback 11/1
+            targetVelocity = 960;                         //based on feedback 11/1
         } else {
             targetVelocity = 0;
         }

@@ -38,7 +38,7 @@ public class DecodeFinalTeleOp17241 extends OpMode {
 
 
     //Auto Correct X Variation (In X values from limelight, approx +- 20 total)
-    double autoVariation = 3;
+    double autoVariation = 1;
 
     //Autocorrect rotation speed
     double autoSpeed = .5;
