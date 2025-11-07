@@ -67,7 +67,7 @@ public abstract class AutoMain extends OpMode {
     /** Flywheel Velocity Control and Gate Control based on Launch Zone */
     protected void updateFlywheelAndGate() {
         if (launchZone == LaunchZone.NEAR) {
-            targetVelocity = 890;                        //based on feedback 11/1
+            targetVelocity = 870;                        //based on feedback 11/1
         } else if (launchZone == LaunchZone.FAR) {
             targetVelocity = 985;                         //based on feedback 11/1
         } else {
