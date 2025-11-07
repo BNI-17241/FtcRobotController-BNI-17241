@@ -8,10 +8,8 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 import com.qualcomm.hardware.limelightvision.LLResult;
 import com.qualcomm.hardware.limelightvision.LLResultTypes;
-import com.qualcomm.hardware.limelightvision.LLStatus;
-import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
 
-import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Robots.DecodeBot;
+import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
 
 import java.util.List;
 
