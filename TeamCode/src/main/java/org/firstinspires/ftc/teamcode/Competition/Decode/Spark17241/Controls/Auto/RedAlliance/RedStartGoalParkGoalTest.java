@@ -7,12 +7,13 @@ import com.pedropathing.paths.Path;
 import com.pedropathing.paths.PathChain;
 import com.pedropathing.util.Timer;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Controls.Auto.AutoMain;
 import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Workspaces.Andrew.RedStartHumanParkSpike;
 import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.pedroPathing.Constants;
 
-//@Disabled
+@Disabled
 @Autonomous(name = "Red:Start Goal:Park Goal Test", group = "Drive")
 public class RedStartGoalParkGoalTest extends AutoMain {
 
@@ -21,7 +22,7 @@ public class RedStartGoalParkGoalTest extends AutoMain {
     /** Pause timing */
     public Timer autoTimer;
     public int startDelay = 5;
-    public int postShootDelay = 10;
+    public int postShootDelay = 5;
 
 
     /**  Pedro Pathing Variables, Poses, Paths & States */

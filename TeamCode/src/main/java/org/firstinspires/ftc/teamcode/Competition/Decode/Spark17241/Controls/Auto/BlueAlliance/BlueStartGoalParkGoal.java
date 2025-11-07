@@ -20,7 +20,7 @@ public class BlueStartGoalParkGoal extends AutoMain {
     public Timer pathTimer, opmodeTimer;
 
     public final Pose startPose = new Pose(22, 122, Math.toRadians(135));     // Red Far Launch Zone start
-    public final Pose scorePose = new Pose(59, 81, Math.toRadians(135));    // Red goal scoring pose
+    public final Pose scorePose = new Pose(55, 80, Math.toRadians(131));    // Red goal scoring pose
     public final Pose parkPose = new Pose(50, 130, Math.toRadians(270)); // Red Home (park)
 
     public Path scorePreload;

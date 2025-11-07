@@ -19,8 +19,8 @@ public class BlueStartHumanParkSpike extends AutoMain {
     public Timer pathTimer, opmodeTimer;
 
     public final Pose startPose = new Pose(44, 8, Math.toRadians(90));     // Red Far Launch Zone start
-    public final Pose scorePose = new Pose(59, 81, Math.toRadians(135));    // Red goal scoring pose // 80 x 80
-    public final Pose parkPose = new Pose(40, 40, Math.toRadians(180)); // Red Home (park)
+    public final Pose scorePose = new Pose(59, 81, Math.toRadians(133));    // Red goal scoring pose // 80 x 80
+    public final Pose parkPose = new Pose(45, 40, Math.toRadians(0)); // Red Home (park)
 
     public Path scorePreload;
     public PathChain goPark;
