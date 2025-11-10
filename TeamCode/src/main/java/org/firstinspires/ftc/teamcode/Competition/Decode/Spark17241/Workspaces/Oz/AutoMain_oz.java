@@ -20,7 +20,7 @@ import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Robots.Decod
  * Put telemetry out in all main loop in individual class before telemetry update.
  * Launch sequence is what actualy fires the balls
  */
-@Disabled
+
 public abstract class AutoMain_oz extends OpMode {
     // Timer definitions
     public Timer start_delay_timer;
