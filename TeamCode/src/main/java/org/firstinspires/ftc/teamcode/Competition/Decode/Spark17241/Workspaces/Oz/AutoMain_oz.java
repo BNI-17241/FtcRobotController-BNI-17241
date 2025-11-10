@@ -27,17 +27,20 @@ public abstract class AutoMain_oz extends OpMode {
     public Timer Ball_delay_timer;
     public Timer max_time_timer;
 
-    protected Double startDelay = 0.0;
-    protected double MaxTimePark = 0.0;
+    // These variables store settings for a specific autonomous run and are not shared between different runs.
+    protected Double startDelay = 0.0; // delay at start of auto if waiting on other team
+    protected double MaxTimePark = 0.0; // The last time where robot able to be in shooting area before it leaves to go park
 
     protected float targetVelocity = 0;
     protected int shotsToFire = 0;
     protected int shotsFired = 0;
 
-    protected float feedPerBallMs = 700;
-    protected double minTimeBetweenShoots = 2.0;
-    protected double flyWheelErrorPercent = 0.05;
+    // variables that control ball feeding
+    protected float feedPerBallMs = 700; //Time that the feeder wheel spins to feed balls
+    protected double minTimeBetweenShoots = 2.0; //Absolute minium time between shots if all other factors are good
+    protected double flyWheelErrorPercent = 0.05; //percent fly wheel can be off and still fire
 
+    // Flags to track the progress of the firing process
     protected boolean startDelayStarted = false;
     protected boolean fireDelayStarted = false;
 
@@ -57,10 +60,12 @@ public abstract class AutoMain_oz extends OpMode {
     public void init_loop() {
     }
 
+    // Turns the flywheel motors on
     protected void powerUpFlyWheels(){
         decBot.flylaunch(targetVelocity);
     }
 
+    // Checks if both flywheels are spinning within the acceptable speed range
     protected Boolean areFlyAtSpeed() {
         double errorMargin = targetVelocity * flyWheelErrorPercent;
         double lowerBound = targetVelocity - errorMargin;
@@ -74,41 +79,47 @@ public abstract class AutoMain_oz extends OpMode {
         return isLeftAtSpeed && isRightAtSpeed;
     }
 
-    // The feed logic is now managed by the state machine to avoid blocking the main thread.
+    // Starts the feeder motor and the timer for the feeding duration
     protected void startFeedingBall(){
         decBot.feedArtifact(1);
         feed_timer.resetTimer();
     }
 
+    // Stops the feeder motor and counts that one shot has been fired
     protected void stopFeedingBall(){
         decBot.feedArtifact(0);
         shotsFired++;
     }
 
+    // This runs one step of the firing process state machine
     protected void launchSequence(){
-        // CRITICAL FIX: The previously static variables are now non-static instance variables.
-        // They must be reset in the concrete class's start() method to prevent state persistence between runs.
+        // Check if the overall auto time limit has passed, if so, stop firing.
         if (max_time_timer.getElapsedTimeSeconds() > MaxTimePark && MaxTimePark > 0.0){
             currentState = IDLE;
         }
 
+        // The switch statement moves between states every time 'loop()' runs in the main OpMode
         switch(currentState){
             case START_DELAY:
+                // Start the initial delay timer
                 if (!startDelayStarted){
                     start_delay_timer.resetTimer();
                     startDelayStarted = true;
                 }
+                // Transition to the next state when the delay time is over
                 if(start_delay_timer.getElapsedTimeSeconds() >= startDelay){
                     currentState = PREFIRE;
                 }
                 break;
 
             case PREFIRE:
+                // Turn on flywheels and move to wait for speed
                 powerUpFlyWheels();
                 currentState = WAITING_ON_SPEED;
                 break;
 
             case WAITING_ON_SPEED:
+                // Check speed and either start firing or finish the sequence
                 if (areFlyAtSpeed()){
                     if (shotsFired < shotsToFire) {
                         currentState = FIRING;
@@ -119,12 +130,13 @@ public abstract class AutoMain_oz extends OpMode {
                 break;
 
             case FIRING:
+                // Begin the feeding process and move immediately to the waiting state
                 startFeedingBall();
                 currentState = WAITING_ON_FEED;
                 break;
 
-            // This state manages the non-blocking feed time check
             case WAITING_ON_FEED:
+                // Wait until the ball has been fed for the correct amount of time
                 if(feed_timer.getElapsedTime() >= feedPerBallMs) {
                     stopFeedingBall();
                     Ball_delay_timer.resetTimer();
@@ -134,6 +146,7 @@ public abstract class AutoMain_oz extends OpMode {
                 break;
 
             case WAITING_ON_DELAY:
+                // Wait for the minimum time between shots before checking speed again
                 if(Ball_delay_timer.getElapsedTimeSeconds() > minTimeBetweenShoots){
                     fireDelayStarted = false;
                     currentState = WAITING_ON_SPEED;
@@ -141,8 +154,8 @@ public abstract class AutoMain_oz extends OpMode {
                 break;
 
             case IDLE:
+                // Stop all firing related mechanisms
                 decBot.feedArtifact(0);
-                // The following line was previously redundant and has been removed.
                 decBot.flylaunch(0);
                 break;
         }
@@ -153,6 +166,18 @@ public abstract class AutoMain_oz extends OpMode {
         telemetry.addData("Target Velocity", targetVelocity);
         telemetry.addData("Shots To Fire", shotsToFire);
         telemetry.addData("Shots Fired Already", shotsFired);
+    }
+
+public void LEDDriver()
+    {
+        if(targetVelocity == 0){decBot.LEDCon(5);}
+        else {
+            if (areFlyAtSpeed()) {
+                decBot.LEDCon(4);
+            } else {
+                decBot.LEDCon(1);
+            }
+        }
     }
 
 }
