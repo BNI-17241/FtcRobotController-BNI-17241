@@ -29,9 +29,7 @@ public abstract class AutoMain_oz extends OpMode {
     public Timer Ball_delay_timer;
     public Timer max_time_timer;
 
-    // delays (Non-static)
-    // These values should ideally be set in init/constructor and not changed at runtime,
-    // but made non-static to ensure they reset with each Opmode instance.
+
     protected Double startDelay = 0.0; // delay at start of auto if waiting on other team
     protected double MaxTimePark = 0.0; // The last time where robot able to be in shooting area before it leaves to go park
 
