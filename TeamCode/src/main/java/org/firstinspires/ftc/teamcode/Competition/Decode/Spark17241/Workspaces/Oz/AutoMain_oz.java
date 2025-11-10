@@ -6,7 +6,7 @@ import static org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Works
 import static org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Workspaces.Oz.AutoMain_oz.FiringStates.START_DELAY;
 import static org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Workspaces.Oz.AutoMain_oz.FiringStates.WAITING_ON_DELAY;
 import static org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Workspaces.Oz.AutoMain_oz.FiringStates.WAITING_ON_SPEED;
-import static org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Workspaces.Oz.AutoMain_oz.FiringStates.WAITING_ON_FEED; // Added new state import
+import static org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Workspaces.Oz.AutoMain_oz.FiringStates.WAITING_ON_FEED; // I DO NOT REMEMBER WRITING THIS AND APPARENTLY IT IS HERE
 
 import com.pedropathing.util.Timer;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
