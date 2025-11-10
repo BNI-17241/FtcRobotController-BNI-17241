@@ -1,12 +1,5 @@
 package org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Workspaces.Oz;
 
-import static org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Workspaces.Oz.AutoMain_oz.FiringStates.FIRING;
-import static org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Workspaces.Oz.AutoMain_oz.FiringStates.IDLE;
-import static org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Workspaces.Oz.AutoMain_oz.FiringStates.PREFIRE;
-import static org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Workspaces.Oz.AutoMain_oz.FiringStates.START_DELAY;
-import static org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Workspaces.Oz.AutoMain_oz.FiringStates.WAITING_ON_DELAY;
-import static org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Workspaces.Oz.AutoMain_oz.FiringStates.WAITING_ON_SPEED;
-import static org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Workspaces.Oz.AutoMain_oz.FiringStates.WAITING_ON_FEED;
 
 import com.pedropathing.util.Timer;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
@@ -35,9 +28,13 @@ public abstract class AutoMain_oz extends OpMode {
     protected float targetVelocity = 0;
     protected int shotsToFire = 0;
     protected int shotsFired = 0;
+    protected int feedNum = 1;
 
     // variables that control ball feeding
-    protected float feedPerBallMs = 700; //Time that the feeder wheel spins to feed balls
+    protected float firstFeedPerBall = 700; //Time that the feeder wheel spins to feed balls
+    protected float secountFeedPerBall = 500;
+    protected float thirdFeedPerBall = 1000;
+
     protected double minTimeBetweenShoots = 2.0; //Absolute minium time between shots if all other factors are good
     protected double flyWheelErrorPercent = 0.05; //percent fly wheel can be off and still fire
     protected double firstShotMinTimme = 5.5;
@@ -49,7 +46,7 @@ public abstract class AutoMain_oz extends OpMode {
     protected DecodeBot decBot = new DecodeBot();
 
     protected enum FiringStates {START_DELAY, IDLE, PREFIRE, FIRING, WAITING_ON_DELAY, WAITING_ON_SPEED, WAITING_ON_FEED}
-    protected FiringStates currentState = START_DELAY;
+    protected FiringStates currentState = FiringStates.START_DELAY;
 
     public AutoMain_oz(){
         start_delay_timer = new Timer();
@@ -98,7 +95,7 @@ public abstract class AutoMain_oz extends OpMode {
     protected void launchSequence(){
         // Check if the overall auto time limit has passed, if so, stop firing.
         if (max_time_timer.getElapsedTimeSeconds() > MaxTimePark && MaxTimePark > 0.0){
-            currentState = IDLE;
+            currentState = FiringStates.IDLE;
         }
 
         // The switch statement moves between states every time 'loop()' runs in the main OpMode
@@ -111,23 +108,23 @@ public abstract class AutoMain_oz extends OpMode {
                 }
                 // Transition to the next state when the delay time is over
                 if(start_delay_timer.getElapsedTimeSeconds() >= startDelay){
-                    currentState = PREFIRE;
+                    currentState = FiringStates.PREFIRE;
                 }
                 break;
 
             case PREFIRE:
                 // Turn on flywheels and move to wait for speed
                 powerUpFlyWheels();
-                currentState = WAITING_ON_SPEED;
+                currentState = FiringStates.WAITING_ON_SPEED;
                 break;
 
             case WAITING_ON_SPEED:
                 // Check speed and either start firing or finish the sequence
                 if (areFlyAtSpeed()){
                     if (shotsFired < shotsToFire) {
-                        currentState = FIRING;
+                        currentState = FiringStates.FIRING;
                     } else {
-                        currentState = IDLE;
+                        currentState = FiringStates.IDLE;
                     }
                 }
                 break;
@@ -136,26 +133,43 @@ public abstract class AutoMain_oz extends OpMode {
                 // Begin the feeding process and move immediately to the waiting state
                 if (first_shot_timer.getElapsedTimeSeconds() >= firstShotMinTimme){
                     startFeedingBall();
-                    currentState = WAITING_ON_FEED;
+                    currentState = FiringStates.WAITING_ON_FEED;
                 }
 
                 break;
 
             case WAITING_ON_FEED:
-                // Wait until the ball has been fed for the correct amount of time
-                if(feed_timer.getElapsedTime() >= feedPerBallMs) {
-                    stopFeedingBall();
-                    Ball_delay_timer.resetTimer();
-                    fireDelayStarted = true;
-                    currentState = WAITING_ON_DELAY;
+                if (feedNum == 1){
+                    if(feed_timer.getElapsedTime() >= firstFeedPerBall) {
+                        stopFeedingBall();
+                        Ball_delay_timer.resetTimer();
+                        fireDelayStarted = true;
+                        currentState = FiringStates.WAITING_ON_DELAY;
+                        feedNum = 2;
+                    }
+                }else if(feedNum == 2) {
+                    if (feed_timer.getElapsedTime() >= secountFeedPerBall) {
+                        stopFeedingBall();
+                        Ball_delay_timer.resetTimer();
+                        fireDelayStarted = true;
+                        currentState = FiringStates.WAITING_ON_DELAY;
+                        feedNum = 3;
+                    }
+                }else if (feedNum == 3) {
+                    if (feed_timer.getElapsedTime() >= thirdFeedPerBall) {
+                        stopFeedingBall();
+                        Ball_delay_timer.resetTimer();
+                        fireDelayStarted = true;
+                        currentState = FiringStates.WAITING_ON_DELAY;
+                        feedNum = 3;
+                    }
                 }
                 break;
-
             case WAITING_ON_DELAY:
                 // Wait for the minimum time between shots before checking speed again
                 if(Ball_delay_timer.getElapsedTimeSeconds() > minTimeBetweenShoots){
                     fireDelayStarted = false;
-                    currentState = WAITING_ON_SPEED;
+                    currentState = FiringStates.WAITING_ON_SPEED;
                 }
                 break;
 

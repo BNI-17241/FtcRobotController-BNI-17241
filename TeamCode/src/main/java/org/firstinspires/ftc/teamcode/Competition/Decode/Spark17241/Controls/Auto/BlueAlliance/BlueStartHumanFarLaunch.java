@@ -64,7 +64,7 @@ public class BlueStartHumanFarLaunch extends AutoMain {
     @Override
     public void loop() {
         follower.update();
-
+        LEDDriver();
         switch (pathState) {
 
             case START:
