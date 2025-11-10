@@ -26,6 +26,7 @@ public abstract class AutoMain_oz extends OpMode {
     public Timer feed_timer;
     public Timer Ball_delay_timer;
     public Timer max_time_timer;
+    public Timer first_shot_timer;
 
     // These variables store settings for a specific autonomous run and are not shared between different runs.
     protected Double startDelay = 0.0; // delay at start of auto if waiting on other team
@@ -39,6 +40,7 @@ public abstract class AutoMain_oz extends OpMode {
     protected float feedPerBallMs = 700; //Time that the feeder wheel spins to feed balls
     protected double minTimeBetweenShoots = 2.0; //Absolute minium time between shots if all other factors are good
     protected double flyWheelErrorPercent = 0.05; //percent fly wheel can be off and still fire
+    protected double firstShotMinTimme = 5.5;
 
     // Flags to track the progress of the firing process
     protected boolean startDelayStarted = false;
@@ -54,6 +56,7 @@ public abstract class AutoMain_oz extends OpMode {
         feed_timer = new Timer();
         Ball_delay_timer = new Timer();
         max_time_timer = new Timer();
+        first_shot_timer = new Timer();
     }
 
     @Override
@@ -131,8 +134,11 @@ public abstract class AutoMain_oz extends OpMode {
 
             case FIRING:
                 // Begin the feeding process and move immediately to the waiting state
-                startFeedingBall();
-                currentState = WAITING_ON_FEED;
+                if (first_shot_timer.getElapsedTimeSeconds() >= firstShotMinTimme){
+                    startFeedingBall();
+                    currentState = WAITING_ON_FEED;
+                }
+
                 break;
 
             case WAITING_ON_FEED:
