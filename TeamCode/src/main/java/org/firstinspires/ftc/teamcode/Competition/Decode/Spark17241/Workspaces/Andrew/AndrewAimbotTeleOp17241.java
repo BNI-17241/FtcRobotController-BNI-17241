@@ -359,11 +359,12 @@ public class AndrewAimbotTeleOp17241 extends OpMode {
     public void autoTarget()
     {
 
+
         List<LLResultTypes.FiducialResult> fiducialResults = result.getFiducialResults();
         for (LLResultTypes.FiducialResult fr : fiducialResults) {
             if(fr.getFiducialId() == 20) {
                 //Z pos in INCHES
-                telemetry.addData("Distance from 20: ", (29.5 - 15.912402) / Math.tan(fr.getTargetYDegrees()));
+                telemetry.addData("Tag 20", "Distance: %, YROT: %", (29.5 - 15.912402) / Math.tan(fr.getTargetYDegrees()), fr.getTargetYDegrees());
                 if (gamepad1.b) {
                     if (fr.getTargetXDegrees() < -autoVariation + autoOffsetFar) {
                         //Turn Left
@@ -385,7 +386,7 @@ public class AndrewAimbotTeleOp17241 extends OpMode {
             if(fr.getFiducialId() == 24)
             {
                 //Z pos in INCHES
-                telemetry.addData("Distance from 24: ", (29.5 - 15.912402) / Math.tan(fr.getTargetYDegrees()));
+                telemetry.addData("Tag 24", "Distance: %, YROT: %", (29.5 - 15.912402) / Math.tan(fr.getTargetYDegrees()), fr.getTargetYDegrees());
                 if(gamepad1.b){
                     if(fr.getTargetXDegrees() < -autoVariation - autoOffsetFar)
                     {
@@ -414,6 +415,7 @@ public class AndrewAimbotTeleOp17241 extends OpMode {
 
     // ***** Helper Method for Telemetry
     public void telemetryOutput() {
+
         telemetry.addData("Target Velocity: ", targetVelocity);
         telemetry.addData("Left Fly Wheel Velocity: ", decBot.leftFlyWheel.getVelocity());
         telemetry.addData("Right Fly Wheel Velocity: ", decBot.rightFlyWheel.getVelocity());
