@@ -304,7 +304,7 @@ public class AndrewAimbotTeleOp17241 extends OpMode {
             double targetingLatency = result.getTargetingLatency();
             double parseLatency = result.getParseLatency();
 
-            telemetry.addData(".GetPos", botpose.getPosition());
+
 
             /*telemetry.addData("LL Latency", captureLatency + targetingLatency);
             telemetry.addData("Parse Latency", parseLatency);
@@ -340,6 +340,8 @@ public class AndrewAimbotTeleOp17241 extends OpMode {
             for (LLResultTypes.FiducialResult fr : fiducialResults) {
                 telemetry.addData("Fiducial", "ID: %d, Family: %s, X: %.2f, Y: %.2f", fr.getFiducialId(), fr.getFamily(), fr.getTargetXDegrees(), fr.getTargetYDegrees());
             }
+
+
             /*
             // Access color results
             List<LLResultTypes.ColorResult> colorResults = result.getColorResults();
@@ -362,6 +364,9 @@ public class AndrewAimbotTeleOp17241 extends OpMode {
             for (LLResultTypes.FiducialResult fr : fiducialResults) {
                 if(fr.getFiducialId() == 20)
                 {
+                    //Z pos in INCHES
+                    telemetry.addData("Distance from 20: ", (29.5 - 15.912402) / Math.tan(fr.getTargetYDegrees()));
+
                     if(fr.getTargetXDegrees() < -autoVariation + autoOffsetFar)
                     {
                         //Turn Left
