@@ -41,7 +41,9 @@ public class BlueStartHumanParkSpikeOz extends AutoMain_oz {
 
         shotsToFire = 3;
         MaxTimePark = 25.0;
-        targetVelocity = 890;
+        targetVelocity = 950;
+        targetVelocityTwo = targetVelocity - 75;
+        targetVelocityThree = targetVelocity - 100;
     }
 
     @Override

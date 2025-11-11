@@ -42,7 +42,7 @@ public class BlueStartHumanParkSpike extends AutoMain {
         decBot.initRobot(hardwareMap);
 
         /**  Optional per-path tuning */
-        maxShots = 4;                       // Adjust for shot attempts
+        maxShots = 6 ;                       // Adjust for shot attempts
         parkLeaveTime = 25.0;               // Adjust if this path is long
     }
 
@@ -83,7 +83,7 @@ public class BlueStartHumanParkSpike extends AutoMain {
                 /**  Begin scoring session. Adjust for number of shots and time limit */
                 if (!isScoringActive()) {
 
-                    startScoring(LaunchZone.NEAR, 4, 8.0, opmodeTimer.getElapsedTimeSeconds());
+                    startScoring(LaunchZone.NEAR, 4, 10.0, opmodeTimer.getElapsedTimeSeconds());
                 }
 
                 /**  Edge Case Handling for Max Shots or Out of Autonomous Time  */

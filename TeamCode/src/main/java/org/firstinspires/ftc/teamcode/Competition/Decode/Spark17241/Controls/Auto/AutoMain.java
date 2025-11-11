@@ -22,7 +22,7 @@ public abstract class AutoMain extends OpMode {
 
 
     /**  Flywheel / Feeder Variables  */
-    protected double targetVelocity = 0;
+    protected double targetVelocity = 0;        // s
     protected double gatePercent = 0.015;     // was ±2% gate window
     protected double feederPower = 1.0;      // feeder wheel power (0..1)
     protected long   feedMs = 600;           // was 700 ms to run feeder during a shot
@@ -67,9 +67,9 @@ public abstract class AutoMain extends OpMode {
     /** Flywheel Velocity Control and Gate Control based on Launch Zone */
     protected void updateFlywheelAndGate() {
         if (launchZone == LaunchZone.NEAR) {
-            targetVelocity = 870;                        //based on feedback 11/1
+            targetVelocity = 885;                        //based on feedback 11/1
         } else if (launchZone == LaunchZone.FAR) {
-            targetVelocity = 985;                         //based on feedback 11/1
+            targetVelocity = 1000;                         //based on feedback 11/1
         } else {
             targetVelocity = 0;
         }

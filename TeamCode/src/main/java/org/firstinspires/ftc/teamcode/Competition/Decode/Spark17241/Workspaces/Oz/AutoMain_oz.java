@@ -26,14 +26,17 @@ public abstract class AutoMain_oz extends OpMode {
     protected double MaxTimePark = 0.0; // The last time where robot able to be in shooting area before it leaves to go park
 
     protected float targetVelocity = 0;
+    protected float targetVelocityTwo = 0;
+    protected float targetVelocityThree = 0;
+
     protected int shotsToFire = 0;
     protected int shotsFired = 0;
     protected int feedNum = 1;
 
     // variables that control ball feeding
     protected float firstFeedPerBall = 700; //Time that the feeder wheel spins to feed balls
-    protected float secountFeedPerBall = 500;
-    protected float thirdFeedPerBall = 1000;
+    protected float secountFeedPerBall = 200; // must add more  times if you want more + edit later code + edit feed num thing idk
+    protected float thirdFeedPerBall = 600;
 
     protected double minTimeBetweenShoots = 2.0; //Absolute minium time between shots if all other factors are good
     protected double flyWheelErrorPercent = 0.05; //percent fly wheel can be off and still fire
@@ -56,17 +59,22 @@ public abstract class AutoMain_oz extends OpMode {
         first_shot_timer = new Timer();
     }
 
-    @Override
-    public void init_loop() {
-    }
-
     // Turns the flywheel motors on
     protected void powerUpFlyWheels(){
-        decBot.flylaunch(targetVelocity);
+        if (shotsFired == 0){
+            decBot.flylaunch(targetVelocity);
+        }
+        if (shotsFired == 1){
+            decBot.flylaunch(targetVelocityTwo);
+        }
+        else {
+            decBot.flylaunch(targetVelocityThree);
+        }
     }
 
     // Checks if both flywheels are spinning within the acceptable speed range
     protected Boolean areFlyAtSpeed() {
+        if (shotsFired == 0){
         double errorMargin = targetVelocity * flyWheelErrorPercent;
         double lowerBound = targetVelocity - errorMargin;
         double upperBound = targetVelocity + errorMargin;
@@ -77,7 +85,32 @@ public abstract class AutoMain_oz extends OpMode {
         boolean isRightAtSpeed = rightVelocity >= lowerBound && rightVelocity <= upperBound;
 
         return isLeftAtSpeed && isRightAtSpeed;
+        } else if (shotsFired == 1){
+            double errorMargin = targetVelocityTwo * flyWheelErrorPercent;
+            double lowerBound = targetVelocityTwo - errorMargin;
+            double upperBound = targetVelocityTwo + errorMargin;
+            double leftVelocity = decBot.leftFlyWheel.getVelocity();
+            double rightVelocity = decBot.rightFlyWheel.getVelocity();
+
+            boolean isLeftAtSpeed = leftVelocity >= lowerBound && leftVelocity <= upperBound;
+            boolean isRightAtSpeed = rightVelocity >= lowerBound && rightVelocity <= upperBound;
+
+            return isLeftAtSpeed && isRightAtSpeed;
+        }
+        else{
+            double errorMargin = targetVelocityThree * flyWheelErrorPercent;
+            double lowerBound = targetVelocityThree - errorMargin;
+            double upperBound = targetVelocityThree + errorMargin;
+            double leftVelocity = decBot.leftFlyWheel.getVelocity();
+            double rightVelocity = decBot.rightFlyWheel.getVelocity();
+
+            boolean isLeftAtSpeed = leftVelocity >= lowerBound && leftVelocity <= upperBound;
+            boolean isRightAtSpeed = rightVelocity >= lowerBound && rightVelocity <= upperBound;
+
+            return isLeftAtSpeed && isRightAtSpeed;
+        }
     }
+
 
     // Starts the feeder motor and the timer for the feeding duration
     protected void startFeedingBall(){
@@ -115,7 +148,13 @@ public abstract class AutoMain_oz extends OpMode {
             case PREFIRE:
                 // Turn on flywheels and move to wait for speed
                 powerUpFlyWheels();
-                currentState = FiringStates.WAITING_ON_SPEED;
+                if (shotsFired == 0){
+                    currentState = FiringStates.WAITING_ON_SPEED;
+                }
+                else{
+                    currentState = FiringStates.WAITING_ON_DELAY;
+                }
+
                 break;
 
             case WAITING_ON_SPEED:
@@ -134,6 +173,7 @@ public abstract class AutoMain_oz extends OpMode {
                 if (first_shot_timer.getElapsedTimeSeconds() >= firstShotMinTimme){
                     startFeedingBall();
                     currentState = FiringStates.WAITING_ON_FEED;
+                    targetVelocity = targetVelocity - 100;
                 }
 
                 break;
@@ -169,7 +209,7 @@ public abstract class AutoMain_oz extends OpMode {
                 // Wait for the minimum time between shots before checking speed again
                 if(Ball_delay_timer.getElapsedTimeSeconds() > minTimeBetweenShoots){
                     fireDelayStarted = false;
-                    currentState = FiringStates.WAITING_ON_SPEED;
+                    currentState = FiringStates.PREFIRE;
                 }
                 break;
 

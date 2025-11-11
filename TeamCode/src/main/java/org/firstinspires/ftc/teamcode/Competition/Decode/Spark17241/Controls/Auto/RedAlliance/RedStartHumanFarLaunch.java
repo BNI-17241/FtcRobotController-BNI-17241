@@ -20,7 +20,7 @@ public class RedStartHumanFarLaunch extends AutoMain {
     public Timer pathTimer, opmodeTimer;
 
     public final Pose startPose = new Pose(100, 10, Math.toRadians(90));     // Red Far Launch Zone start
-    public final Pose scorePose = new Pose(84, 18, Math.toRadians(60));    // Red goal scoring pose // 80 x 80
+    public final Pose scorePose = new Pose(84, 18, Math.toRadians(62));    // Red goal scoring pose // 80 x 80
     public final Pose parkPose = new Pose(90, 35, Math.toRadians(180)); // Red Home (park)
 
     public Path scorePreload;
