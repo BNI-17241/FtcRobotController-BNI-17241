@@ -32,7 +32,7 @@ public abstract class AutoMain_oz extends OpMode {
 
     // variables that control ball feeding
     protected float firstFeedPerBall = 700; //Time that the feeder wheel spins to feed balls
-    protected float secountFeedPerBall = 500;
+    protected float secountFeedPerBall = 200;
     protected float thirdFeedPerBall = 1000;
 
     protected double minTimeBetweenShoots = 2.0; //Absolute minium time between shots if all other factors are good
@@ -134,6 +134,7 @@ public abstract class AutoMain_oz extends OpMode {
                 if (first_shot_timer.getElapsedTimeSeconds() >= firstShotMinTimme){
                     startFeedingBall();
                     currentState = FiringStates.WAITING_ON_FEED;
+                    targetVelocity = targetVelocity - 100;
                 }
 
                 break;
