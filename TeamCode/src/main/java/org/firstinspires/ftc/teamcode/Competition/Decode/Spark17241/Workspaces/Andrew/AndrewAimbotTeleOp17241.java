@@ -358,35 +358,35 @@ public class AndrewAimbotTeleOp17241 extends OpMode {
     //Auto Correction
     public void autoTarget()
     {
-        if(gamepad1.b)
-        {
-            List<LLResultTypes.FiducialResult> fiducialResults = result.getFiducialResults();
-            for (LLResultTypes.FiducialResult fr : fiducialResults) {
-                if(fr.getFiducialId() == 20)
-                {
-                    //Z pos in INCHES
-                    telemetry.addData("Distance from 20: ", (29.5 - 15.912402) / Math.tan(fr.getTargetYDegrees()));
 
-                    if(fr.getTargetXDegrees() < -autoVariation + autoOffsetFar)
-                    {
+        List<LLResultTypes.FiducialResult> fiducialResults = result.getFiducialResults();
+        for (LLResultTypes.FiducialResult fr : fiducialResults) {
+            if(fr.getFiducialId() == 20) {
+                //Z pos in INCHES
+                telemetry.addData("Distance from 20: ", (29.5 - 15.912402) / Math.tan(fr.getTargetYDegrees()));
+                if (gamepad1.b) {
+                    if (fr.getTargetXDegrees() < -autoVariation + autoOffsetFar) {
                         //Turn Left
                         setMotorPower(decBot.frontLeftMotor, -autoSpeed, powerThreshold, speedMultiply);
                         setMotorPower(decBot.frontRightMotor, autoSpeed, powerThreshold, speedMultiply);
-                        setMotorPower(decBot.rearLeftMotor,  -autoSpeed, powerThreshold, speedMultiply);
-                        setMotorPower(decBot.rearRightMotor,  autoSpeed, powerThreshold, speedMultiply);
+                        setMotorPower(decBot.rearLeftMotor, -autoSpeed, powerThreshold, speedMultiply);
+                        setMotorPower(decBot.rearRightMotor, autoSpeed, powerThreshold, speedMultiply);
 
                     }
-                    if(fr.getTargetXDegrees() > autoVariation + autoOffsetFar)
-                    {
+                    if (fr.getTargetXDegrees() > autoVariation + autoOffsetFar) {
                         //Turn Right
-                        setMotorPower(decBot.frontLeftMotor,  autoSpeed, powerThreshold, speedMultiply);
-                        setMotorPower(decBot.frontRightMotor,-autoSpeed, powerThreshold, speedMultiply);
-                        setMotorPower(decBot.rearLeftMotor,   autoSpeed, powerThreshold, speedMultiply);
+                        setMotorPower(decBot.frontLeftMotor, autoSpeed, powerThreshold, speedMultiply);
+                        setMotorPower(decBot.frontRightMotor, -autoSpeed, powerThreshold, speedMultiply);
+                        setMotorPower(decBot.rearLeftMotor, autoSpeed, powerThreshold, speedMultiply);
                         setMotorPower(decBot.rearRightMotor, -autoSpeed, powerThreshold, speedMultiply);
                     }
                 }
-
-                if(fr.getFiducialId() == 24) {
+            }
+            if(fr.getFiducialId() == 24)
+            {
+                //Z pos in INCHES
+                telemetry.addData("Distance from 24: ", (29.5 - 15.912402) / Math.tan(fr.getTargetYDegrees()));
+                if(gamepad1.b){
                     if(fr.getTargetXDegrees() < -autoVariation - autoOffsetFar)
                     {
                         //Turn Left
