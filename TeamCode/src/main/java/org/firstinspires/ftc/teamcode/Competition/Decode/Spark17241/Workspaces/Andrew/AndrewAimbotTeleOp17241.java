@@ -364,7 +364,8 @@ public class AndrewAimbotTeleOp17241 extends OpMode {
         for (LLResultTypes.FiducialResult fr : fiducialResults) {
             if(fr.getFiducialId() == 20) {
                 //Z pos in INCHES
-                telemetry.addData("Tag 20", "Distance: %, YROT: %", (29.5 - 15.912402) / Math.tan(fr.getTargetYDegrees()), fr.getTargetYDegrees());
+                telemetry.addData("Distance from 20: ", (29.5 - 15.912402) / Math.tan(fr.getTargetYDegrees()));
+                telemetry.addData("Yrot: ", fr.getTargetYDegrees());
                 if (gamepad1.b) {
                     if (fr.getTargetXDegrees() < -autoVariation + autoOffsetFar) {
                         //Turn Left
@@ -386,7 +387,8 @@ public class AndrewAimbotTeleOp17241 extends OpMode {
             if(fr.getFiducialId() == 24)
             {
                 //Z pos in INCHES
-                telemetry.addData("Tag 24", "Distance: %, YROT: %", (29.5 - 15.912402) / Math.tan(fr.getTargetYDegrees()), fr.getTargetYDegrees());
+                telemetry.addData("Distance from 20: ", (29.5 - 15.912402) / Math.tan(fr.getTargetYDegrees()));
+                telemetry.addData("Yrot: ", fr.getTargetYDegrees());
                 if(gamepad1.b){
                     if(fr.getTargetXDegrees() < -autoVariation - autoOffsetFar)
                     {
