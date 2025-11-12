@@ -61,11 +61,11 @@ public class AndrewAimbotTeleOp17241 extends OpMode {
     public int currentProfile = PROFILE_1;
 
     // Velocity gate
-    double gatePercent = 0.05;            // ±5`     % gate window
+    double gatePercent = 0.03;            // was ±5`     % gate window
 
     // Feed action
     double feederPower = 1.0;             // power for feeder wheel (0..1)
-    long   feedMs = 700;                  // how long to run feeder
+    long   feedMs = 350;                  // how long to run feeder was 700
 
     // Shot-drop compensation (temporary target bump while feeding)
     double boostFactor = 1.02;            // +2% target during feed
@@ -82,6 +82,7 @@ public class AndrewAimbotTeleOp17241 extends OpMode {
 
     boolean autoFire;
     double autoTargetSpeed = 0.0;
+    double angleTopTri;
 
     double nominalTarget = 0;             // remembers non-boosted target
     double tolerance; // floor to 10 ticks per secibd
@@ -416,7 +417,8 @@ public class AndrewAimbotTeleOp17241 extends OpMode {
 
                 double rangeMeters = Math.sqrt(x * x + y * y + forwardMeters * forwardMeters);// 3D range
 
-                autoTargetSpeed = (169.2 * Math.pow(forwardMeters, 3)) + (- 866.967 * Math.pow(forwardMeters, 2) + (1557.1 * forwardMeters));
+                autoTargetSpeed = (127.7 * Math.pow(forwardMeters, 5)) + (-641.4 * Math.pow(forwardMeters, 4)) + (782.4 * Math.pow(forwardMeters, 3)) + (604.8 * Math.pow(forwardMeters, 2) - (1500 * forwardMeters) + 1500);
+
                 telemetry.addLine("-------------------------------------");
                 telemetry.addData("Tag ID", fr.getFiducialId());
                 telemetry.addData("Forward (m)", "%.3f", forwardMeters);
@@ -450,10 +452,16 @@ public class AndrewAimbotTeleOp17241 extends OpMode {
                 double x = tagInCam.getPosition().x;  // right (+)
                 double y = tagInCam.getPosition().y;  // down (+)
                 double forwardMeters = tagInCam.getPosition().z;  // forward/out of camera (+)
+                double yaw = fr.getTargetXDegrees();
 
                 double rangeMeters = Math.sqrt(x * x + y * y + forwardMeters * forwardMeters);// 3D range
 
-                autoTargetSpeed = (169.2 * Math.pow(forwardMeters, 3)) + (- 866.967 * Math.pow(forwardMeters, 2) + (1557.1 * forwardMeters));
+                autoTargetSpeed = (127.7 * Math.pow(forwardMeters, 5)) + (-641.4 * Math.pow(forwardMeters, 4)) + (782.4 * Math.pow(forwardMeters, 3)) + (604.8 * Math.pow(forwardMeters, 2) - (1500 * forwardMeters) + 1500);
+
+                angleTopTri = Math.acos((forwardMeters + 18.5 * Math.sin(yaw))/(Math.sqrt(Math.pow(forwardMeters, 2) * Math.pow(Math.cos(yaw), 2) + Math.pow(18.5 + forwardMeters * Math.sin(yaw), 2)   )));
+
+                telemetry.addData("Angle to point A: ", angleTopTri);
+
                 telemetry.addLine("-------------------------------------");
                 telemetry.addData("Tag ID", fr.getFiducialId());
                 telemetry.addData("Forward (m)", "%.3f", forwardMeters);
