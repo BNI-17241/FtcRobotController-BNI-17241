@@ -13,6 +13,7 @@ import com.qualcomm.robotcore.util.Range;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
 import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Robots.DecodeBot;
 
+import java.util.Arrays;
 import java.util.List;
 
 @TeleOp(name = "AndrewAuto TeleOp", group = "Drive")
@@ -79,6 +80,8 @@ public class AndrewAimbotTeleOp17241 extends OpMode {
     boolean rbPressed;
     boolean prevRb;
 
+    boolean autoFire;
+    double autoTargetSpeed = 0.0;
 
     double nominalTarget = 0;             // remembers non-boosted target
     double tolerance; // floor to 10 ticks per secibd
@@ -201,6 +204,12 @@ public class AndrewAimbotTeleOp17241 extends OpMode {
         if (gamepad2.dpad_down) targetVelocity -= 1;
         if (gamepad2.left_bumper) { targetVelocity = 0; }
 
+        if(gamepad1.right_stick_button)
+        {
+            targetVelocity = autoTargetSpeed;
+            autoFire = true;
+        }
+
         decBot.flylaunch(targetVelocity);
 
         // Keep nominalTarget synced unless we’re in a boost
@@ -233,13 +242,16 @@ public class AndrewAimbotTeleOp17241 extends OpMode {
         switch (state) {
             case IDLE:
                 decBot.feederWheel.setPower(0);
-                if (rbPressed) {
+                if (rbPressed || autoFire) {
                     state = ShootState.WAIT_FOR_GATE;
                 }
                 break;
 
             case WAIT_FOR_GATE:
                 decBot.feederWheel.setPower(0);
+                if(autoFire){
+                    nominalTarget = autoTargetSpeed;
+                }
                 if (inGate) {
                     // Apply brief boost and feed
                     targetVelocity = nominalTarget * boostFactor;
@@ -263,6 +275,7 @@ public class AndrewAimbotTeleOp17241 extends OpMode {
                     targetVelocity = nominalTarget;
                     timer.reset();
                     state = ShootState.RECOVERING;
+                    autoFire = false;
                 }
                 break;
 
@@ -315,6 +328,8 @@ public class AndrewAimbotTeleOp17241 extends OpMode {
             telemetry.addData("ty", result.getTy());
             telemetry.addData("tync", result.getTyNC());
 
+
+
             telemetry.addData("Botpose", botpose.toString());
 
             // Access barcode results
@@ -362,10 +377,55 @@ public class AndrewAimbotTeleOp17241 extends OpMode {
 
         List<LLResultTypes.FiducialResult> fiducialResults = result.getFiducialResults();
         for (LLResultTypes.FiducialResult fr : fiducialResults) {
+
+
+            /*if (!result.getFiducialResults().isEmpty()) {
+                List<LLResultTypes.FiducialResult> allTags = result.getFiducialResults();   // best tag this frame
+                LLResultTypes.FiducialResult f = allTags.get(0);
+                for(int i = 0; i < allTags.size(); i++) {
+                    if(allTags.get(i).getFiducialId() == 20 || allTags.get(i).getFiducialId() == 24) {
+                        f = allTags.get(i);
+                    }
+                }
+
+                Pose3D tagInCam = f.getTargetPoseCameraSpace();     // pose of tag in CAMERA space
+                double x = tagInCam.getPosition().x;  // right (+)
+                double y = tagInCam.getPosition().y;  // down (+)
+                double forwardMeters = tagInCam.getPosition().z;  // forward/out of camera (+)
+
+                double rangeMeters = Math.sqrt(x * x + y * y + forwardMeters * forwardMeters);// 3D range
+
+                telemetry.addLine("-------------------------------------");
+
+                telemetry.addData("Tag ID", f.getFiducialId());
+                telemetry.addData("Forward (m)", "%.3f", forwardMeters);
+                telemetry.addData("Range (m)", "%.3f", rangeMeters);
+
+            } else {
+                telemetry.addData("Tag", "none");
+            }
+
+            telemetry.addLine("-------------------------------------");*/
+
+
             if(fr.getFiducialId() == 20) {
-                //Z pos in INCHES
-                telemetry.addData("Distance from 20: ", (29.5 - 15.912402) / Math.tan(fr.getTargetYDegrees()));
-                telemetry.addData("Yrot: ", fr.getTargetYDegrees());
+                Pose3D tagInCam = fr.getTargetPoseCameraSpace();     // pose of tag in CAMERA space
+                double x = tagInCam.getPosition().x;  // right (+)
+                double y = tagInCam.getPosition().y;  // down (+)
+                double forwardMeters = tagInCam.getPosition().z;  // forward/out of camera (+)
+
+                double rangeMeters = Math.sqrt(x * x + y * y + forwardMeters * forwardMeters);// 3D range
+
+                autoTargetSpeed = (169.2 * Math.pow(forwardMeters, 3)) + (- 866.967 * Math.pow(forwardMeters, 2) + (1557.1 * forwardMeters));
+                telemetry.addLine("-------------------------------------");
+                telemetry.addData("Tag ID", fr.getFiducialId());
+                telemetry.addData("Forward (m)", "%.3f", forwardMeters);
+                telemetry.addData("Range (m)", "%.3f", rangeMeters);
+                telemetry.addData("Yaw", fr.getTargetXDegrees());
+                telemetry.addLine("-------------------------------------");
+
+
+
                 if (gamepad1.b) {
                     if (fr.getTargetXDegrees() < -autoVariation + autoOffsetFar) {
                         //Turn Left
@@ -386,9 +446,20 @@ public class AndrewAimbotTeleOp17241 extends OpMode {
             }
             if(fr.getFiducialId() == 24)
             {
-                //Z pos in INCHES
-                telemetry.addData("Distance from 20: ", (29.5 - 15.912402) / Math.tan(fr.getTargetYDegrees()));
-                telemetry.addData("Yrot: ", fr.getTargetYDegrees());
+                Pose3D tagInCam = fr.getTargetPoseCameraSpace();     // pose of tag in CAMERA space
+                double x = tagInCam.getPosition().x;  // right (+)
+                double y = tagInCam.getPosition().y;  // down (+)
+                double forwardMeters = tagInCam.getPosition().z;  // forward/out of camera (+)
+
+                double rangeMeters = Math.sqrt(x * x + y * y + forwardMeters * forwardMeters);// 3D range
+
+                autoTargetSpeed = (169.2 * Math.pow(forwardMeters, 3)) + (- 866.967 * Math.pow(forwardMeters, 2) + (1557.1 * forwardMeters));
+                telemetry.addLine("-------------------------------------");
+                telemetry.addData("Tag ID", fr.getFiducialId());
+                telemetry.addData("Forward (m)", "%.3f", forwardMeters);
+                telemetry.addData("Range (m)", "%.3f", rangeMeters);
+                telemetry.addLine("-------------------------------------");
+
                 if(gamepad1.b){
                     if(fr.getTargetXDegrees() < -autoVariation - autoOffsetFar)
                     {
