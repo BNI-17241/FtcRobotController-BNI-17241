@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Controls.Auto.BlueAlliance;
+package org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Workspaces.Andrew;
 
 import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.BezierLine;
@@ -8,19 +8,19 @@ import com.pedropathing.paths.PathChain;
 import com.pedropathing.util.Timer;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
-import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Controls.Auto.AutoMain;
+import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Workspaces.Oz.AutoMain_oz;
 import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.pedroPathing.Constants;
 
 //@Disabled
-@Autonomous(name = "Blue:Start Human Far Launch", group = "Drive")
-public class BlueStartHumanFarLaunch extends AutoMain {
+@Autonomous(name = "Blue:Start Human Far Launch Andrew New", group = "Drive")
+public class BlueStartHumanFarLaunchNewAndrew extends AutoMain_NewAndrew {
 //
     /**  Pedro Pathing Variables, Poses, Paths & States */
     public Follower follower;
     public Timer pathTimer, opmodeTimer;
 
     public final Pose startPose = new Pose(44, 10, Math.toRadians(90));     // start pos
-    public final Pose scoreFarPose = new Pose(60, 20, Math.toRadians(111));    // blue shoot far
+    public final Pose scoreFarPose = new Pose(60, 20, Math.toRadians(112));    // blue shoot far
     public final Pose parkPose = new Pose(56, 35, Math.toRadians(0)); // Red Home (park)
 
     public Path scorePreload;
@@ -29,6 +29,7 @@ public class BlueStartHumanFarLaunch extends AutoMain {
     public enum pathingState { START, Shooting, GO_PARK, READY }
     pathingState pathState = pathingState.READY;
     private boolean parkPathStarted = false;
+    private boolean scorePathStarted = false;
 
 
     /**  Required OpMode Autonomous Control Methods  */
@@ -43,8 +44,11 @@ public class BlueStartHumanFarLaunch extends AutoMain {
         decBot.initRobot(hardwareMap);
 
         /**  Optional per-path tuning */
-        maxShots = 4;                       // Adjust for shot attempts
-        parkLeaveTime = 25.0;               // Adjust if this path is long
+        shotsToFire = 4;
+        MaxTimePark = 25.0;
+        targetVelocity = 1090;
+        targetVelocityTwo = targetVelocity - 75;
+        targetVelocityThree = targetVelocity - 100;
     }
 
     @Override
@@ -53,12 +57,13 @@ public class BlueStartHumanFarLaunch extends AutoMain {
         pathTimer.resetTimer();
 
         pathState = pathingState.START;
-        scoringState = scoreState.IDLE;
-        launchZone = LaunchZone.NONE;
-
-        autoScoreComplete = false;
+        currentState = FiringStates.START_DELAY;
         shotsFired = 0;
+        startDelayStarted = false;
+        fireDelayStarted = false;
+
         parkPathStarted = false;
+        scorePathStarted = false;
     }
 
     @Override
@@ -68,31 +73,32 @@ public class BlueStartHumanFarLaunch extends AutoMain {
         switch (pathState) {
 
             case START:
-                follower.followPath(scorePreload);
+                if (!scorePathStarted) {
+                    follower.followPath(scorePreload);
+                    scorePathStarted = true;
+                }
                 pathState = pathingState.Shooting;
                 break;
 
             case Shooting:
                 /**  If still driving to goal, optionally spin up early */
                 if (follower.isBusy()) {
-                    launchZone = LaunchZone.FAR;
-                    onLoopStart();
-                    updateFlywheelAndGate();
+                    powerUpFlyWheels();
+                    launchSequence();
                     break;
                 }
 
                 /**  Begin scoring session. Adjust for number of shots and time limit */
-                if (!isScoringActive()) {
-
-                    startScoring(LaunchZone.FAR, 4, 9.0, opmodeTimer.getElapsedTimeSeconds());
+                if (currentState != FiringStates.IDLE) {
+                    launchSequence();
                 }
 
                 /**  Edge Case Handling for Max Shots or Out of Autonomous Time  */
-                boolean done = updateScoring(opmodeTimer.getElapsedTimeSeconds());
-                boolean timeToLeave = opmodeTimer.getElapsedTimeSeconds() >= parkLeaveTime;
+                boolean done = (currentState == FiringStates.IDLE);
+                boolean timeToLeave = opmodeTimer.getElapsedTimeSeconds() >= MaxTimePark;
 
                 if (done || timeToLeave) {
-                    stopScoring(); // safe even if already inactive
+                    currentState = FiringStates.IDLE;
                     pathState = pathingState.GO_PARK;
                 }
                 break;
@@ -103,9 +109,8 @@ public class BlueStartHumanFarLaunch extends AutoMain {
                     follower.followPath(goPark);
                     parkPathStarted = true;
                 }
-                launchZone = LaunchZone.NONE;    // spin down while driving to park
-                onLoopStart();
-                updateFlywheelAndGate();         // harmless when NONE
+                powerUpFlyWheels();
+                launchSequence();
                 // When park path finishes, advance to READY
                 if (parkPathStarted && !follower.isBusy()) {
                     pathState = pathingState.READY;
@@ -114,8 +119,7 @@ public class BlueStartHumanFarLaunch extends AutoMain {
 //
             case READY:
                 // Do nothing, keep robot safe
-                onLoopStart();
-                updateFlywheelAndGate();
+                launchSequence();
                 break;
         }
         /** LED Driver for Gate Control */
@@ -123,11 +127,11 @@ public class BlueStartHumanFarLaunch extends AutoMain {
 
         /**  Telemetry: Include Base Telementry and add additional for Pathing */
 
-        baseTelemetry();
+        TelemetryOut();
         telemetry.addData("Pathing State", pathState);
         telemetry.addData("At goal?", !follower.isBusy());
         telemetry.addData("Auto Time (s)", "%.1f", opmodeTimer.getElapsedTimeSeconds());
-        telemetry.addData("Leaving to park at (s)", parkLeaveTime);
+        telemetry.addData("Leaving to park at (s)", MaxTimePark);
         telemetry.update();
     }
 
@@ -148,4 +152,3 @@ public class BlueStartHumanFarLaunch extends AutoMain {
                 .build();
     }
 }
-

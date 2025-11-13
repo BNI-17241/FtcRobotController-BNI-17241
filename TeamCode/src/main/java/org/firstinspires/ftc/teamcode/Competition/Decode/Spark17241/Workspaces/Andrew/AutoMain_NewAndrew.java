@@ -1,7 +1,8 @@
-package org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Workspaces.Oz;
+package org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Workspaces.Andrew;
 
 import com.pedropathing.util.Timer;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+
 import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Robots.DecodeBot;
 
 /**
@@ -15,12 +16,13 @@ import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Robots.Decod
  * The launch sequence handles the ball firing process.
  */
 
-public abstract class AutoMain_oz extends OpMode {
+public abstract class AutoMain_NewAndrew extends OpMode {
     public Timer start_delay_timer;
     public Timer feed_timer;
     public Timer Ball_delay_timer;
     public Timer max_time_timer;
     public Timer first_shot_timer;
+    public Timer auto_Timer;
 
     // Configurable autonomous parameters
     protected double startDelay = 0.0;       // Delay before auto starts
@@ -34,9 +36,9 @@ public abstract class AutoMain_oz extends OpMode {
     protected int feedNum = 1;
 
     // Feed timing (milliseconds)
-    protected float firstFeedPerBall = 700;
-    protected float secondFeedPerBall = 250;
-    protected float thirdFeedPerBall = 600;
+    protected float firstFeedPerBall = 700;//700
+    protected float secondFeedPerBall = 250;//250
+    protected float thirdFeedPerBall = 600;//600
 
     protected double minTimeBetweenShoots = 2.0;  // Seconds
     protected double flyWheelErrorPercent = 0.05;
@@ -54,12 +56,14 @@ public abstract class AutoMain_oz extends OpMode {
 
     protected FiringStates currentState = FiringStates.START_DELAY;
 
-    public AutoMain_oz() {
+    public AutoMain_NewAndrew() {
         start_delay_timer = new Timer();
         feed_timer = new Timer();
         Ball_delay_timer = new Timer();
         max_time_timer = new Timer();
         first_shot_timer = new Timer();
+
+        auto_Timer = new Timer();
     }
 
 
@@ -127,7 +131,7 @@ public abstract class AutoMain_oz extends OpMode {
                     currentState = FiringStates.WAITING_ON_SPEED;
                     first_shot_timer.resetTimer();
                 } else {
-                    currentState = FiringStates.WAITING_ON_DELAY;
+                    currentState = FiringStates.WAITING_ON_SPEED;//-------------------------------I changed this from PREFIRE
                 }
                 break;
 
@@ -194,6 +198,11 @@ public abstract class AutoMain_oz extends OpMode {
         telemetry.addData("Shots Fired", shotsFired);
         telemetry.addData("Feed Num", feedNum);
         telemetry.addData("Flywheel At Speed", areFlyAtSpeed());
+        telemetry.addData("Start Timer: ", start_delay_timer.getElapsedTimeSeconds());
+        telemetry.addData("Max Time Timer: ",  max_time_timer.getElapsedTimeSeconds());
+        telemetry.addData("First Shot Timer: ", first_shot_timer.getElapsedTimeSeconds());
+        telemetry.addData("Auto Timer: ", auto_Timer.getElapsedTimeSeconds());
+        telemetry.addData("Ball Delay Timer: ", Ball_delay_timer.getElapsedTimeSeconds());
     }
 
 

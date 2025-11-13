@@ -20,7 +20,7 @@ public class BlueStartHumanFarLaunchOz extends AutoMain_oz {
     public Timer pathTimer, opmodeTimer;
 
     public final Pose startPose = new Pose(44, 10, Math.toRadians(90));     // start pos
-    public final Pose scoreFarPose = new Pose(60, 20, Math.toRadians(107));    // blue shoot far
+    public final Pose scoreFarPose = new Pose(60, 20, Math.toRadians(112));    // blue shoot far
     public final Pose parkPose = new Pose(56, 35, Math.toRadians(0)); // Red Home (park)
 
     public Path scorePreload;
