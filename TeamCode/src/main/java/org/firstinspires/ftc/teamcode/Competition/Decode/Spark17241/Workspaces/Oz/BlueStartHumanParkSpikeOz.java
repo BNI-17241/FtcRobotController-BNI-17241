@@ -11,7 +11,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Workspaces.Oz.AutoMain_oz;
 import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.pedroPathing.Constants;
 
-//@Disabled
+
 @Autonomous(name = "Blue:Start Human:Park Spike Oz", group = "Drive")
 public class BlueStartHumanParkSpikeOz extends AutoMain_oz {
 
@@ -44,6 +44,7 @@ public class BlueStartHumanParkSpikeOz extends AutoMain_oz {
         targetVelocity = 950;
         targetVelocityTwo = targetVelocity - 75;
         targetVelocityThree = targetVelocity - 100;
+
     }
 
     @Override

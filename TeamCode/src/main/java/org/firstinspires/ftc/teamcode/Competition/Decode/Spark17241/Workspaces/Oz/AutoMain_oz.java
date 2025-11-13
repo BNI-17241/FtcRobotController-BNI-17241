@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Robots.DecodeBot;
 
 /**
- * Re written Auto main by Oz Joswick Nov 20 2025
+ * Re written Auto main by Oz Joswick Nov 12 2025
  * Defines functions to be used in other classes
  * When creating object for class enter target velocity for for flywheels(Near 890: far 1093), and shots to be fired
  * Put telemetry out in all main loop in individual class before telemetry update.
@@ -35,12 +35,12 @@ public abstract class AutoMain_oz extends OpMode {
 
     // variables that control ball feeding
     protected float firstFeedPerBall = 700; //Time that the feeder wheel spins to feed balls
-    protected float secountFeedPerBall = 200; // must add more  times if you want more + edit later code + edit feed num thing idk
+    protected float secontFeedPerBall = 200; // must add more  times if you want more + edit later code + edit feed num thing idk
     protected float thirdFeedPerBall = 600;
 
     protected double minTimeBetweenShoots = 2.0; //Absolute minium time between shots if all other factors are good
     protected double flyWheelErrorPercent = 0.05; //percent fly wheel can be off and still fire
-    protected double firstShotMinTimme = 5.5;
+    protected double firstShotMinTimme = 5;
 
     // Flags to track the progress of the firing process
     protected boolean startDelayStarted = false;
@@ -150,6 +150,7 @@ public abstract class AutoMain_oz extends OpMode {
                 powerUpFlyWheels();
                 if (shotsFired == 0){
                     currentState = FiringStates.WAITING_ON_SPEED;
+                    first_shot_timer.resetTimer();
                 }
                 else{
                     currentState = FiringStates.WAITING_ON_DELAY;
@@ -170,7 +171,7 @@ public abstract class AutoMain_oz extends OpMode {
 
             case FIRING:
                 // Begin the feeding process and move immediately to the waiting state
-                if (first_shot_timer.getElapsedTimeSeconds() >= firstShotMinTimme){
+                if (shotsFired > 0 || first_shot_timer.getElapsedTimeSeconds() >= firstShotMinTimme){
                     startFeedingBall();
                     currentState = FiringStates.WAITING_ON_FEED;
                     targetVelocity = targetVelocity - 100;
@@ -188,7 +189,7 @@ public abstract class AutoMain_oz extends OpMode {
                         feedNum = 2;
                     }
                 }else if(feedNum == 2) {
-                    if (feed_timer.getElapsedTime() >= secountFeedPerBall) {
+                    if (feed_timer.getElapsedTime() >= secontFeedPerBall) {
                         stopFeedingBall();
                         Ball_delay_timer.resetTimer();
                         fireDelayStarted = true;
