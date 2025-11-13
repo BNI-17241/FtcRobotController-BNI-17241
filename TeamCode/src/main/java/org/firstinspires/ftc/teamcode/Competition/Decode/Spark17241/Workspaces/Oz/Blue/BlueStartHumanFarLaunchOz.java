@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Workspaces.Oz;
+package org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Workspaces.Oz.Blue;
 
 import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.BezierLine;
@@ -12,23 +12,27 @@ import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Workspaces.O
 import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.pedroPathing.Constants;
 
 //@Disabled
-@Autonomous(name = "Blue:Start Human:Park Spike Oz", group = "Drive")
-public class BlueStartHumanParkSpikeOz extends AutoMain_oz {
-
+@Autonomous(name = "Blue:Start Human Far Launch Oz", group = "Drive")
+public class BlueStartHumanFarLaunchOz extends AutoMain_oz {
+//
+    /**  Pedro Pathing Variables, Poses, Paths & States */
     public Follower follower;
     public Timer pathTimer, opmodeTimer;
 
-    public final Pose startPose = new Pose(44, 8, Math.toRadians(90));
-    public final Pose scorePose = new Pose(59, 81, Math.toRadians(133));
-    public final Pose parkPose = new Pose(45, 40, Math.toRadians(0));
+    public final Pose startPose = new Pose(44, 10, Math.toRadians(90));     // start pos
+    public final Pose scoreFarPose = new Pose(60, 20, Math.toRadians(107));    // blue shoot far
+    public final Pose parkPose = new Pose(56, 35, Math.toRadians(0)); // Red Home (park)
 
     public Path scorePreload;
     public PathChain goPark;
 
-    public enum pathingState { START, SCORE_PRELOAD, GO_PARK, READY }
+    public enum pathingState { START, Shooting, GO_PARK, READY }
     pathingState pathState = pathingState.READY;
     private boolean parkPathStarted = false;
+    private boolean scorePathStarted = false;
 
+
+    /**  Required OpMode Autonomous Control Methods  */
 
     @Override
     public void init() {
@@ -39,9 +43,10 @@ public class BlueStartHumanParkSpikeOz extends AutoMain_oz {
         follower.setStartingPose(startPose);
         decBot.initRobot(hardwareMap);
 
-        shotsToFire = 3;
+        /**  Optional per-path tuning */
+        shotsToFire = 4;
         MaxTimePark = 25.0;
-        targetVelocity = 950;
+        targetVelocity = 1090;
         targetVelocityTwo = targetVelocity - 75;
         targetVelocityThree = targetVelocity - 100;
     }
@@ -58,23 +63,37 @@ public class BlueStartHumanParkSpikeOz extends AutoMain_oz {
         fireDelayStarted = false;
 
         parkPathStarted = false;
+        scorePathStarted = false;
     }
 
     @Override
     public void loop() {
         follower.update();
+        LEDDriver();
         switch (pathState) {
+
             case START:
-                follower.followPath(scorePreload);
-                pathState = pathingState.SCORE_PRELOAD;
+                if (!scorePathStarted) {
+                    follower.followPath(scorePreload);
+                    scorePathStarted = true;
+                }
+                pathState = pathingState.Shooting;
                 break;
 
-            case SCORE_PRELOAD:
+            case Shooting:
+                /**  If still driving to goal, optionally spin up early */
                 if (follower.isBusy()) {
                     powerUpFlyWheels();
+                    launchSequence();
                     break;
                 }
 
+                /**  Begin scoring session. Adjust for number of shots and time limit */
+                if (currentState != FiringStates.IDLE) {
+                    launchSequence();
+                }
+
+                /**  Edge Case Handling for Max Shots or Out of Autonomous Time  */
                 boolean done = (currentState == FiringStates.IDLE);
                 boolean timeToLeave = opmodeTimer.getElapsedTimeSeconds() >= MaxTimePark;
 
@@ -82,27 +101,31 @@ public class BlueStartHumanParkSpikeOz extends AutoMain_oz {
                     currentState = FiringStates.IDLE;
                     pathState = pathingState.GO_PARK;
                 }
-
-                launchSequence();
                 break;
 
             case GO_PARK:
+                /** Start the park path exactly once upon entering this state */
                 if (!parkPathStarted) {
                     follower.followPath(goPark);
                     parkPathStarted = true;
                 }
-
+                powerUpFlyWheels();
                 launchSequence();
-
+                // When park path finishes, advance to READY
                 if (parkPathStarted && !follower.isBusy()) {
                     pathState = pathingState.READY;
                 }
                 break;
-
+//
             case READY:
+                // Do nothing, keep robot safe
                 launchSequence();
                 break;
         }
+        /** LED Driver for Gate Control */
+        LEDDriver();
+
+        /**  Telemetry: Include Base Telementry and add additional for Pathing */
 
         TelemetryOut();
         telemetry.addData("Pathing State", pathState);
@@ -115,13 +138,17 @@ public class BlueStartHumanParkSpikeOz extends AutoMain_oz {
     @Override
     public void stop() { }
 
-    public void buildPaths() {
-        scorePreload = new Path(new BezierLine(startPose, scorePose));
-        scorePreload.setLinearHeadingInterpolation(startPose.getHeading(), scorePose.getHeading());
+    /**  Pedro Pathing Control Methods  */
 
+    public void buildPaths() {
+        // Start Pose -> Score Pose
+        scorePreload = new Path(new BezierLine(startPose, scoreFarPose));
+        scorePreload.setLinearHeadingInterpolation(startPose.getHeading(), scoreFarPose.getHeading());
+
+        // Score Pose -> Park Home Pose
         goPark = follower.pathBuilder()
-                .addPath(new BezierLine(scorePose, parkPose))
-                .setLinearHeadingInterpolation(scorePose.getHeading(), parkPose.getHeading())
+                .addPath(new BezierLine(scoreFarPose, parkPose))
+                .setLinearHeadingInterpolation(scoreFarPose.getHeading(), parkPose.getHeading())
                 .build();
     }
 }
