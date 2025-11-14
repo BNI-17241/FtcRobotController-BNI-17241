@@ -131,7 +131,7 @@ public abstract class AutoMain_NewAndrew extends OpMode {
                     currentState = FiringStates.WAITING_ON_SPEED;
                     first_shot_timer.resetTimer();
                 } else {
-                    currentState = FiringStates.WAITING_ON_SPEED;//-------------------------------I changed this from PREFIRE
+                    currentState = FiringStates.WAITING_ON_SPEED;//-------------------------------I changed this from WAITING_ON_DELAY
                 }
                 break;
 

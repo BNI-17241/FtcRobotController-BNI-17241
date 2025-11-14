@@ -197,6 +197,7 @@ public class AndrewAimbotTeleOp17241 extends OpMode {
     // Fly Wheel Control
     public void flyWheelControl() {
 
+        if (gamepad2.left_stick_button) {targetVelocity = -600;}
         if (gamepad2.x) { targetVelocity = 876; }
         if (gamepad2.a) { targetVelocity = 934; }
         if (gamepad2.b) { targetVelocity = 1003; }
