@@ -46,7 +46,7 @@ public class BlueStartGoalParkGoalDecodeMeetTwo extends AutoMain_NewAndrew {
         /**  Optional per-path tuning */
         shotsToFire = 4;
         MaxTimePark = 25.0;
-        targetVelocity = 1000;
+        targetVelocity = 900;
         targetVelocityTwo = targetVelocity - 75;
         targetVelocityThree = targetVelocity - 100;
     }
