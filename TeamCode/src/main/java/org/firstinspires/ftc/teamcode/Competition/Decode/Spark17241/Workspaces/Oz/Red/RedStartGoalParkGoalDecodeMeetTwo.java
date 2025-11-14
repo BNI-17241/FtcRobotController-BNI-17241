@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Controls.Auto.RedAlliance;
+package org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Workspaces.Oz.Red;
 
 import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.BezierLine;
@@ -7,23 +7,13 @@ import com.pedropathing.paths.Path;
 import com.pedropathing.paths.PathChain;
 import com.pedropathing.util.Timer;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
-import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Controls.Auto.AutoMain;
-import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Workspaces.Andrew.RedStartHumanParkSpike;
+import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Workspaces.Andrew.AutoMain_NewAndrew;
 import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.pedroPathing.Constants;
 
-@Disabled
-@Autonomous(name = "Red:Start Goal:Park Goal Test", group = "Drive")
-public class RedStartGoalParkGoalTest extends AutoMain {
-
-
-
-    /** Pause timing */
-    public Timer autoTimer;
-    public int startDelay = 5;
-    public int postShootDelay = 5;
-
+//@Disabled
+@Autonomous(name = "Red:Start Goal:Park Goal Meet Two", group = "Drive")
+public class RedStartGoalParkGoalDecodeMeetTwo extends AutoMain_NewAndrew {
 
     /**  Pedro Pathing Variables, Poses, Paths & States */
     public Follower follower;
@@ -36,9 +26,10 @@ public class RedStartGoalParkGoalTest extends AutoMain {
     public Path scorePreload;
     public PathChain goPark;
 
-    public enum pathingState {START_PAUSE, START, SCORE_PRELOAD, POST_SHOOT_PAUSE, GO_PARK, READY }
+    public enum pathingState { START, SCORE_PRELOAD, GO_PARK, READY }
     pathingState pathState = pathingState.READY;
     private boolean parkPathStarted = false;
+    private boolean scorePathStarted = false;
 
 
     /**  Required OpMode Autonomous Control Methods  */
@@ -47,16 +38,17 @@ public class RedStartGoalParkGoalTest extends AutoMain {
     public void init() {
         pathTimer = new Timer();
         opmodeTimer = new Timer();
-        autoTimer = new Timer();
-
         follower = Constants.createFollower(hardwareMap);
         buildPaths();
         follower.setStartingPose(startPose);
         decBot.initRobot(hardwareMap);
 
         /**  Optional per-path tuning */
-        maxShots = 4;                       // Adjust for shot attempts
-        parkLeaveTime = 25.0;               // Adjust if this path is long
+        shotsToFire = 4;
+        MaxTimePark = 25.0;
+        targetVelocity = 1000;
+        targetVelocityTwo = targetVelocity - 75;
+        targetVelocityThree = targetVelocity - 100;
     }
 
     @Override
@@ -64,13 +56,14 @@ public class RedStartGoalParkGoalTest extends AutoMain {
         opmodeTimer.resetTimer();
         pathTimer.resetTimer();
 
-        pathState = pathingState.START_PAUSE;
-        scoringState = scoreState.IDLE;
-        launchZone = LaunchZone.NONE;
-
-        autoScoreComplete = false;
+        pathState = pathingState.START;
+        currentState = FiringStates.START_DELAY;
         shotsFired = 0;
+        startDelayStarted = false;
+        fireDelayStarted = false;
+
         parkPathStarted = false;
+        scorePathStarted = false;
     }
 
     @Override
@@ -79,50 +72,34 @@ public class RedStartGoalParkGoalTest extends AutoMain {
 
         switch (pathState) {
 
-            case START_PAUSE:
-                if(autoTimer.getElapsedTimeSeconds() >= startDelay)
-                {
-                    pathState = pathingState.START;
-                    break;
-                }
-                break;
-
             case START:
-                follower.followPath(scorePreload);
+                if (!scorePathStarted) {
+                    follower.followPath(scorePreload);
+                    scorePathStarted = true;
+                }
                 pathState = pathingState.SCORE_PRELOAD;
                 break;
 
             case SCORE_PRELOAD:
                 /**  If still driving to goal, optionally spin up early */
                 if (follower.isBusy()) {
-                    launchZone = LaunchZone.NEAR;
-                    onLoopStart();
-                    updateFlywheelAndGate();
+                    powerUpFlyWheels();
+                    launchSequence();
                     break;
                 }
 
                 /**  Begin scoring session. Adjust for number of shots and time limit */
-                if (!isScoringActive()) {
-
-                    startScoring(LaunchZone.NEAR, 4, 8.0, opmodeTimer.getElapsedTimeSeconds());
+                if (currentState != FiringStates.IDLE) {
+                    launchSequence();
                 }
 
                 /**  Edge Case Handling for Max Shots or Out of Autonomous Time  */
-                boolean done = updateScoring(opmodeTimer.getElapsedTimeSeconds());
-                boolean timeToLeave = opmodeTimer.getElapsedTimeSeconds() >= parkLeaveTime;
+                boolean done = (currentState == FiringStates.IDLE);
+                boolean timeToLeave = opmodeTimer.getElapsedTimeSeconds() >= MaxTimePark;
 
                 if (done || timeToLeave) {
-                    stopScoring(); // safe even if already inactive
-                    pathState = pathingState.POST_SHOOT_PAUSE;
-                }
-                break;
-
-
-            case POST_SHOOT_PAUSE:
-                if(autoTimer.getElapsedTimeSeconds() >= postShootDelay)
-                {
+                    currentState = FiringStates.IDLE;
                     pathState = pathingState.GO_PARK;
-                    break;
                 }
                 break;
 
@@ -132,9 +109,8 @@ public class RedStartGoalParkGoalTest extends AutoMain {
                     follower.followPath(goPark);
                     parkPathStarted = true;
                 }
-                launchZone = LaunchZone.NONE;    // spin down while driving to park
-                onLoopStart();
-                updateFlywheelAndGate();         // harmless when NONE
+                powerUpFlyWheels();
+                launchSequence();
                 // When park path finishes, advance to READY
                 if (parkPathStarted && !follower.isBusy()) {
                     pathState = pathingState.READY;
@@ -143,8 +119,7 @@ public class RedStartGoalParkGoalTest extends AutoMain {
 //
             case READY:
                 // Do nothing, keep robot safe
-                onLoopStart();
-                updateFlywheelAndGate();
+                launchSequence();
                 break;
         }
 
@@ -153,11 +128,11 @@ public class RedStartGoalParkGoalTest extends AutoMain {
 
         /**  Telemetry: Include Base Telementry and add additional for Pathing */
 
-        baseTelemetry();
+        TelemetryOut();
         telemetry.addData("Pathing State", pathState);
         telemetry.addData("At goal?", !follower.isBusy());
         telemetry.addData("Auto Time (s)", "%.1f", opmodeTimer.getElapsedTimeSeconds());
-        telemetry.addData("Leaving to park at (s)", parkLeaveTime);
+        telemetry.addData("Leaving to park at (s)", MaxTimePark);
         telemetry.update();
     }
 
@@ -178,4 +153,3 @@ public class RedStartGoalParkGoalTest extends AutoMain {
                 .build();
     }
 }
-
