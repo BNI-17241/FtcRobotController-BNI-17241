@@ -8,12 +8,13 @@ import com.pedropathing.paths.PathChain;
 import com.pedropathing.util.Timer;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
+import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Workspaces.Andrew.AutoMain_NewAndrew;
 import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Workspaces.Oz.AutoMain_oz;
 import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.pedroPathing.Constants;
 
 
 @Autonomous(name = "Blue:Start Human:Park Spike Oz", group = "Drive")
-public class BlueStartHumanParkSpikeOz extends AutoMain_oz {
+public class BlueStartHumanParkSpikeOz extends AutoMain_NewAndrew {
 
     public Follower follower;
     public Timer pathTimer, opmodeTimer;
