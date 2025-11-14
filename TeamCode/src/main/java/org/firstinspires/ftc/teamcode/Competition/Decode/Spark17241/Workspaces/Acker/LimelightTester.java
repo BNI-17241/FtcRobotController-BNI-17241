@@ -1,11 +1,13 @@
 package org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Workspaces.Acker;
 
 import com.qualcomm.hardware.limelightvision.*;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
 
+@Disabled
 @TeleOp(name="LL Distance Demo")
 public class LimelightTester extends OpMode {
 
