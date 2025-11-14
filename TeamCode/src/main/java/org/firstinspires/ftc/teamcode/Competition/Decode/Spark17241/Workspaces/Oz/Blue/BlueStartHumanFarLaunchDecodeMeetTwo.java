@@ -12,25 +12,21 @@ import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Workspaces.A
 import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.pedroPathing.Constants;
 
 //@Disabled
-@Autonomous(name = "Blue:Start Human far launch", group = "Drive")
-public class BlueStartHumanParkSpikeOz extends AutoMain_NewAndrew {
-
+@Autonomous(name = "Blue:Start Human Far Launch Meet Two", group = "Drive")
+public class BlueStartHumanFarLaunchDecodeMeetTwo extends AutoMain_NewAndrew {
+//
     /**  Pedro Pathing Variables, Poses, Paths & States */
     public Follower follower;
     public Timer pathTimer, opmodeTimer;
 
-    public final Pose startPose = new Pose(44, 8, Math.toRadians(90));     // Red Far Launch Zone start
-    public final Pose scorePose = new Pose(59, 81, Math.toRadians(133));    // Red goal scoring pose
-    public final Pose parkPose = new Pose(45    , 40, Math.toRadians(270));
-
-//    public final Pose startPose = new Pose(22, 122, Math.toRadians(135));     // Red Far Launch Zone start
-//    public final Pose scorePose = new Pose(55, 80, Math.toRadians(131));    // Red goal scoring pose
-//    public final Pose parkPose = new Pose(50, 130, Math.toRadians(270)); // Red Home (park)
+    public final Pose startPose = new Pose(44, 10, Math.toRadians(90));     // start pos
+    public final Pose scoreFarPose = new Pose(60, 20, Math.toRadians(112));    // blue shoot far
+    public final Pose parkPose = new Pose(56, 35, Math.toRadians(0)); // Red Home (park)
 
     public Path scorePreload;
     public PathChain goPark;
 
-    public enum pathingState { START, Firing, GO_PARK, READY }
+    public enum pathingState { START, Shooting, GO_PARK, READY }
     pathingState pathState = pathingState.READY;
     private boolean parkPathStarted = false;
     private boolean scorePathStarted = false;
@@ -50,9 +46,9 @@ public class BlueStartHumanParkSpikeOz extends AutoMain_NewAndrew {
         /**  Optional per-path tuning */
         shotsToFire = 4;
         MaxTimePark = 25.0;
-        targetVelocity = 885;
-        targetVelocityTwo = targetVelocity - 40;
-        targetVelocityThree = targetVelocity - 40;
+        targetVelocity = 1090;
+        targetVelocityTwo = targetVelocity - 75;
+        targetVelocityThree = targetVelocity - 100;
     }
 
     @Override
@@ -73,7 +69,7 @@ public class BlueStartHumanParkSpikeOz extends AutoMain_NewAndrew {
     @Override
     public void loop() {
         follower.update();
-
+        LEDDriver();
         switch (pathState) {
 
             case START:
@@ -81,10 +77,10 @@ public class BlueStartHumanParkSpikeOz extends AutoMain_NewAndrew {
                     follower.followPath(scorePreload);
                     scorePathStarted = true;
                 }
-                pathState = pathingState.Firing;
+                pathState = pathingState.Shooting;
                 break;
 
-            case Firing:
+            case Shooting:
                 /**  If still driving to goal, optionally spin up early */
                 if (follower.isBusy()) {
                     powerUpFlyWheels();
@@ -126,7 +122,6 @@ public class BlueStartHumanParkSpikeOz extends AutoMain_NewAndrew {
                 launchSequence();
                 break;
         }
-
         /** LED Driver for Gate Control */
         LEDDriver();
 
@@ -147,13 +142,13 @@ public class BlueStartHumanParkSpikeOz extends AutoMain_NewAndrew {
 
     public void buildPaths() {
         // Start Pose -> Score Pose
-        scorePreload = new Path(new BezierLine(startPose, scorePose));
-        scorePreload.setLinearHeadingInterpolation(startPose.getHeading(), scorePose.getHeading());
+        scorePreload = new Path(new BezierLine(startPose, scoreFarPose));
+        scorePreload.setLinearHeadingInterpolation(startPose.getHeading(), scoreFarPose.getHeading());
 
         // Score Pose -> Park Home Pose
         goPark = follower.pathBuilder()
-                .addPath(new BezierLine(scorePose, parkPose))
-                .setLinearHeadingInterpolation(scorePose.getHeading(), parkPose.getHeading())
+                .addPath(new BezierLine(scoreFarPose, parkPose))
+                .setLinearHeadingInterpolation(scoreFarPose.getHeading(), parkPose.getHeading())
                 .build();
     }
 }
