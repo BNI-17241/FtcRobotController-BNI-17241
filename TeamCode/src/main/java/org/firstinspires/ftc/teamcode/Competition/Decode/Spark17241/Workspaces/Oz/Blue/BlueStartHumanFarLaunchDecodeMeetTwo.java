@@ -38,6 +38,7 @@ public class BlueStartHumanFarLaunchDecodeMeetTwo extends AutoMain_NewAndrew {
     public void init() {
         pathTimer = new Timer();
         opmodeTimer = new Timer();
+
         follower = Constants.createFollower(hardwareMap);
         buildPaths();
         follower.setStartingPose(startPose);
@@ -46,7 +47,7 @@ public class BlueStartHumanFarLaunchDecodeMeetTwo extends AutoMain_NewAndrew {
         /**  Optional per-path tuning */
         shotsToFire = 4;
         MaxTimePark = 25.0;
-        targetVelocity = 1090;
+        targetVelocity = 1080;
         targetVelocityTwo = targetVelocity - 75;
         targetVelocityThree = targetVelocity - 100;
     }
@@ -55,6 +56,7 @@ public class BlueStartHumanFarLaunchDecodeMeetTwo extends AutoMain_NewAndrew {
     public void start() {
         opmodeTimer.resetTimer();
         pathTimer.resetTimer();
+        max_time_timer.resetTimer();
 
         pathState = pathingState.START;
         currentState = FiringStates.START_DELAY;

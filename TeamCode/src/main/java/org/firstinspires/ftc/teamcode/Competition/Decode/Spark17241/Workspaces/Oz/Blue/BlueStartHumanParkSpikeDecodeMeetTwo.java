@@ -50,7 +50,7 @@ public class BlueStartHumanParkSpikeDecodeMeetTwo extends AutoMain_NewAndrew {
         /**  Optional per-path tuning */
         shotsToFire = 4;
         MaxTimePark = 25.0;
-        targetVelocity = 800;
+        targetVelocity = 830;
         targetVelocityTwo = targetVelocity - 40;
         targetVelocityThree = targetVelocity + 100;
     }
