@@ -55,6 +55,7 @@ public class RedStartHumanFarLaunchDecodeMeetTwo extends AutoMain_NewAndrew {
     public void start() {
         opmodeTimer.resetTimer();
         pathTimer.resetTimer();
+        max_time_timer.resetTimer();
 
         pathState = pathingState.START;
         currentState = FiringStates.START_DELAY;

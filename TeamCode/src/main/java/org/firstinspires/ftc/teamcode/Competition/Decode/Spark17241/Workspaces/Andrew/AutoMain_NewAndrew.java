@@ -26,7 +26,7 @@ public abstract class AutoMain_NewAndrew extends OpMode {
 
     // Configurable autonomous parameters
     protected double startDelay = 0.0;       // Delay before auto starts
-    protected double MaxTimePark = 0.0;      // Last allowed shooting time before parking
+    protected double MaxTimePark = 30.0;      // Last allowed shooting time before parking
     protected float targetVelocity = 0;
     protected float targetVelocityTwo = 0;
     protected float targetVelocityThree = 0;
