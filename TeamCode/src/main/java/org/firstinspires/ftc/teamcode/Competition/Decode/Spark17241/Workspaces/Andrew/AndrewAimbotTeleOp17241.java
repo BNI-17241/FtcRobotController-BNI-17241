@@ -18,7 +18,7 @@ import java.util.Arrays;
 import java.util.List;
 
 //
-@Disabled
+
 @TeleOp(name = "AndrewAuto TeleOp", group = "Drive")
 public class AndrewAimbotTeleOp17241 extends OpMode {
 
@@ -201,10 +201,9 @@ public class AndrewAimbotTeleOp17241 extends OpMode {
     public void flyWheelControl() {
 
         if (gamepad2.left_stick_button) {targetVelocity = -600;}
-        if (gamepad2.x) { targetVelocity = 876; }
-        if (gamepad2.a) { targetVelocity = 934; }
-        if (gamepad2.b) { targetVelocity = 1003; }
-        if (gamepad2.y) { targetVelocity = 1125; }
+        if (gamepad2.x) { targetVelocity = 737; }
+        if (gamepad2.a) { targetVelocity = 781; }
+        if (gamepad2.b) { targetVelocity = 865; }
         if (gamepad2.dpad_up) targetVelocity += 1;
         if (gamepad2.dpad_down) targetVelocity -= 1;
         if (gamepad2.left_bumper) { targetVelocity = 0; }

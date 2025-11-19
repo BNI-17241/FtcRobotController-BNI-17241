@@ -7,11 +7,13 @@ import com.pedropathing.paths.Path;
 import com.pedropathing.paths.PathChain;
 import com.pedropathing.util.Timer;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Workspaces.Andrew.AutoMain_NewAndrew;
 import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.pedroPathing.Constants;
 
-//@Disabled
+@Disabled
+
 @Autonomous(name = "Blue:Start Goal:Park Goal Meet Two", group = "Drive")
 public class BlueStartGoalParkGoalDecodeMeetTwo extends AutoMain_NewAndrew {
 

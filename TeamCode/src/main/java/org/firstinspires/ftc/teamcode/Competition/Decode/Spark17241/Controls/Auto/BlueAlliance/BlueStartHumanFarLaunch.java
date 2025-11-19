@@ -12,7 +12,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Controls.Auto.AutoMain;
 import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.pedroPathing.Constants;
 
-@Disabled
+
 @Autonomous(name = "Blue:Start Human Far Launch", group = "Drive")
 public class BlueStartHumanFarLaunch extends AutoMain {
 //
@@ -20,9 +20,13 @@ public class BlueStartHumanFarLaunch extends AutoMain {
     public Follower follower;
     public Timer pathTimer, opmodeTimer;
 
-    public final Pose startPose = new Pose(44, 10, Math.toRadians(90));     // start pos
+    /*public final Pose startPose = new Pose(44, 10, Math.toRadians(90));     // start pos
     public final Pose scoreFarPose = new Pose(60, 20, Math.toRadians(111));    // blue shoot far
-    public final Pose parkPose = new Pose(56, 35, Math.toRadians(0)); // Red Home (park)
+    public final Pose parkPose = new Pose(56, 35, Math.toRadians(0));*/ // Red Home (park)
+
+    public final Pose startPose = new Pose(44, 10, Math.toRadians(90));     // start pos
+    public final Pose scoreFarPose = new Pose(60, 20, Math.toRadians(112));    // blue shoot far
+    public final Pose parkPose = new Pose(56, 35, Math.toRadians(0));
 
     public Path scorePreload;
     public PathChain goPark;

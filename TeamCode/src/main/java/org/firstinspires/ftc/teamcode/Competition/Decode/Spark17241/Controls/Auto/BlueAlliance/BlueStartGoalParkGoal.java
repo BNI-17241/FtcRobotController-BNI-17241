@@ -12,7 +12,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Controls.Auto.AutoMain;
 import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.pedroPathing.Constants;
 
-@Disabled
+
 @Autonomous(name = "Blue:Start Goal:Park Goal", group = "Drive")
 public class BlueStartGoalParkGoal extends AutoMain {
 
