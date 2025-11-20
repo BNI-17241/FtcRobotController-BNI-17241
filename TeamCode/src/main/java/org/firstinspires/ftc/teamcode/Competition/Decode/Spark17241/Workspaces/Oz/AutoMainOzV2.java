@@ -20,7 +20,6 @@ public abstract class AutoMainOzV2 extends OpMode {
     protected double targetVelocity = 0;        // s
     protected double gatePercent = 0.025;     // was ±2% gate window
     protected double feederPower = 1.0;      // feeder wheel power (0..1)
-    protected int ballsshot = 0;
     protected long feedMsOne = 600;           // was 700 ms to run feeder during a shot
     protected long feedMSTwo = 250;
     protected long feedMSThree = 600;
@@ -107,13 +106,12 @@ public abstract class AutoMainOzV2 extends OpMode {
                     timer.reset();
                     decBot.feederWheel.setPower(feederPower);
                     scoringState = scoreState.FEEDING;
-                    ballsshot++;
                 }
                 break;
 
             case FEEDING:
                 targetVelocity = nominalTarget * boostFactor;
-                if (ballsshot == 1){
+                if (shotsFired == 0){
                     if (timer.milliseconds() >= feedMsOne) {
                         decBot.feederWheel.setPower(0);
                         targetVelocity = nominalTarget;
@@ -122,7 +120,7 @@ public abstract class AutoMainOzV2 extends OpMode {
                     }
                     break;
                 }
-                else if (ballsshot == 2){
+                else if (shotsFired == 1){
                     if (timer.milliseconds() >= feedMSTwo) {
                         decBot.feederWheel.setPower(0);
                         targetVelocity = nominalTarget;
@@ -131,7 +129,7 @@ public abstract class AutoMainOzV2 extends OpMode {
                     }
                     break;
                 }
-                else {
+                else{
                         if (timer.milliseconds() >= feedMSThree) {
                             decBot.feederWheel.setPower(0);
                             targetVelocity = nominalTarget;
