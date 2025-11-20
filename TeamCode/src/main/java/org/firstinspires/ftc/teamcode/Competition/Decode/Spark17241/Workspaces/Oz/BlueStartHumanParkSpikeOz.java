@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Workspaces.Oz.Red;
+package org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Workspaces.Oz;
 
 import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.BezierLine;
@@ -7,30 +7,27 @@ import com.pedropathing.paths.Path;
 import com.pedropathing.paths.PathChain;
 import com.pedropathing.util.Timer;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
-import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Workspaces.Andrew.AutoMain_NewAndrew;
+import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Controls.Auto.AutoMain;
 import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.pedroPathing.Constants;
 
-@Disabled
-@Autonomous(name = "Red:Start Human Far Launch Meet Two", group = "Drive")
-public class RedStartHumanFarLaunchDecodeMeetTwo extends AutoMain_NewAndrew {
+@Autonomous(name = "OZ Test BSHP", group = "Drive")
+public class BlueStartHumanParkSpikeOz extends AutoMainOzV2{
 //
     /**  Pedro Pathing Variables, Poses, Paths & States */
     public Follower follower;
     public Timer pathTimer, opmodeTimer;
 
-    public final Pose startPose = new Pose(100, 10, Math.toRadians(90));     // start pos
-    public final Pose scoreFarPose = new Pose(84, 20, Math.toRadians(62));    // blue shoot far
-    public final Pose parkPose = new Pose(90, 35, Math.toRadians(180)); // Red Home (park)
+    public final Pose startPose = new Pose(44, 8, Math.toRadians(90));     // Red Far Launch Zone start
+    public final Pose scorePose = new Pose(59, 81, Math.toRadians(133));    // Red goal scoring pose // 80 x 80
+    public final Pose parkPose = new Pose(45, 40, Math.toRadians(0)); // Red Home (park)
 
     public Path scorePreload;
     public PathChain goPark;
 
-    public enum pathingState { START, Shooting, GO_PARK, READY }
+    public enum pathingState { START, SCORE_PRELOAD, GO_PARK, READY }
     pathingState pathState = pathingState.READY;
     private boolean parkPathStarted = false;
-    private boolean scorePathStarted = false;
 
 
     /**  Required OpMode Autonomous Control Methods  */
@@ -45,62 +42,56 @@ public class RedStartHumanFarLaunchDecodeMeetTwo extends AutoMain_NewAndrew {
         decBot.initRobot(hardwareMap);
 
         /**  Optional per-path tuning */
-        shotsToFire = 4;
-        MaxTimePark = 25.0;
-        targetVelocity = 1090;
-        targetVelocityTwo = targetVelocity - 75;
-        targetVelocityThree = targetVelocity - 100;
+        maxShots = 6 ;                       // Adjust for shot attempts
+        parkLeaveTime = 25.0;               // Adjust if this path is long
     }
 
     @Override
     public void start() {
         opmodeTimer.resetTimer();
         pathTimer.resetTimer();
-        max_time_timer.resetTimer();
 
         pathState = pathingState.START;
-        currentState = FiringStates.START_DELAY;
-        shotsFired = 0;
-        startDelayStarted = false;
-        fireDelayStarted = false;
+        scoringState = scoreState.IDLE;
+        launchZone = LaunchZone.NONE;
 
+        autoScoreComplete = false;
+        shotsFired = 0;
         parkPathStarted = false;
-        scorePathStarted = false;
     }
 
     @Override
     public void loop() {
         follower.update();
-        LEDDriver();
+
         switch (pathState) {
 
             case START:
-                if (!scorePathStarted) {
-                    follower.followPath(scorePreload);
-                    scorePathStarted = true;
-                }
-                pathState = pathingState.Shooting;
+                follower.followPath(scorePreload);
+                pathState = pathingState.SCORE_PRELOAD;
                 break;
 
-            case Shooting:
+            case SCORE_PRELOAD:
                 /**  If still driving to goal, optionally spin up early */
                 if (follower.isBusy()) {
-                    powerUpFlyWheels();
-                    launchSequence();
+                    launchZone = LaunchZone.NEAR;
+                    onLoopStart();
+                    updateFlywheelAndGate();
                     break;
                 }
 
                 /**  Begin scoring session. Adjust for number of shots and time limit */
-                if (currentState != FiringStates.IDLE) {
-                    launchSequence();
+                if (!isScoringActive()) {
+
+                    startScoring(LaunchZone.NEAR, 4, 10.0, opmodeTimer.getElapsedTimeSeconds());
                 }
 
                 /**  Edge Case Handling for Max Shots or Out of Autonomous Time  */
-                boolean done = (currentState == FiringStates.IDLE);
-                boolean timeToLeave = opmodeTimer.getElapsedTimeSeconds() >= MaxTimePark;
+                boolean done = updateScoring(opmodeTimer.getElapsedTimeSeconds());
+                boolean timeToLeave = opmodeTimer.getElapsedTimeSeconds() >= parkLeaveTime;
 
                 if (done || timeToLeave) {
-                    currentState = FiringStates.IDLE;
+                    stopScoring(); // safe even if already inactive
                     pathState = pathingState.GO_PARK;
                 }
                 break;
@@ -111,8 +102,9 @@ public class RedStartHumanFarLaunchDecodeMeetTwo extends AutoMain_NewAndrew {
                     follower.followPath(goPark);
                     parkPathStarted = true;
                 }
-                powerUpFlyWheels();
-                launchSequence();
+                launchZone = LaunchZone.NONE;    // spin down while driving to park
+                onLoopStart();
+                updateFlywheelAndGate();         // harmless when NONE
                 // When park path finishes, advance to READY
                 if (parkPathStarted && !follower.isBusy()) {
                     pathState = pathingState.READY;
@@ -121,7 +113,8 @@ public class RedStartHumanFarLaunchDecodeMeetTwo extends AutoMain_NewAndrew {
 //
             case READY:
                 // Do nothing, keep robot safe
-                launchSequence();
+                onLoopStart();
+                updateFlywheelAndGate();
                 break;
         }
         /** LED Driver for Gate Control */
@@ -129,11 +122,11 @@ public class RedStartHumanFarLaunchDecodeMeetTwo extends AutoMain_NewAndrew {
 
         /**  Telemetry: Include Base Telementry and add additional for Pathing */
 
-        TelemetryOut();
+        baseTelemetry();
         telemetry.addData("Pathing State", pathState);
         telemetry.addData("At goal?", !follower.isBusy());
         telemetry.addData("Auto Time (s)", "%.1f", opmodeTimer.getElapsedTimeSeconds());
-        telemetry.addData("Leaving to park at (s)", MaxTimePark);
+        telemetry.addData("Leaving to park at (s)", parkLeaveTime);
         telemetry.update();
     }
 
@@ -144,13 +137,14 @@ public class RedStartHumanFarLaunchDecodeMeetTwo extends AutoMain_NewAndrew {
 
     public void buildPaths() {
         // Start Pose -> Score Pose
-        scorePreload = new Path(new BezierLine(startPose, scoreFarPose));
-        scorePreload.setLinearHeadingInterpolation(startPose.getHeading(), scoreFarPose.getHeading());
+        scorePreload = new Path(new BezierLine(startPose, scorePose));
+        scorePreload.setLinearHeadingInterpolation(startPose.getHeading(), scorePose.getHeading());
 
         // Score Pose -> Park Home Pose
         goPark = follower.pathBuilder()
-                .addPath(new BezierLine(scoreFarPose, parkPose))
-                .setLinearHeadingInterpolation(scoreFarPose.getHeading(), parkPose.getHeading())
+                .addPath(new BezierLine(scorePose, parkPose))
+                .setLinearHeadingInterpolation(scorePose.getHeading(), parkPose.getHeading())
                 .build();
     }
 }
+

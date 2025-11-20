@@ -10,10 +10,11 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Controls.Auto.AutoMain;
+import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Workspaces.Oz.AutoMainOzV2;
 import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.pedroPathing.Constants;
 
 @Autonomous(name = "Blue:Start Human:Park Spike", group = "Drive")
-public class BlueStartHumanParkSpike extends AutoMain {
+public class BlueStartHumanParkSpike extends AutoMain{
 //
     /**  Pedro Pathing Variables, Poses, Paths & States */
     public Follower follower;

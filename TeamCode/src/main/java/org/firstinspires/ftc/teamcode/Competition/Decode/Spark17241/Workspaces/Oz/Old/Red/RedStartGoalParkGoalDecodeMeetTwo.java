@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Workspaces.Oz.Blue;
+package org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Workspaces.Oz.Old.Red;
 
 import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.BezierLine;
@@ -13,25 +13,21 @@ import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Workspaces.A
 import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.pedroPathing.Constants;
 
 @Disabled
-@Autonomous(name = "Blue:Start Human Park Spike  Meet Two ", group = "Drive")
-public class BlueStartHumanParkSpikeDecodeMeetTwo extends AutoMain_NewAndrew {
+@Autonomous(name = "Red:Start Goal:Park Goal Meet Two", group = "Drive")
+public class RedStartGoalParkGoalDecodeMeetTwo extends AutoMain_NewAndrew {
 
     /**  Pedro Pathing Variables, Poses, Paths & States */
     public Follower follower;
     public Timer pathTimer, opmodeTimer;
 
-    public final Pose startPose = new Pose(44, 8, Math.toRadians(90));     // Red Far Launch Zone start
-    public final Pose scorePose = new Pose(59, 81, Math.toRadians(133));    // Red goal scoring pose
-    public final Pose parkPose = new Pose(45    , 40, Math.toRadians(270));
-
-//    public final Pose startPose = new Pose(22, 122, Math.toRadians(135));     // Red Far Launch Zone start
-//    public final Pose scorePose = new Pose(55, 80, Math.toRadians(131));    // Red goal scoring pose
-//    public final Pose parkPose = new Pose(50, 130, Math.toRadians(270)); // Red Home (park)
+    public final Pose startPose = new Pose(122, 122, Math.toRadians(45));     // Red Far Launch Zone start
+    public final Pose scorePose = new Pose(87, 80, Math.toRadians(45));    // Red goal scoring pose
+    public final Pose parkPose = new Pose(96, 130, Math.toRadians(270)); // Red Home (park)
 
     public Path scorePreload;
     public PathChain goPark;
 
-    public enum pathingState { START, Firing, GO_PARK, READY }
+    public enum pathingState { START, SCORE_PRELOAD, GO_PARK, READY }
     pathingState pathState = pathingState.READY;
     private boolean parkPathStarted = false;
     private boolean scorePathStarted = false;
@@ -51,15 +47,16 @@ public class BlueStartHumanParkSpikeDecodeMeetTwo extends AutoMain_NewAndrew {
         /**  Optional per-path tuning */
         shotsToFire = 4;
         MaxTimePark = 25.0;
-        targetVelocity = 830;
-        targetVelocityTwo = targetVelocity - 40;
-        targetVelocityThree = targetVelocity + 100;
+        targetVelocity = 1000;
+        targetVelocityTwo = targetVelocity - 75;
+        targetVelocityThree = targetVelocity - 100;
     }
 
     @Override
     public void start() {
         opmodeTimer.resetTimer();
         pathTimer.resetTimer();
+        max_time_timer.resetTimer();
 
         pathState = pathingState.START;
         currentState = FiringStates.START_DELAY;
@@ -82,10 +79,10 @@ public class BlueStartHumanParkSpikeDecodeMeetTwo extends AutoMain_NewAndrew {
                     follower.followPath(scorePreload);
                     scorePathStarted = true;
                 }
-                pathState = pathingState.Firing;
+                pathState = pathingState.SCORE_PRELOAD;
                 break;
 
-            case Firing:
+            case SCORE_PRELOAD:
                 /**  If still driving to goal, optionally spin up early */
                 if (follower.isBusy()) {
                     powerUpFlyWheels();
