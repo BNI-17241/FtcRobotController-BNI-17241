@@ -20,7 +20,10 @@ public abstract class AutoMainOzV2 extends OpMode {
     protected double targetVelocity = 0;        // s
     protected double gatePercent = 0.025;     // was ±2% gate window
     protected double feederPower = 1.0;      // feeder wheel power (0..1)
-    protected long   feedMs = 600;           // was 700 ms to run feeder during a shot
+    protected int ballsshot = 0;
+    protected long feedMsOne = 600;           // was 700 ms to run feeder during a shot
+    protected long feedMSTwo = 250;
+    protected long feedMSThree = 600;
     protected double boostFactor = 1.0;     // temporary +2% velocity during feed
     protected long   boostMs = 180;          // recovery delay after feed
 
@@ -104,19 +107,40 @@ public abstract class AutoMainOzV2 extends OpMode {
                     timer.reset();
                     decBot.feederWheel.setPower(feederPower);
                     scoringState = scoreState.FEEDING;
-
+                    ballsshot++;
                 }
                 break;
 
             case FEEDING:
                 targetVelocity = nominalTarget * boostFactor;
-                if (timer.milliseconds() >= feedMs) {
-                    decBot.feederWheel.setPower(0);
-                    targetVelocity = nominalTarget;
-                    timer.reset();
-                    scoringState = scoreState.RECOVERING;
+                if (ballsshot == 1){
+                    if (timer.milliseconds() >= feedMsOne) {
+                        decBot.feederWheel.setPower(0);
+                        targetVelocity = nominalTarget;
+                        timer.reset();
+                        scoringState = scoreState.RECOVERING;
+                    }
+                    break;
                 }
-                break;
+                else if (ballsshot == 2){
+                    if (timer.milliseconds() >= feedMSTwo) {
+                        decBot.feederWheel.setPower(0);
+                        targetVelocity = nominalTarget;
+                        timer.reset();
+                        scoringState = scoreState.RECOVERING;
+                    }
+                    break;
+                }
+                else {
+                        if (timer.milliseconds() >= feedMSThree) {
+                            decBot.feederWheel.setPower(0);
+                            targetVelocity = nominalTarget;
+                            timer.reset();
+                            scoringState = scoreState.RECOVERING;
+                        }
+                        break;
+                }
+
 
             case RECOVERING:
                 if (timer.milliseconds() >= boostMs) {
