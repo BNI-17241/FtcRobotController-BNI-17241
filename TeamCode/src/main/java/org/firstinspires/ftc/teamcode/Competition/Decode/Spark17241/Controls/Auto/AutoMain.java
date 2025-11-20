@@ -10,6 +10,8 @@ import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 
+import java.util.ArrayList;
+
 /**
  * Abstract base OpMode for Autonomous pathing.
  * Holds ALL shooter/flywheel/feeder logic so per-path OpModes only define paths and call the scoring methods.
@@ -23,7 +25,7 @@ public abstract class AutoMain extends OpMode {
 
     /**  Flywheel / Feeder Variables  */
     protected double targetVelocity = 0;        // s
-    protected double gatePercent = 0.015;     // was ±2% gate window
+    protected double gatePercent = 0.025;     // was ±2% gate window
     protected double feederPower = 1.0;      // feeder wheel power (0..1)
     protected long   feedMs = 600;           // was 700 ms to run feeder during a shot
     protected double boostFactor = 1.0;     // temporary +2% velocity during feed
@@ -52,8 +54,10 @@ public abstract class AutoMain extends OpMode {
     protected double currentVelocityLeft;
     protected double currentVelocityRight;
 
+    //public List<scoreState> allStates = new ArrayList<scoreState>;
+
     /** Parking timing helper  */
-    protected double parkLeaveTime = 30.0;  // seconds into auto to guarantee time to park
+    protected double parkLeaveTime = 25.0;  // seconds into auto to guarantee time to park
 
     /**  Robot instance (motors/sensors accessed here) */
     protected DecodeBot decBot = new DecodeBot();
@@ -107,6 +111,7 @@ public abstract class AutoMain extends OpMode {
                     timer.reset();
                     decBot.feederWheel.setPower(feederPower);
                     scoringState = scoreState.FEEDING;
+
                 }
                 break;
 
