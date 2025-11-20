@@ -44,7 +44,7 @@ public class AndrewAimbotTeleOp17241 extends OpMode {
 
     //Auto Correct X Variation (In X values from limelight, approx +- 20 total)
     double autoVariation = 1;
-    double autoOffsetFar = 3;
+    double autoOffsetFar = 2.8;
 
     //Autocorrect rotation speed
     double autoSpeed = .5;
@@ -201,9 +201,10 @@ public class AndrewAimbotTeleOp17241 extends OpMode {
     public void flyWheelControl() {
 
         if (gamepad2.left_stick_button) {targetVelocity = -600;}
-        if (gamepad2.x) { targetVelocity = 737; }
-        if (gamepad2.a) { targetVelocity = 781; }
-        if (gamepad2.b) { targetVelocity = 865; }
+        if (gamepad2.x) { targetVelocity = 737; autoOffsetFar = 0;}
+        if (gamepad2.a) { targetVelocity = 781; autoOffsetFar = 0;}
+        if (gamepad2.b) { targetVelocity = 865; autoOffsetFar = 2.5;}
+        if (gamepad2.y) { targetVelocity = 865; autoOffsetFar = 1.9;}
         if (gamepad2.dpad_up) targetVelocity += 1;
         if (gamepad2.dpad_down) targetVelocity -= 1;
         if (gamepad2.left_bumper) { targetVelocity = 0; }
@@ -420,7 +421,7 @@ public class AndrewAimbotTeleOp17241 extends OpMode {
 
                 double rangeMeters = Math.sqrt(x * x + y * y + forwardMeters * forwardMeters);// 3D range
 
-                autoTargetSpeed = (127.7 * Math.pow(forwardMeters, 5)) + (-641.4 * Math.pow(forwardMeters, 4)) + (782.4 * Math.pow(forwardMeters, 3)) + (604.8 * Math.pow(forwardMeters, 2) - (1500 * forwardMeters) + 1500);
+                //autoTargetSpeed = (127.7 * Math.pow(forwardMeters, 5)) + (-641.4 * Math.pow(forwardMeters, 4)) + (782.4 * Math.pow(forwardMeters, 3)) + (604.8 * Math.pow(forwardMeters, 2) - (1500 * forwardMeters) + 1500);
 
                 telemetry.addLine("-------------------------------------");
                 telemetry.addData("Tag ID", fr.getFiducialId());
@@ -459,9 +460,9 @@ public class AndrewAimbotTeleOp17241 extends OpMode {
 
                 double rangeMeters = Math.sqrt(x * x + y * y + forwardMeters * forwardMeters);// 3D range
 
-                autoTargetSpeed = (127.7 * Math.pow(forwardMeters, 5)) + (-641.4 * Math.pow(forwardMeters, 4)) + (782.4 * Math.pow(forwardMeters, 3)) + (604.8 * Math.pow(forwardMeters, 2) - (1500 * forwardMeters) + 1500);
+                //autoTargetSpeed = (127.7 * Math.pow(forwardMeters, 5)) + (-641.4 * Math.pow(forwardMeters, 4)) + (782.4 * Math.pow(forwardMeters, 3)) + (604.8 * Math.pow(forwardMeters, 2) - (1500 * forwardMeters) + 1500);
 
-                angleTopTri = Math.acos((forwardMeters + 18.5 * Math.sin(yaw))/(Math.sqrt(Math.pow(forwardMeters, 2) * Math.pow(Math.cos(yaw), 2) + Math.pow(18.5 + forwardMeters * Math.sin(yaw), 2)   )));
+                //angleTopTri = Math.acos((forwardMeters + 18.5 * Math.sin(yaw))/(Math.sqrt(Math.pow(forwardMeters, 2) * Math.pow(Math.cos(yaw), 2) + Math.pow(18.5 + forwardMeters * Math.sin(yaw), 2)   )));
 
                 telemetry.addData("Angle to point A: ", angleTopTri);
 
