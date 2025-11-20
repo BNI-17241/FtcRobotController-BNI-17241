@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Controls.Te
 import com.qualcomm.hardware.limelightvision.LLResult;
 import com.qualcomm.hardware.limelightvision.LLResultTypes;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -14,6 +15,7 @@ import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Robots.Decod
 
 import java.util.List;
 
+@Disabled
 @TeleOp(name = "Decode TeleOp", group = "Drive")
 public class DecodeFinalTeleOp17241 extends OpMode {
 

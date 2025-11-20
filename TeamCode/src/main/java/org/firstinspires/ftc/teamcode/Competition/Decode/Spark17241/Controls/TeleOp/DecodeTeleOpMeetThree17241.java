@@ -1,26 +1,23 @@
-package org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Workspaces.Andrew;
+package org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Controls.TeleOp;
 
 import com.qualcomm.hardware.limelightvision.LLResult;
 import com.qualcomm.hardware.limelightvision.LLResultTypes;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
-
 import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
 import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Robots.DecodeBot;
 
-import java.util.Arrays;
 import java.util.List;
 
 //
-@Disabled
-@TeleOp(name = "AndrewAuto TeleOp", group = "Drive")
-public class AndrewAimbotTeleOp17241 extends OpMode {
+
+@TeleOp(name = "DecodeTeleOpMeetThree17241", group = "Drive")
+public class DecodeTeleOpMeetThree17241 extends OpMode {
 
     private Limelight3A limelight;
 
@@ -209,11 +206,11 @@ public class AndrewAimbotTeleOp17241 extends OpMode {
         if (gamepad2.dpad_down) targetVelocity -= 1;
         if (gamepad2.left_bumper) { targetVelocity = 0; }
 
-        if(gamepad1.right_stick_button)
+        /*if(gamepad1.right_stick_button)
         {
             targetVelocity = autoTargetSpeed;
             autoFire = true;
-        }
+        }*/
 
         decBot.flylaunch(targetVelocity);
 
