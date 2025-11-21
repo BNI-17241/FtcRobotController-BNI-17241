@@ -59,6 +59,14 @@ public class RedStartHumanFarLaunch extends AutoMain {
         autoScoreComplete = false;
         shotsFired = 0;
         parkPathStarted = false;
+
+        firstShotVelocity = 781;
+        secountShotVelocity = 700;
+        thirdShotVelocity = 700;
+
+        feedMsOne = 600;
+        feedMSTwo = 250;
+        feedMSThree = 600;
     }
 
     @Override

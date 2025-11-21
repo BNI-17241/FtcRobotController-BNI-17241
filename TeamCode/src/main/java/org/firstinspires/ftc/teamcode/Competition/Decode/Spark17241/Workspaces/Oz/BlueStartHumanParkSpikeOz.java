@@ -60,9 +60,13 @@ public class BlueStartHumanParkSpikeOz extends AutoMainOzV2{
         shotsFired = 0;
         parkPathStarted = false;
 
-        firstShotVelocity = 1000;
-        secountShotVelocity = 500;
-        thirdShotVelocity = 100;
+        firstShotVelocity = 781;
+        secountShotVelocity = 781;
+        thirdShotVelocity = 781;
+
+        feedMsOne = 600;
+        feedMSTwo = 250;
+        feedMSThree = 600;
     }
 
     @Override

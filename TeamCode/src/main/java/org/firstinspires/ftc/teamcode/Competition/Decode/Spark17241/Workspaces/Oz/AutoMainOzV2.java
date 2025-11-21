@@ -25,8 +25,9 @@ public abstract class AutoMainOzV2 extends OpMode {
 
     protected double gatePercent = 0.025;     // was ±2% gate window
     protected double feederPower = 1.0;      // feeder wheel power (0..1)
+
     protected long feedMsOne = 600;           // was 700 ms to run feeder during a shot
-    protected long feedMSTwo = 250;
+    protected long feedMSTwo = 250;         // Changed in each individal class this is default
     protected long feedMSThree = 600;
 
     protected double boostFactor = 1.0;     // temporary +2% velocity during feed

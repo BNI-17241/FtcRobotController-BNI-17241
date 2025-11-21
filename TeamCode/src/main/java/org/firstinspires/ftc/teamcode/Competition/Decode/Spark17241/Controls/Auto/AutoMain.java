@@ -68,6 +68,14 @@ public abstract class AutoMain extends OpMode {
     }
 
 
+    protected double firstShotVelocity = 0;
+    protected double secountShotVelocity = 0; // default values I dont think they should ever happen
+    protected double thirdShotVelocity = 0;
+
+    protected long feedMsOne = 600;           // was 700 ms to run feeder during a shot
+    protected long feedMSTwo = 250;         // Changed in each individal class this is default
+    protected long feedMSThree = 600;
+
     /** Flywheel Velocity Control and Gate Control based on Launch Zone */
     protected void updateFlywheelAndGate() {
         if (launchZone == LaunchZone.NEAR) {
@@ -96,6 +104,36 @@ public abstract class AutoMain extends OpMode {
         inGate = leftInGateStatus && rightInGateStatus;
     }
 
+    protected void updateFlywheelAndGate(double speedOne, double SpeedTwo, double speedThree) {
+        if (shotsFired == 0){
+            targetVelocity = speedOne;
+        }
+        else if(shotsFired == 1){
+            targetVelocity = speedThree;
+        }
+        else{
+            targetVelocity = speedThree;
+        }
+
+        decBot.flylaunch(targetVelocity);
+
+        if (scoringState == AutoMain.scoreState.IDLE || scoringState == AutoMain.scoreState.WAIT_FOR_GATE) {
+            nominalTarget = targetVelocity;
+        }
+
+        decBot.leftFlyWheel.setVelocity(targetVelocity);
+        decBot.rightFlyWheel.setVelocity(targetVelocity);
+
+        currentVelocityLeft = decBot.leftFlyWheel.getVelocity();
+        currentVelocityRight = decBot.rightFlyWheel.getVelocity();
+
+        tolerance = Math.max(10.0, Math.abs(nominalTarget) * gatePercent);
+        leftInGateStatus  = Math.abs(currentVelocityLeft - nominalTarget) <= tolerance;
+        rightInGateStatus = Math.abs(currentVelocityRight - nominalTarget) <= tolerance;
+        inGate = leftInGateStatus && rightInGateStatus;
+    }
+
+
     /** Feeder Wheel State Machine. Uses `justCompletedFeed()` for edge-detect.    OZ says(I know this was written with chat)*/
     protected void runAutoFeederCycle() {
         switch (scoringState) {
@@ -117,13 +155,33 @@ public abstract class AutoMain extends OpMode {
 
             case FEEDING:
                 targetVelocity = nominalTarget * boostFactor;
-                if (timer.milliseconds() >= feedMs) {
-                    decBot.feederWheel.setPower(0);
-                    targetVelocity = nominalTarget;
-                    timer.reset();
-                    scoringState = scoreState.RECOVERING;
+                if (shotsFired == 0){
+                    if (timer.milliseconds() >= feedMsOne) {
+                        decBot.feederWheel.setPower(0);
+                        targetVelocity = nominalTarget;
+                        timer.reset();
+                        scoringState = AutoMain.scoreState.RECOVERING;
+                    }
+                    break;
                 }
-                break;
+                else if (shotsFired == 1){
+                    if (timer.milliseconds() >= feedMSTwo) {
+                        decBot.feederWheel.setPower(0);
+                        targetVelocity = nominalTarget;
+                        timer.reset();
+                        scoringState = AutoMain.scoreState.RECOVERING;
+                    }
+                    break;
+                }
+                else{
+                    if (timer.milliseconds() >= feedMSThree) {
+                        decBot.feederWheel.setPower(0);
+                        targetVelocity = nominalTarget;
+                        timer.reset();
+                        scoringState = AutoMain.scoreState.RECOVERING;
+                    }
+                    break;
+                }
 
             case RECOVERING:
                 if (timer.milliseconds() >= boostMs) {
@@ -229,7 +287,7 @@ public abstract class AutoMain extends OpMode {
         if (!scoring.active) return true;
 
         onLoopStart();
-        updateFlywheelAndGate();
+        updateFlywheelAndGate(firstShotVelocity, secountShotVelocity, thirdShotVelocity);
         runAutoFeederCycle();
 
         // detect shot completion

@@ -22,7 +22,7 @@ public class BlueStartHumanParkSpike extends AutoMain{
 
     public final Pose startPose = new Pose(44, 8, Math.toRadians(90));     // Red Far Launch Zone start
     public final Pose scorePose = new Pose(59, 81, Math.toRadians(133));    // Red goal scoring pose // 80 x 80
-    public final Pose parkPose = new Pose(45, 40, Math.toRadians(0)); // Red Home (park)
+    public final Pose parkPose = new Pose(43, 12, Math.toRadians(0)); // Red Home (park)
 
     public Path scorePreload;
     public PathChain goPark;
@@ -36,6 +36,11 @@ public class BlueStartHumanParkSpike extends AutoMain{
 
     @Override
     public void init() {
+
+    }
+
+    @Override
+    public void start() {
         pathTimer = new Timer();
         opmodeTimer = new Timer();
         follower = Constants.createFollower(hardwareMap);
@@ -46,10 +51,9 @@ public class BlueStartHumanParkSpike extends AutoMain{
         /**  Optional per-path tuning */
         maxShots = 6 ;                       // Adjust for shot attempts
         parkLeaveTime = 25.0;               // Adjust if this path is long
-    }
 
-    @Override
-    public void start() {
+
+
         opmodeTimer.resetTimer();
         pathTimer.resetTimer();
 
@@ -60,6 +64,14 @@ public class BlueStartHumanParkSpike extends AutoMain{
         autoScoreComplete = false;
         shotsFired = 0;
         parkPathStarted = false;
+
+        firstShotVelocity = 740;
+        secountShotVelocity = 680;
+        thirdShotVelocity = 640;
+
+        feedMsOne = 600;
+        feedMSTwo = 250;
+        feedMSThree = 600;
     }
 
     @Override
@@ -84,7 +96,6 @@ public class BlueStartHumanParkSpike extends AutoMain{
 
                 /**  Begin scoring session. Adjust for number of shots and time limit */
                 if (!isScoringActive()) {
-
                     startScoring(LaunchZone.NEAR, 4, 10.0, opmodeTimer.getElapsedTimeSeconds());
                 }
 
@@ -106,7 +117,7 @@ public class BlueStartHumanParkSpike extends AutoMain{
                 }
                 launchZone = LaunchZone.NONE;    // spin down while driving to park
                 onLoopStart();
-                updateFlywheelAndGate();         // harmless when NONE
+                updateFlywheelAndGate(firstShotVelocity, secountShotVelocity, thirdShotVelocity);         // harmless when NONE
                 // When park path finishes, advance to READY
                 if (parkPathStarted && !follower.isBusy()) {
                     pathState = pathingState.READY;
@@ -116,7 +127,7 @@ public class BlueStartHumanParkSpike extends AutoMain{
             case READY:
                 // Do nothing, keep robot safe
                 onLoopStart();
-                updateFlywheelAndGate();
+                updateFlywheelAndGate(firstShotVelocity, secountShotVelocity, thirdShotVelocity);
                 break;
         }
         /** LED Driver for Gate Control */
