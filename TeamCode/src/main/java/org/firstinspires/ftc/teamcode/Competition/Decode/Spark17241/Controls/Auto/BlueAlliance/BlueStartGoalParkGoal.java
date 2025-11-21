@@ -50,6 +50,8 @@ public class BlueStartGoalParkGoal extends AutoMain {
 
     @Override
     public void start() {
+
+
         opmodeTimer.resetTimer();
         pathTimer.resetTimer();
 
@@ -60,6 +62,14 @@ public class BlueStartGoalParkGoal extends AutoMain {
         autoScoreComplete = false;
         shotsFired = 0;
         parkPathStarted = false;
+
+        firstShotVelocity = 740;
+        secountShotVelocity = 715;
+        thirdShotVelocity = 700;
+
+        feedMsOne = 600;
+        feedMSTwo = 275;
+        feedMSThree = 600;
     }
 
     @Override
@@ -78,7 +88,7 @@ public class BlueStartGoalParkGoal extends AutoMain {
                 if (follower.isBusy()) {
                     launchZone = LaunchZone.NEAR;
                     onLoopStart();
-                    updateFlywheelAndGate();
+                    updateFlywheelAndGate(firstShotVelocity, secountShotVelocity, thirdShotVelocity);
                     break;
                 }
 
@@ -105,7 +115,7 @@ public class BlueStartGoalParkGoal extends AutoMain {
                 }
                 launchZone = LaunchZone.NONE;    // spin down while driving to park
                 onLoopStart();
-                updateFlywheelAndGate();         // harmless when NONE
+                updateFlywheelAndGate(firstShotVelocity, secountShotVelocity, thirdShotVelocity);         // harmless when NONE
                 // When park path finishes, advance to READY
                 if (parkPathStarted && !follower.isBusy()) {
                     pathState = pathingState.READY;
@@ -115,7 +125,7 @@ public class BlueStartGoalParkGoal extends AutoMain {
             case READY:
                 // Do nothing, keep robot safe
                 onLoopStart();
-                updateFlywheelAndGate();
+                updateFlywheelAndGate(firstShotVelocity, secountShotVelocity, thirdShotVelocity);
                 break;
         }
 

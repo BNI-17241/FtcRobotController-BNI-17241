@@ -22,7 +22,7 @@ public class BlueStartHumanParkSpike extends AutoMain{
 
     public final Pose startPose = new Pose(44, 8, Math.toRadians(90));     // Red Far Launch Zone start
     public final Pose scorePose = new Pose(59, 81, Math.toRadians(133));    // Red goal scoring pose // 80 x 80
-    public final Pose parkPose = new Pose(43, 12, Math.toRadians(0)); // Red Home (park)
+    public final Pose parkPose = new Pose(43, 12, Math.toRadians(90)); // Red Home (park)
 
     public Path scorePreload;
     public PathChain goPark;
@@ -36,11 +36,6 @@ public class BlueStartHumanParkSpike extends AutoMain{
 
     @Override
     public void init() {
-
-    }
-
-    @Override
-    public void start() {
         pathTimer = new Timer();
         opmodeTimer = new Timer();
         follower = Constants.createFollower(hardwareMap);
@@ -51,7 +46,10 @@ public class BlueStartHumanParkSpike extends AutoMain{
         /**  Optional per-path tuning */
         maxShots = 6 ;                       // Adjust for shot attempts
         parkLeaveTime = 25.0;               // Adjust if this path is long
+    }
 
+    @Override
+    public void start() {
 
 
         opmodeTimer.resetTimer();
@@ -66,11 +64,11 @@ public class BlueStartHumanParkSpike extends AutoMain{
         parkPathStarted = false;
 
         firstShotVelocity = 740;
-        secountShotVelocity = 680;
-        thirdShotVelocity = 640;
+        secountShotVelocity = 715;
+        thirdShotVelocity = 700;
 
         feedMsOne = 600;
-        feedMSTwo = 250;
+        feedMSTwo = 275;
         feedMSThree = 600;
     }
 
@@ -90,7 +88,7 @@ public class BlueStartHumanParkSpike extends AutoMain{
                 if (follower.isBusy()) {
                     launchZone = LaunchZone.NEAR;
                     onLoopStart();
-                    updateFlywheelAndGate();
+                    updateFlywheelAndGate(firstShotVelocity, secountShotVelocity, thirdShotVelocity);
                     break;
                 }
 

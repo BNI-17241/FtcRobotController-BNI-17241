@@ -24,12 +24,12 @@ public abstract class AutoMain extends OpMode {
 
 
     /**  Flywheel / Feeder Variables  */
-    protected double targetVelocity = 0;        // s
-    protected double gatePercent = 0.025;     // was ±2% gate window
+    protected double targetVelocity = 0;        // default
+    protected double gatePercent = 0.02;     // was ±2% gate window
     protected double feederPower = 1.0;      // feeder wheel power (0..1)
     protected long   feedMs = 600;           // was 700 ms to run feeder during a shot
     protected double boostFactor = 1.0;     // temporary +2% velocity during feed
-    protected long   boostMs = 180;          // recovery delay after feed
+    protected long   boostMs = 350;          // recovery delay after feed
 
     /**  Scoring State Machine Variables and Constants (Independent of Pathing States) ===== */
     protected enum scoreState { READY, IDLE, WAIT_FOR_GATE, FEEDING, RECOVERING, EMPTY }
@@ -54,6 +54,10 @@ public abstract class AutoMain extends OpMode {
     protected double currentVelocityLeft;
     protected double currentVelocityRight;
 
+    boolean hasExited = false;
+    boolean hitCount = false;
+    boolean timedOut = false;
+
     //public List<scoreState> allStates = new ArrayList<scoreState>;
 
     /** Parking timing helper  */
@@ -72,9 +76,9 @@ public abstract class AutoMain extends OpMode {
     protected double secountShotVelocity = 0; // default values I dont think they should ever happen
     protected double thirdShotVelocity = 0;
 
-    protected long feedMsOne = 600;           // was 700 ms to run feeder during a shot
-    protected long feedMSTwo = 250;         // Changed in each individal class this is default
-    protected long feedMSThree = 600;
+    protected long feedMsOne = 0;           // was 700 ms to run feeder during a shot
+    protected long feedMSTwo = 0;         // Changed in each individal class this is default
+    protected long feedMSThree = 0;
 
     /** Flywheel Velocity Control and Gate Control based on Launch Zone */
     protected void updateFlywheelAndGate() {
@@ -110,6 +114,9 @@ public abstract class AutoMain extends OpMode {
         }
         else if(shotsFired == 1){
             targetVelocity = speedThree;
+        }
+        else if (launchZone == LaunchZone.NONE){
+            targetVelocity  = 0;
         }
         else{
             targetVelocity = speedThree;
@@ -215,12 +222,16 @@ public abstract class AutoMain extends OpMode {
         telemetry.addData("Score State", scoringState);
         telemetry.addData("Prev->Curr", "%s -> %s", prevScoringState, scoringState);
         telemetry.addData("Shots", "%d / %d", shotsFired, maxShots);
-        telemetry.addData("Gate", "%b | %b", leftInGateStatus, rightInGateStatus);
-        telemetry.addData("Target Vel", targetVelocity);
-        telemetry.addData("Nominal Target", nominalTarget);
+        //telemetry.addData("Gate", "%b | %b", leftInGateStatus, rightInGateStatus);
+        //telemetry.addData("Target Vel", targetVelocity);
+        //telemetry.addData("Nominal Target", nominalTarget);
         telemetry.addData("Gate Tol ±%", gatePercent * 100.0);
-        telemetry.addData("L Vel", currentVelocityLeft);
-        telemetry.addData("R Vel", currentVelocityRight);
+        //telemetry.addData("L Vel", currentVelocityLeft);
+        //telemetry.addData("R Vel", currentVelocityRight);
+
+        telemetry.addData("has exited", Boolean.toString(hasExited));
+        telemetry.addData("hit count", hitCount);
+        telemetry.addData("timeOut", timedOut);
     }
 
     /** Scoring Session Tracking / Orchestrator */
@@ -301,10 +312,13 @@ public abstract class AutoMain extends OpMode {
         }
 
         // check if we’re done or timed out
-        boolean hitCount = (shotsFired - scoring.shotsFiredAtStart) >= scoring.targetShots;
-        boolean timedOut = (nowSec - scoring.startedAtSec) >= scoring.timeLimitSec;
+         hitCount = shotsFired >= scoring.targetShots;// + scoring.shotsFiredAtStart) >= scoring.targetShots;//(shotsFired - scoring.shotsFiredAtStart) >= scoring.targetShots;
+         timedOut = (nowSec) >= scoring.timeLimitSec;
 
-        if (hitCount || timedOut) {
+
+
+        if (hitCount) {
+            hasExited = true;
             launchZone = LaunchZone.NONE;
             scoringState = scoreState.EMPTY;
             scoring.active = false;

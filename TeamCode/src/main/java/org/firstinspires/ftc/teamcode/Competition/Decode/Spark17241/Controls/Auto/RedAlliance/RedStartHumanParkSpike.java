@@ -21,7 +21,7 @@ public class RedStartHumanParkSpike extends AutoMain {
 
     public final Pose startPose = new Pose(100, 8, Math.toRadians(90));     // Red Far Launch Zone start
     public final Pose scorePose = new Pose(85, 81, Math.toRadians(45));    // Red goal scoring pose // 80 x 80
-    public final Pose parkPose = new Pose(90, 40, Math.toRadians(0)); // Red Home (park)
+    public final Pose parkPose = new Pose(101, 12, Math.toRadians(90)); // Red Home (park)
 
     public Path scorePreload;
     public PathChain goPark;
@@ -45,10 +45,14 @@ public class RedStartHumanParkSpike extends AutoMain {
         /**  Optional per-path tuning */
         maxShots = 4;                       // Adjust for shot attempts
         parkLeaveTime = 25.0;               // Adjust if this path is long
+
     }
 
     @Override
     public void start() {
+
+
+
         opmodeTimer.resetTimer();
         pathTimer.resetTimer();
 
@@ -59,6 +63,14 @@ public class RedStartHumanParkSpike extends AutoMain {
         autoScoreComplete = false;
         shotsFired = 0;
         parkPathStarted = false;
+
+        firstShotVelocity = 740;
+        secountShotVelocity = 690;
+        thirdShotVelocity = 650;
+
+        feedMsOne = 550;
+        feedMSTwo = 300;
+        feedMSThree = 1000;
     }
 
     @Override
@@ -77,7 +89,7 @@ public class RedStartHumanParkSpike extends AutoMain {
                 if (follower.isBusy()) {
                     launchZone = LaunchZone.NEAR;
                     onLoopStart();
-                    updateFlywheelAndGate();
+                    updateFlywheelAndGate(firstShotVelocity, secountShotVelocity, thirdShotVelocity);
                     break;
                 }
 
@@ -105,7 +117,7 @@ public class RedStartHumanParkSpike extends AutoMain {
                 }
                 launchZone = LaunchZone.NONE;    // spin down while driving to park
                 onLoopStart();
-                updateFlywheelAndGate();         // harmless when NONE
+                updateFlywheelAndGate(firstShotVelocity, secountShotVelocity, thirdShotVelocity);         // harmless when NONE
                 // When park path finishes, advance to READY
                 if (parkPathStarted && !follower.isBusy()) {
                     pathState = pathingState.READY;
@@ -115,7 +127,7 @@ public class RedStartHumanParkSpike extends AutoMain {
             case READY:
                 // Do nothing, keep robot safe
                 onLoopStart();
-                updateFlywheelAndGate();
+                updateFlywheelAndGate(firstShotVelocity, secountShotVelocity, thirdShotVelocity);
                 break;
         }
 

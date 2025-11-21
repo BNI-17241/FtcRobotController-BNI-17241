@@ -7,10 +7,10 @@ import com.pedropathing.paths.Path;
 import com.pedropathing.paths.PathChain;
 import com.pedropathing.util.Timer;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Controls.Auto.AutoMain;
 import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.pedroPathing.Constants;
+
 
 @Autonomous(name = "Red:Start Goal:Park Goal", group = "Drive")
 public class RedStartGoalParkGoal extends AutoMain {
@@ -45,10 +45,13 @@ public class RedStartGoalParkGoal extends AutoMain {
         /**  Optional per-path tuning */
         maxShots = 4;                       // Adjust for shot attempts
         parkLeaveTime = 25.0;               // Adjust if this path is long
+
     }
 
     @Override
     public void start() {
+
+
         opmodeTimer.resetTimer();
         pathTimer.resetTimer();
 
@@ -59,6 +62,14 @@ public class RedStartGoalParkGoal extends AutoMain {
         autoScoreComplete = false;
         shotsFired = 0;
         parkPathStarted = false;
+
+        firstShotVelocity = 740;
+        secountShotVelocity = 715;
+        thirdShotVelocity = 690;
+
+        feedMsOne = 600;
+        feedMSTwo = 300;
+        feedMSThree = 700;
     }
 
     @Override
@@ -77,13 +88,12 @@ public class RedStartGoalParkGoal extends AutoMain {
                 if (follower.isBusy()) {
                     launchZone = LaunchZone.NEAR;
                     onLoopStart();
-                    updateFlywheelAndGate();
+                    updateFlywheelAndGate(firstShotVelocity, secountShotVelocity, thirdShotVelocity);
                     break;
                 }
 
                 /**  Begin scoring session. Adjust for number of shots and time limit */
                 if (!isScoringActive()) {
-
                     startScoring(LaunchZone.NEAR, 4, 8.0, opmodeTimer.getElapsedTimeSeconds());
                 }
 
@@ -105,7 +115,7 @@ public class RedStartGoalParkGoal extends AutoMain {
                 }
                 launchZone = LaunchZone.NONE;    // spin down while driving to park
                 onLoopStart();
-                updateFlywheelAndGate();         // harmless when NONE
+                updateFlywheelAndGate(firstShotVelocity, secountShotVelocity, thirdShotVelocity);         // harmless when NONE
                 // When park path finishes, advance to READY
                 if (parkPathStarted && !follower.isBusy()) {
                     pathState = pathingState.READY;
@@ -115,7 +125,7 @@ public class RedStartGoalParkGoal extends AutoMain {
             case READY:
                 // Do nothing, keep robot safe
                 onLoopStart();
-                updateFlywheelAndGate();
+                updateFlywheelAndGate(firstShotVelocity, secountShotVelocity, thirdShotVelocity);
                 break;
         }
 

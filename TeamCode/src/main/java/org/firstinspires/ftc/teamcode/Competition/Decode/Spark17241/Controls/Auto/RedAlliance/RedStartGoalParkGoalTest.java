@@ -71,6 +71,14 @@ public class RedStartGoalParkGoalTest extends AutoMain {
         autoScoreComplete = false;
         shotsFired = 0;
         parkPathStarted = false;
+
+        firstShotVelocity = 740;
+        secountShotVelocity = 720;
+        thirdShotVelocity = 700;
+
+        feedMsOne = 600;
+        feedMSTwo = 250;
+        feedMSThree = 600;
     }
 
     @Override

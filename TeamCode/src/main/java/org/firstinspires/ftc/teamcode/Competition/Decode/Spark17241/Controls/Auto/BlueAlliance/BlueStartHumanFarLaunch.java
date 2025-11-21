@@ -25,8 +25,8 @@ public class BlueStartHumanFarLaunch extends AutoMain {
     public final Pose parkPose = new Pose(56, 35, Math.toRadians(0));*/ // Red Home (park)
 
     public final Pose startPose = new Pose(44, 10, Math.toRadians(90));     // start pos
-    public final Pose scoreFarPose = new Pose(60, 20, Math.toRadians(112));    // blue shoot far
-    public final Pose parkPose = new Pose(56, 35, Math.toRadians(0));
+    public final Pose scoreFarPose = new Pose(60, 20, Math.toRadians(110));    // blue shoot far
+    public final Pose parkPose = new Pose(43, 12, Math.toRadians(90)); //  Home (park)
 
     public Path scorePreload;
     public PathChain goPark;
@@ -50,10 +50,13 @@ public class BlueStartHumanFarLaunch extends AutoMain {
         /**  Optional per-path tuning */
         maxShots = 4;                       // Adjust for shot attempts
         parkLeaveTime = 25.0;               // Adjust if this path is long
+
     }
 
     @Override
     public void start() {
+
+
         opmodeTimer.resetTimer();
         pathTimer.resetTimer();
 
@@ -64,6 +67,15 @@ public class BlueStartHumanFarLaunch extends AutoMain {
         autoScoreComplete = false;
         shotsFired = 0;
         parkPathStarted = false;
+
+        firstShotVelocity = 865;
+        secountShotVelocity = 845;
+        thirdShotVelocity = 815;
+
+
+        feedMsOne = 550;
+        feedMSTwo = 270;
+        feedMSThree = 600;
     }
 
     @Override
@@ -82,7 +94,7 @@ public class BlueStartHumanFarLaunch extends AutoMain {
                 if (follower.isBusy()) {
                     launchZone = LaunchZone.FAR;
                     onLoopStart();
-                    updateFlywheelAndGate();
+                    updateFlywheelAndGate(firstShotVelocity, secountShotVelocity, thirdShotVelocity);
                     break;
                 }
 
@@ -109,7 +121,7 @@ public class BlueStartHumanFarLaunch extends AutoMain {
                 }
                 launchZone = LaunchZone.NONE;    // spin down while driving to park
                 onLoopStart();
-                updateFlywheelAndGate();         // harmless when NONE
+                updateFlywheelAndGate(firstShotVelocity, secountShotVelocity, thirdShotVelocity);         // harmless when NONE
                 // When park path finishes, advance to READY
                 if (parkPathStarted && !follower.isBusy()) {
                     pathState = pathingState.READY;
@@ -119,7 +131,7 @@ public class BlueStartHumanFarLaunch extends AutoMain {
             case READY:
                 // Do nothing, keep robot safe
                 onLoopStart();
-                updateFlywheelAndGate();
+                updateFlywheelAndGate(firstShotVelocity, secountShotVelocity, thirdShotVelocity);
                 break;
         }
         /** LED Driver for Gate Control */
