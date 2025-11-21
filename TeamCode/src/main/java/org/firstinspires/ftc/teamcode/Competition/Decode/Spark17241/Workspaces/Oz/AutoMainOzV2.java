@@ -18,12 +18,19 @@ public abstract class AutoMainOzV2 extends OpMode {
 
     /**  Flywheel / Feeder Variables  */
     protected double targetVelocity = 0;        // s
+
+    protected double firstShotVelocity = 900;
+    protected double secountShotVelocity = 900; // default values I dont think they should ever happen
+    protected double thirdShotVelocity = 900;
+
     protected double gatePercent = 0.025;     // was ±2% gate window
     protected double feederPower = 1.0;      // feeder wheel power (0..1)
     protected long feedMsOne = 600;           // was 700 ms to run feeder during a shot
     protected long feedMSTwo = 250;
     protected long feedMSThree = 600;
+
     protected double boostFactor = 1.0;     // temporary +2% velocity during feed
+
     protected long   boostMs = 180;          // recovery delay after feed
 
     /**  Scoring State Machine Variables and Constants (Independent of Pathing States) ===== */
@@ -56,6 +63,8 @@ public abstract class AutoMainOzV2 extends OpMode {
 
     /**  Robot instance (motors/sensors accessed here) */
     protected DecodeBot decBot = new DecodeBot();
+
+
 
     /** Called at the start of OpMode.loop() to snapshot the previous scoring state. */
     protected void onLoopStart() {
@@ -90,6 +99,36 @@ public abstract class AutoMainOzV2 extends OpMode {
         rightInGateStatus = Math.abs(currentVelocityRight - nominalTarget) <= tolerance;
         inGate = leftInGateStatus && rightInGateStatus;
     }
+    protected void updateFlywheelAndGate(double speedOne, double SpeedTwo, double speedThree) {
+        if (shotsFired == 0){
+            targetVelocity = speedOne;
+        }
+        else if(shotsFired == 1){
+            targetVelocity = speedThree;
+        }
+        else{
+            targetVelocity = speedThree;
+        }
+
+        decBot.flylaunch(targetVelocity);
+
+        if (scoringState == scoreState.IDLE || scoringState == scoreState.WAIT_FOR_GATE) {
+            nominalTarget = targetVelocity;
+        }
+
+        decBot.leftFlyWheel.setVelocity(targetVelocity);
+        decBot.rightFlyWheel.setVelocity(targetVelocity);
+
+        currentVelocityLeft = decBot.leftFlyWheel.getVelocity();
+        currentVelocityRight = decBot.rightFlyWheel.getVelocity();
+
+        tolerance = Math.max(10.0, Math.abs(nominalTarget) * gatePercent);
+        leftInGateStatus  = Math.abs(currentVelocityLeft - nominalTarget) <= tolerance;
+        rightInGateStatus = Math.abs(currentVelocityRight - nominalTarget) <= tolerance;
+        inGate = leftInGateStatus && rightInGateStatus;
+    }
+
+
 
     /** Feeder Wheel State Machine. Uses `justCompletedFeed()` for edge-detect.    OZ says(I know this was written with chat)*/
     protected void runAutoFeederCycle() {
@@ -244,7 +283,7 @@ public abstract class AutoMainOzV2 extends OpMode {
         if (!scoring.active) return true;
 
         onLoopStart();
-        updateFlywheelAndGate();
+        updateFlywheelAndGate(firstShotVelocity, secountShotVelocity, thirdShotVelocity);
         runAutoFeederCycle();
 
         // detect shot completion

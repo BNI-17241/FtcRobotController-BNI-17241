@@ -44,6 +44,7 @@ public class BlueStartHumanParkSpikeOz extends AutoMainOzV2{
         /**  Optional per-path tuning */
         maxShots = 6 ;                       // Adjust for shot attempts
         parkLeaveTime = 25.0;               // Adjust if this path is long
+
     }
 
     @Override
@@ -58,6 +59,10 @@ public class BlueStartHumanParkSpikeOz extends AutoMainOzV2{
         autoScoreComplete = false;
         shotsFired = 0;
         parkPathStarted = false;
+
+        firstShotVelocity = 1000;
+        secountShotVelocity = 500;
+        thirdShotVelocity = 100;
     }
 
     @Override
@@ -76,7 +81,7 @@ public class BlueStartHumanParkSpikeOz extends AutoMainOzV2{
                 if (follower.isBusy()) {
                     launchZone = LaunchZone.NEAR;
                     onLoopStart();
-                    updateFlywheelAndGate();
+                    updateFlywheelAndGate(firstShotVelocity, secountShotVelocity, thirdShotVelocity);
                     break;
                 }
 
@@ -104,7 +109,7 @@ public class BlueStartHumanParkSpikeOz extends AutoMainOzV2{
                 }
                 launchZone = LaunchZone.NONE;    // spin down while driving to park
                 onLoopStart();
-                updateFlywheelAndGate();         // harmless when NONE
+                updateFlywheelAndGate(firstShotVelocity, secountShotVelocity, thirdShotVelocity);         // harmless when NONE
                 // When park path finishes, advance to READY
                 if (parkPathStarted && !follower.isBusy()) {
                     pathState = pathingState.READY;
@@ -114,7 +119,7 @@ public class BlueStartHumanParkSpikeOz extends AutoMainOzV2{
             case READY:
                 // Do nothing, keep robot safe
                 onLoopStart();
-                updateFlywheelAndGate();
+                updateFlywheelAndGate(firstShotVelocity, secountShotVelocity, thirdShotVelocity);
                 break;
         }
         /** LED Driver for Gate Control */
