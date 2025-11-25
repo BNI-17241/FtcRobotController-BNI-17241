@@ -63,13 +63,13 @@ public class BlueStartGoalParkGoal extends AutoMain {
         shotsFired = 0;
         parkPathStarted = false;
 
-        firstShotVelocity = 740;
+        firstShotVelocity = 705;
         secountShotVelocity = 715;
         thirdShotVelocity = 700;
 
-        feedMsOne = 600;
-        feedMSTwo = 275;
-        feedMSThree = 600;
+        feedMsOne = 536;
+        feedMSTwo = 240;
+        feedMSThree = 115;
     }
 
     @Override

@@ -206,19 +206,19 @@ public class TeleOpMeet3VelocityGateImprovAcker extends OpMode {
         }
         if (gamepad2.x) {       // Square
             // NEAR preset
-            targetVelocity = 737;
+            targetVelocity = 705;
             autoOffsetFar = 0;
             rangeMode = RangeMode.NEAR;
         }
         if (gamepad2.a) {   // X
             // NEAR preset
-            targetVelocity = 761;  //781
+            targetVelocity = 705;  //781
             autoOffsetFar = 0;
             rangeMode = RangeMode.NEAR;
         }
         if (gamepad2.b) { // Circle
             // FAR preset
-            targetVelocity = 865;
+            targetVelocity = 843;
             autoOffsetFar = 2.5;
             rangeMode = RangeMode.FAR;
         }

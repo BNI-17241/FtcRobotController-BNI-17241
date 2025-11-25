@@ -64,13 +64,14 @@ public class RedStartHumanParkSpike extends AutoMain {
         shotsFired = 0;
         parkPathStarted = false;
 
-        firstShotVelocity = 740;
-        secountShotVelocity = 690;
-        thirdShotVelocity = 650;
+        firstShotVelocity = 705;
+        secountShotVelocity = 715;
+        thirdShotVelocity = 700;
 
-        feedMsOne = 550;
-        feedMSTwo = 300;
-        feedMSThree = 1000;
+
+        feedMsOne = 536;
+        feedMSTwo = 240;
+        feedMSThree = 115;
     }
 
     @Override
@@ -96,7 +97,7 @@ public class RedStartHumanParkSpike extends AutoMain {
                 /**  Begin scoring session. Adjust for number of shots and time limit */
                 if (!isScoringActive()) {
 
-                    startScoring(LaunchZone.NEAR, 4, 8.0, opmodeTimer.getElapsedTimeSeconds());
+                    startScoring(LaunchZone.NEAR, 5, 14.0, opmodeTimer.getElapsedTimeSeconds());
                 }
 
                 /**  Edge Case Handling for Max Shots or Out of Autonomous Time  */
