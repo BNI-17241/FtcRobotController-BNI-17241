@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Workspaces.
 import com.qualcomm.hardware.limelightvision.LLResult;
 import com.qualcomm.hardware.limelightvision.LLResultTypes;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -14,6 +15,7 @@ import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Robots.Decod
 
 import java.util.List;
 
+@Disabled
 @TeleOp(name = "Acker:Post Meet 3 Vel Gate Improvements", group = "Drive")
 public class TeleOpMeet3VelocityGateImprovAcker extends OpMode {
 
@@ -212,7 +214,7 @@ public class TeleOpMeet3VelocityGateImprovAcker extends OpMode {
         }
         if (gamepad2.a) {   // X
             // NEAR preset
-            targetVelocity = 705;  //781
+            targetVelocity = 725;  //781
             autoOffsetFar = 0;
             rangeMode = RangeMode.NEAR;
         }

@@ -14,7 +14,7 @@ import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Robots.Decod
 
 import java.util.List;
 
-@TeleOp(name = "Decode Teleop Meet Four", group = "Drive")
+@TeleOp(name = "Andrew State Decode Teleop", group = "Drive")
 public class AndrewStateDecodeTeleop extends OpMode {
 
     protected  Limelight3A limelight;
@@ -85,17 +85,18 @@ public class AndrewStateDecodeTeleop extends OpMode {
             // Name of Driver using Profile 1
             case PROFILE_1:
                 // leftStickXVal controls rotation, and rightStickXVal controls strafing.
+                frontLeftSpeed = leftStickYVal + leftStickXVal + rightStickXVal; // Vertical + Rotation + Staffing
+                frontRightSpeed = leftStickYVal - leftStickXVal - rightStickXVal;// Vertical - Rotation - Strafing
+                rearLeftSpeed = leftStickYVal - leftStickXVal + rightStickXVal;
+                rearRightSpeed = leftStickYVal + leftStickXVal - rightStickXVal;
+
+                break;
+            case PROFILE_2:
+                //leftStickXVal controls strafing, and rightStickXVal controls rotation.
                 frontLeftSpeed = leftStickYVal + rightStickXVal + leftStickXVal;    // Vertical + Rotation + Staffing
                 frontRightSpeed = leftStickYVal - rightStickXVal - leftStickXVal;   // Vertical - Rotation - Strafing(sign in front is the way the motor is turning in relation to the others)
                 rearLeftSpeed = leftStickYVal - rightStickXVal + leftStickXVal;
                 rearRightSpeed = leftStickYVal + rightStickXVal - leftStickXVal;
-                break;
-            case PROFILE_2:
-                //leftStickXVal controls strafing, and rightStickXVal controls rotation.
-                frontLeftSpeed = leftStickYVal + leftStickXVal + rightStickXVal;
-                frontRightSpeed = leftStickYVal - leftStickXVal - rightStickXVal;
-                rearLeftSpeed = leftStickYVal - leftStickXVal + rightStickXVal;
-                rearRightSpeed = leftStickYVal + leftStickXVal - rightStickXVal;
                 break;
 
                 // Default Driver Profile
