@@ -37,7 +37,8 @@ public class AndrewStateDecodeTeleop extends OpMode {
     protected  static final int PROFILE_2 = 2; //user 2
     protected  int currentProfile = PROFILE_1;
 
-
+    //Limelight Cam data
+    protected  LLResult result;
 
 
     //Velocity of the Launching wheel
@@ -57,6 +58,7 @@ public class AndrewStateDecodeTeleop extends OpMode {
     @Override
     public void loop() {
         speedControl();
+        limeLightData();
         telemetryOutput();
         robotCentricDrive();
         LEDDriver();
@@ -153,23 +155,29 @@ public class AndrewStateDecodeTeleop extends OpMode {
 
     }*/
 
-
-    //****************Limelight Data Collection
-
-
-
     //Auto Correction
-    public void autoTarget()
-    {
+    public void limeLightData() {
+        result = limelight.getLatestResult();
+        if (result.isValid()) {
+            // Access fiducial results
+            List<LLResultTypes.FiducialResult> fiducialResults = result.getFiducialResults();
+            for (LLResultTypes.FiducialResult fr : fiducialResults) {
+                telemetry.addData("Fiducial", "ID: %d, Family: %s, X: %.2f, Y: %.2f", fr.getFiducialId(), fr.getFamily(), fr.getTargetXDegrees(), fr.getTargetYDegrees());
+            }
+        } else {
+            telemetry.addData("Limelight", "No data available");
+        }
 
     }
 
+    public void autoTarget() {
+
+    }
 
     // ***** Helper Method for Telemetry
     public void telemetryOutput() {
         telemetry.update();
     }
-
 
     // ****** Helper method to set Motor Power
     public void setMotorPower(DcMotor motor, double speed, double threshold, double multiplier) {
@@ -180,10 +188,8 @@ public class AndrewStateDecodeTeleop extends OpMode {
         }
     }
 
-
     // ****** Led Controller
-    public void LEDDriver()
-    {
+    public void LEDDriver() {
         decBot.LEDCon(6);
     }
 }
