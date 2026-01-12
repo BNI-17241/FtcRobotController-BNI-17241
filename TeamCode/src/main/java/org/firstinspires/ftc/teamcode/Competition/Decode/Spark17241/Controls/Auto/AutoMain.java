@@ -38,7 +38,7 @@ public abstract class AutoMain extends OpMode {
     protected ElapsedTime timer = new ElapsedTime();
 
     /**  Global counters / Flags to tracker number of shots on goal */
-    protected int maxShots = 5;
+    protected int maxShots = 0;
     protected int shotsFired = 0;
     protected boolean autoScoreComplete;
 
