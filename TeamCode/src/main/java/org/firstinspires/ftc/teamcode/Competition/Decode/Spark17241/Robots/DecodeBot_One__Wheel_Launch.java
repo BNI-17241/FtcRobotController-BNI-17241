@@ -136,9 +136,9 @@ public class DecodeBot_One__Wheel_Launch {
     }
     public void stopfeeding(){
     }
-    public void intakeControl(boolean ison){
-        double intakeMotorPower = 50;
-        if (ison){
+    public void intakeControl(boolean isOn){
+        double intakeMotorPower = 0.7;
+        if (isOn){
             intakeMotor.setPower(intakeMotorPower);
         }
         else{
