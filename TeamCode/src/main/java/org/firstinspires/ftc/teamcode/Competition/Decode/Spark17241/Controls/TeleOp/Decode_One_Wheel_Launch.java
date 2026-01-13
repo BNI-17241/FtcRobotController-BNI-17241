@@ -35,6 +35,7 @@ public class Decode_One_Wheel_Launch extends OpMode {
     protected double powerThreshold;
     protected double moveSpeedMultiply = 0.75;
 
+
     // Drive Profile Control Variables
     protected  static final int PROFILE_1 = 1;  //User 1
     protected  static final int PROFILE_2 = 2; //user 2
@@ -45,8 +46,9 @@ public class Decode_One_Wheel_Launch extends OpMode {
 
 
     //Velocity of the Launching wheels
-    protected double currentLaunchVelocity;
     protected double targetVelocity;
+
+    protected double tolerance = 50;
 
 
     // Instantiation of Robot using Robot Class Constructor
@@ -61,9 +63,12 @@ public class Decode_One_Wheel_Launch extends OpMode {
 
     @Override
     public void loop() {
+        firingControl();
         basics();
     }
-    protected double min_velocity_drop = 80; // threshold for detecting ball contact
+
+
+    protected double min_velocity_drop = 50; // threshold for detecting ball contact
     protected List<Double> previousShotVelocityL = new ArrayList<>();
 
     protected boolean hasStartedAutoLaunch = false;
@@ -117,18 +122,18 @@ public class Decode_One_Wheel_Launch extends OpMode {
             hasReleased = false;
             decBot.startfeeding();
         }
-
+        boolean hasdroped = velocityDrop();
         // Stop feeding once velocity drop indicates the ball launched
-        if (hasStartedFeeding && velocityDrop()) {
+        if (hasStartedFeeding && hasdroped) {
             hasReleased = true;
             hasStartedFeeding = false;
             decBot.stopfeeding();
         }
+        telemetry.addData("has dropped", hasdroped);
     }
 
     public void launchAuto(double selectedSpeed, double tolerance) {
         startSpeed(selectedSpeed);
-
         int ballCount = 3;
         for (int i = 1; i <= ballCount; i++) {
             singleBallFire(selectedSpeed, tolerance);
@@ -140,21 +145,25 @@ public class Decode_One_Wheel_Launch extends OpMode {
         }
         if (gamepad2.x) {       // Square
             // NEAR preset
-            targetVelocity = 705;
+            targetVelocity = 700;
         }
         if (gamepad2.a) {   // X
-            targetVelocity = 705;
+            targetVelocity = 800;
         }
         if (gamepad2.b) { // Circle
-            targetVelocity = 843;
+            targetVelocity = 900;
         }
         if (gamepad2.y) { // Triangle
-            targetVelocity = 865;
+            targetVelocity = 1000;
         }
 
         if (gamepad2.dpad_up)     { targetVelocity += 1; }
         if (gamepad2.dpad_down)   { targetVelocity -= 1; }
         if (gamepad2.left_bumper) { targetVelocity = 0;  }
+
+        if (gamepad2.right_bumper){
+            launchAuto(targetVelocity, tolerance);
+        }
     }
 
 
@@ -278,6 +287,7 @@ public class Decode_One_Wheel_Launch extends OpMode {
 
     // ***** Helper Method for Telemetry
     public void telemetryOutput() {
+        telemetry.addData("Can fire", canLaunch(targetVelocity,tolerance));
         telemetry.update();
     }
 
