@@ -1,52 +1,31 @@
 package org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Workspaces.Oz;
 
-import com.qualcomm.hardware.limelightvision.LLResult;
-import com.qualcomm.hardware.limelightvision.LLResultTypes;
-import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.Range;
 
-import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
 import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Robots.DecodeBot_One__Wheel_Launch;
 
-import java.util.ArrayList;
-import java.util.List;
-
-@TeleOp(name = "Oz Test", group = "Drive")
+@TeleOp(name = "Oz big scary Test", group = "Test")
 public class test extends OpMode {
 
-    protected Limelight3A limelight;
+    public DecodeBot_One__Wheel_Launch decBot = new DecodeBot_One__Wheel_Launch();
 
-    // Drivetrain Variables
-    protected double leftStickYVal;
-    protected double leftStickXVal;
-    protected double rightStickYVal;
-    protected double rightStickXVal;
-    protected double frontLeftSpeed;
-    protected double frontRightSpeed;
-    protected double rearLeftSpeed;
-    protected double rearRightSpeed;
-    protected double powerThreshold;
 
     protected double moveSpeedMultiply = 0.75;
-
-    protected static final int PROFILE_1 = 1;
-    protected static final int PROFILE_2 = 2;
-    protected int currentProfile = PROFILE_1;
-
-    protected LLResult result;
-
     protected double targetVelocity = 0;
     protected double tolerance = 50;
+    protected double powerThreshold = 0.05;
 
-    protected double min_velocity_drop = 50;
-    protected List<Double> previousShotVelocityL = new ArrayList<>();
-    protected boolean hasStartedAutoLaunch = false;
-    protected boolean hasStartedFeeding = false;
-    protected boolean hasReleased = true;
-    public DecodeBot_One__Wheel_Launch decBot = new DecodeBot_One__Wheel_Launch();
+    protected double leftStickYVal, leftStickXVal, rightStickXVal;
+    protected double frontLeftSpeed, frontRightSpeed, rearLeftSpeed, rearRightSpeed;
+
+    // Debounce variables for velocity buttons
+    protected boolean prevLB = false, prevRB = false;
+    protected boolean prevLT = false, prevRT = false;
+    protected boolean prevDpadLeft = false, prevDpadRight = false;
+    protected boolean prevB = false;  // NEW: B button debounce
 
     @Override
     public void init() {
@@ -56,155 +35,30 @@ public class test extends OpMode {
 
     @Override
     public void loop() {
-        firingControl();
         driveControl();
+        intakeControl();
+        launchControl();
         telemetryOutput();
-        decBot.flylaunch(targetVelocity);
     }
-
-    private double getCurrentVelocity() {
-        return (decBot.launchFrontMotor.getVelocity() + decBot.launchBackMotor.getVelocity()) / 2.0;
-    }
-
-    public boolean canLaunch(double selected_speed, double tolerance) {
-        double upper_tolerance = Math.max(0, selected_speed + tolerance);
-        double lower_tolerance = Math.max(0, selected_speed - tolerance);
-        double currentVelocity = getCurrentVelocity();
-        return currentVelocity >= lower_tolerance && currentVelocity <= upper_tolerance;
-    }
-
-    public boolean velocityDrop() {
-        double currentVelocity = getCurrentVelocity();
-        previousShotVelocityL.add(currentVelocity);
-
-        if (previousShotVelocityL.size() > 50) {
-            previousShotVelocityL.remove(0);
-        }
-
-        double maxRecentVelocity = previousShotVelocityL.stream()
-                .mapToDouble(v -> v)
-                .max()
-                .orElse(currentVelocity);
-
-        double velocityDrop = maxRecentVelocity - currentVelocity;
-        return velocityDrop >= min_velocity_drop;
-    }
-
-    public void startSpeed(double selectedSpeed) {
-        if (!hasStartedAutoLaunch) {
-            hasStartedAutoLaunch = true;
-            decBot.flylaunch(selectedSpeed);
-        }
-    }
-
-    public void singleBallFire(double selectedSpeed, double tolerance) {
-        if (canLaunch(selectedSpeed, tolerance) && !hasStartedFeeding) {
-            hasStartedFeeding = true;
-            hasReleased = false;
-            decBot.startfeeding();
-        }
-
-        boolean hasDropped = velocityDrop();
-
-        if (hasStartedFeeding && hasDropped) {
-            hasReleased = true;
-            hasStartedFeeding = false;
-            decBot.stopfeeding();
-        }
-    }
-
-    public void launchAuto(double selectedSpeed, double tolerance) {
-        startSpeed(selectedSpeed);
-        // this loop as written will execute in a single loop() call and
-        // rely on velocityDrop() over time; consider state machine if needed
-        for (int i = 0; i < 3; i++) {
-            singleBallFire(selectedSpeed, tolerance);
-        }
-    }
-
-    public void firingControl() {
-
-        if (gamepad2.x) {
-            decBot.intakeControl(true);
-        }
-        if (gamepad2.a) {
-            decBot.intakeControl(false);
-        }
-
-
-        // Velocity adjustments:
-        // LT -100, RT +100, LB -50, RB +50
-        if (gamepad2.left_trigger > 0.5) {
-            targetVelocity -= 100;
-        }
-        if (gamepad2.right_trigger > 0.5) {
-            targetVelocity += 100;
-        }
-        if (gamepad2.left_bumper) {
-            targetVelocity -= 50;
-        }
-        if (gamepad2.right_bumper) {
-            targetVelocity += 50;
-        }
-
-        // Optional tolerance control on gamepad2 dpad
-        if (gamepad2.dpad_left) {
-            tolerance = Math.max(0, tolerance - 10);
-        }
-        if (gamepad2.dpad_right) {
-            tolerance += 10;
-        }
-
-        // Fire sequence button (example: gamepad2.start)
-        if (gamepad2.start) {
-            launchAuto(targetVelocity, tolerance);
-
-        }
-
-    }
-
-    // ======== Movement (gamepad1) ========
 
     public void driveControl() {
         speedControl();
         robotCentricDrive();
     }
 
-    public void robotCentricDrive() {
+    private void robotCentricDrive() {
         leftStickYVal = -gamepad1.left_stick_y;
-        leftStickYVal = Range.clip(leftStickYVal, -1, 1);
-
-        rightStickYVal = gamepad1.right_stick_y;
-        rightStickYVal = Range.clip(rightStickYVal, -1, 1);
-
         leftStickXVal = gamepad1.left_stick_x;
-        leftStickXVal = Range.clip(leftStickXVal, -1, 1);
-
         rightStickXVal = gamepad1.right_stick_x;
+
+        leftStickYVal = Range.clip(leftStickYVal, -1, 1);
+        leftStickXVal = Range.clip(leftStickXVal, -1, 1);
         rightStickXVal = Range.clip(rightStickXVal, -1, 1);
 
-        switch (currentProfile) {
-            case PROFILE_1:
-                frontLeftSpeed = leftStickYVal + leftStickXVal + rightStickXVal;
-                frontRightSpeed = leftStickYVal - leftStickXVal - rightStickXVal;
-                rearLeftSpeed = leftStickYVal - leftStickXVal + rightStickXVal;
-                rearRightSpeed = leftStickYVal + leftStickXVal - rightStickXVal;
-                break;
-
-            case PROFILE_2:
-                frontLeftSpeed = leftStickYVal + rightStickXVal + leftStickXVal;
-                frontRightSpeed = leftStickYVal - rightStickXVal - leftStickXVal;
-                rearLeftSpeed = leftStickYVal - rightStickXVal + leftStickXVal;
-                rearRightSpeed = leftStickYVal + rightStickXVal - leftStickXVal;
-                break;
-
-            default:
-                frontLeftSpeed = 0;
-                frontRightSpeed = 0;
-                rearLeftSpeed = 0;
-                rearRightSpeed = 0;
-                break;
-        }
+        frontLeftSpeed = leftStickYVal + leftStickXVal + rightStickXVal;
+        frontRightSpeed = leftStickYVal - leftStickXVal - rightStickXVal;
+        rearLeftSpeed = leftStickYVal - leftStickXVal + rightStickXVal;
+        rearRightSpeed = leftStickYVal + leftStickXVal - rightStickXVal;
 
         frontLeftSpeed = Range.clip(frontLeftSpeed, -1, 1);
         frontRightSpeed = Range.clip(frontRightSpeed, -1, 1);
@@ -217,31 +71,98 @@ public class test extends OpMode {
         setMotorPower(decBot.rearRightMotor, rearRightSpeed, powerThreshold, moveSpeedMultiply);
     }
 
-    public void speedControl() {
+    private void speedControl() {
         if (gamepad1.dpad_up) {
-            moveSpeedMultiply = 0.5;
+            moveSpeedMultiply = 1.0;
         } else if (gamepad1.dpad_right) {
             moveSpeedMultiply = 0.75;
         } else if (gamepad1.dpad_down) {
-            moveSpeedMultiply = 0.25;
+            moveSpeedMultiply = 0.5;
         } else if (gamepad1.dpad_left) {
-            moveSpeedMultiply = 1.0;
+            moveSpeedMultiply = 0.25;
         }
     }
 
-    // ======== Telemetry ========
+    public void intakeControl() {
+        if (gamepad2.a) {
+            decBot.intakeControl(false);  // Out
+        } else if (gamepad2.x) {
+            decBot.intakeControl(true);   // In
+        }
+    }
+
+    public void launchControl() {
+
+        if (gamepad2.b && !prevB) {
+            targetVelocity = 0;
+            decBot.intakeControl(false);
+        }
+
+        // Debounced trigger controls (coarse ±100)
+        if (gamepad2.left_trigger > 0.5 && !prevLT) {
+            targetVelocity = Math.max(0, targetVelocity - 100);
+        }
+        if (gamepad2.right_trigger > 0.5 && !prevRT) {
+            targetVelocity = 0;
+        }
+
+        // Debounced bumper controls (fine ±10)
+        if (gamepad2.left_bumper && !prevLB) {
+            targetVelocity = Math.max(0, targetVelocity - 10);
+        }
+        if (gamepad2.right_bumper && !prevRB) {
+            targetVelocity += 10;
+        }
+
+        // Debounced dpad tolerance controls
+        if (gamepad2.dpad_left && !prevDpadLeft) {
+            tolerance = Math.max(10, tolerance - 10);
+        }
+        if (gamepad2.dpad_right && !prevDpadRight) {
+            tolerance += 10;
+        }
+
+        // Fire (not debounced - can hold to keep firing)
+        if (gamepad2.y && canLaunch(targetVelocity, tolerance)) {
+            decBot.startfeeding();
+        }
+
+        // Always set launch motor velocity
+        decBot.flylaunch(targetVelocity);
+
+        // Update previous states for next loop
+        prevB = gamepad2.b;  // NEW
+        prevLT = gamepad2.left_trigger > 0.5;
+        prevRT = gamepad2.right_trigger > 0.5;
+        prevLB = gamepad2.left_bumper;
+        prevRB = gamepad2.right_bumper;
+        prevDpadLeft = gamepad2.dpad_left;
+        prevDpadRight = gamepad2.dpad_right;
+    }
+
+    private boolean canLaunch(double selected_speed, double tolerance) {
+        double currentVelocity = getCurrentVelocity();
+        double lower = Math.max(0, selected_speed - tolerance);
+        double upper = selected_speed + tolerance;
+        return currentVelocity >= lower && currentVelocity <= upper;
+    }
+
+    private double getCurrentVelocity() {
+        return (decBot.launchFrontMotor.getVelocity() + decBot.launchBackMotor.getVelocity()) / 2.0;
+    }
 
     public void telemetryOutput() {
-        telemetry.addData("Target Velocity", targetVelocity);
-        telemetry.addData("Current Velocity", getCurrentVelocity());
-        telemetry.addData("In Gate", canLaunch(targetVelocity, tolerance));
-        telemetry.addData("Thinks Fired", hasReleased || velocityDrop());
-        telemetry.addData("Tolerance", tolerance);
+        telemetry.addData("Drive Speed", String.format("%.2f", moveSpeedMultiply));
+        telemetry.addData("Target Velocity", String.format("%.1f", targetVelocity));
+        telemetry.addData("Current Velocity", String.format("%.1f", getCurrentVelocity()));
+        telemetry.addData("Launch Ready", canLaunch(targetVelocity, tolerance));
+        telemetry.addData("Tolerance", String.format("%.1f", tolerance));
+        telemetry.addData("Intake", gamepad2.x ? "IN" : (gamepad2.a ? "OUT" : (gamepad2.b ? "STOPPED" : "STOP")));
         telemetry.update();
     }
 
     public void setMotorPower(DcMotor motor, double speed, double threshold, double multiplier) {
-        if (speed <= threshold && speed >= -threshold) {
+        if (Math.abs(speed) <= threshold) {
             motor.setPower(0);
         } else {
             motor.setPower(speed * multiplier);
