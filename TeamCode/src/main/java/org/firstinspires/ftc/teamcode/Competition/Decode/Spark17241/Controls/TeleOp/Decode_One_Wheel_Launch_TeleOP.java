@@ -58,6 +58,9 @@ public class Decode_One_Wheel_Launch_TeleOP extends OpMode {
     public void init() {
         decBot.initRobot(hardwareMap);
         decBot.imu.resetYaw();// REV
+        limelight = hardwareMap.get(Limelight3A.class, "limelight");
+        limelight.pipelineSwitch(0);
+        limelight.start();
     }
 
     @Override
