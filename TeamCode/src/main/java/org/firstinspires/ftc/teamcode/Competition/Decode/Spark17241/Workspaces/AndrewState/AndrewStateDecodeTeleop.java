@@ -40,6 +40,11 @@ public class AndrewStateDecodeTeleop extends OpMode {
     //Limelight Cam data
     protected  LLResult result;
 
+    protected double autoTargetRotation = 0;
+    protected double autoTargetSpeed = .4;
+    protected double autoYawVariation = 1;
+
+    protected boolean isTracking = false;
 
     //Velocity of the Launching wheel
     protected double currentLaunchVelocity;
@@ -60,6 +65,7 @@ public class AndrewStateDecodeTeleop extends OpMode {
 
     @Override
     public void loop() {
+        driverOneInput();
         speedControl();
         limeLightData();
         autoTarget();
@@ -146,18 +152,16 @@ public class AndrewStateDecodeTeleop extends OpMode {
 
 
     // ***** Manual Feeder Wheel Controller
-    /*public void feedWheelManualControl() {
-        if (gamepad2.left_trigger > 0.5) {
-            decBot.feedArtifact(1.0);
+    public void driverOneInput() {
+        if (gamepad1.a) {
+            isTracking = true;
         }
-        else if (gamepad2.right_trigger > 0.5) {
-            decBot.feedArtifact(-1.0);
-        }
-        else if(gamepad2.left_stick_button){
-            decBot.feedArtifact(0);
+        if (gamepad1.b) {
+            isTracking = false;
         }
 
-    }*/
+
+    }
 
     //Auto Correction
     public void limeLightData() {
@@ -178,15 +182,18 @@ public class AndrewStateDecodeTeleop extends OpMode {
             telemetry.addData("AutoTarget", "No valid Limelight result");
             return;
         }
+        if(!isTracking)
+        {
+            autoTargetRotation = 0;
+        }
 
         List<LLResultTypes.FiducialResult> fiducialResults = result.getFiducialResults();
-        telemetry.addData("Result", fiducialResults);
         for (LLResultTypes.FiducialResult fr : fiducialResults) {
             Pose3D tagInCam = fr.getTargetPoseCameraSpace();     // pose of tag in CAMERA space
             double x = tagInCam.getPosition().x;  // right (+)
             double y = tagInCam.getPosition().y;  // down (+)
-            double forwardMeters = tagInCam.getPosition().z;  // forward/out of camera (+)
 
+            double forwardMeters = tagInCam.getPosition().z;  // forward/out of camera (+)
             double rangeMeters = Math.sqrt(x * x + y * y + forwardMeters * forwardMeters);// 3D range
 
             telemetry.addLine("-------------------------------------");
@@ -195,12 +202,55 @@ public class AndrewStateDecodeTeleop extends OpMode {
             telemetry.addData("Range (m)", "%.3f", rangeMeters);
             telemetry.addData("Yaw", fr.getTargetXDegrees());
             telemetry.addLine("-------------------------------------");
+            double tagXDegrees;
+
+            //Don't rotate for motif tags
+            if(fr.getFiducialId() == 21 || fr.getFiducialId() == 22 || fr.getFiducialId() == 23) {return;}
+
+            //Check for tags and get X degrees
+            tagXDegrees = fr.getFiducialId() == 20 ? fr.getTargetXDegrees() : 0;
+            tagXDegrees = fr.getFiducialId() == 24 ? fr.getTargetXDegrees() : tagXDegrees;
+
+            // --- Proportional Drive Control parameters  ---
+            double kP = 0.03;             // Proportional gain for turning and oscillation
+            double maxTurnSpeed = 0.50;  // Max turn power
+            double minTurnSpeed = 0.25;  // Minimum turn power to overcome friction
+            double tolerance = 1.5;      // Deadband in degrees that controls oscillation
+
+            // Proportional turning power
+            double power = kP * tagXDegrees;
+
+            // Clip to max speed
+            if (power > maxTurnSpeed) power = maxTurnSpeed;
+            if (power < -maxTurnSpeed) power = -maxTurnSpeed;
+
+            // Enforce a minimum power when we’re still outside tolerance
+            if (power > 0 && Math.abs(power) < minTurnSpeed) power = minTurnSpeed;
+            if (power < 0 && Math.abs(power) < minTurnSpeed) power = -minTurnSpeed;
+
+            // Map sign so that:
+            //  tx < 0 (tag left) so robot turns left (fl -, fr +)
+            //  tx > 0 (tag right) so robots turns right (fl +, fr -)
+            double frontLeft =  power;
+            double frontRight = -power;
+            double rearLeft =  power;
+            double rearRight = -power;
+
+            // Set motor powers
+            setMotorPower(decBot.frontLeftMotor, frontLeft, powerThreshold, 1.0);
+            setMotorPower(decBot.frontRightMotor, frontRight, powerThreshold, 1.0);
+            setMotorPower(decBot.rearLeftMotor, rearLeft, powerThreshold, 1.0);
+            setMotorPower(decBot.rearRightMotor, rearRight, powerThreshold, 1.0);
+
+            telemetry.addData("Align", "tx=%.2f, power=%.2f", tagXDegrees, power);
         }
     }
 
     // ***** Helper Method for Telemetry
     public void telemetryOutput() {
         telemetry.addLine("-------------------------------------");
+        telemetry.addData("Is Tracking: ", isTracking);
+        telemetry.addData("XVAL: ", leftStickXVal);
         telemetry.update();
     }
 
