@@ -6,10 +6,12 @@ import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
+import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
+import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Robots.DecodeBot;
 import java.util.List;
 import java.util.ArrayList;
-
 
 import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Robots.DecodeBot_One__Wheel_Launch;
 
@@ -304,4 +306,56 @@ public class Decode_One_Wheel_Launch extends OpMode {
     public void LEDDriver() {
         decBot.LEDCon(6);
     }
+
+     // + = tag is to the right of center, - = left.
+
+    public Double getTagAngleDegrees(int desiredTagId) {
+
+        LLResult result = limelight.getLatestResult();
+
+        if (result == null || !result.isValid()) {
+            return null;
+        }
+
+        List<LLResultTypes.FiducialResult> fiducials = result.getFiducialResults();
+
+        for (LLResultTypes.FiducialResult fr : fiducials) {
+            if (fr.getFiducialId() == desiredTagId) {
+                return fr.getTargetXDegrees();
+            }
+        }
+        // if no limelight found
+        return null;
+    }
+
+    public Double getTagDistanceMeters(int desiredTagId) {
+
+        LLResult result = limelight.getLatestResult();
+        if (result == null || !result.isValid()) {
+            return null;
+        }
+
+        List<LLResultTypes.FiducialResult> fiducials = result.getFiducialResults();
+        // yes i did steal this from andrew
+        for (LLResultTypes.FiducialResult fr : fiducials) {
+            if (fr.getFiducialId() == desiredTagId) {
+                Pose3D tagInCam = fr.getTargetPoseCameraSpace();
+                double x = tagInCam.getPosition().x;
+                double y = tagInCam.getPosition().y;
+                double z = tagInCam.getPosition().z;
+
+                double distanceMeters = Math.abs(Math.sqrt(x * x + y * y + z * z));
+                return distanceMeters;
+            }
+        }
+        // if no tag
+        return null;
+    }
+    public double calculateTargetVelocity(int tag){
+        double distance = getTagDistanceMeters(tag);
+        double velocity = 0;
+        return velocity;
+    }
+
+
 }

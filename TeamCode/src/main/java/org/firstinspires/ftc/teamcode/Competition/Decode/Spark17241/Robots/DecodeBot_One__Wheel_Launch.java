@@ -24,7 +24,6 @@ public class DecodeBot_One__Wheel_Launch {
     public DcMotorEx launchBackMotor;
 
 
-    public Servo feederLiftServo;
 
     public Servo LED;
 
@@ -65,7 +64,6 @@ public class DecodeBot_One__Wheel_Launch {
         //Flywheels & Feed Wheel
         launchFrontMotor = hwBot.get(DcMotorEx.class, "front_launch_wheel");;//Port ex 0
         launchBackMotor = hwBot.get(DcMotorEx.class, "back_launch_wheel");;//Port ex 0
-        feederLiftServo = hwBot.get(Servo.class,"feeder_servo");//Port ex 2
 
         LED = hwBot.servo.get("led");//Servo 1 Control
 
@@ -89,7 +87,7 @@ public class DecodeBot_One__Wheel_Launch {
         // Flywheel & Feeder Wheel Direction Mapping
         launchFrontMotor.setDirection(DcMotorSimple.Direction.FORWARD);
         launchBackMotor.setDirection(DcMotorSimple.Direction.FORWARD);
-        feederLiftServo.setDirection(Servo.Direction.FORWARD);
+
 
         // Flywheel & Feed Wheel Breaking
         launchFrontMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -122,14 +120,7 @@ public class DecodeBot_One__Wheel_Launch {
         launchFrontMotor.setVelocity(velocity);
         launchBackMotor.setVelocity(velocity);
     }
-    public void feedLiftArtifact(Boolean top_or_Bottom){
-        if (top_or_Bottom == true){
-            feederLiftServo.setPosition(top_servo_pos);
-        }
-        else{
-            feederLiftServo.setPosition(bottom_servo_pos);
-        }
-    }
+
     public void startfeeding(){
 
     }
