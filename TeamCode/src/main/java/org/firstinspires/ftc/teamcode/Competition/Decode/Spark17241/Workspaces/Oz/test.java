@@ -59,6 +59,7 @@ public class test extends OpMode {
         firingControl();
         driveControl();
         telemetryOutput();
+        decBot.flylaunch(targetVelocity);
     }
 
     private double getCurrentVelocity() {
