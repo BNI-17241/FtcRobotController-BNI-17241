@@ -57,8 +57,8 @@ public class AndrewStateDecodeBot {
         LED = hwBot.servo.get("led");//Servo 1 Control
 
         // Drivetrain Motor direction mapping
-        frontLeftMotor.setDirection(DcMotor.Direction.REVERSE);
-        frontRightMotor.setDirection(DcMotor.Direction.FORWARD);
+        frontRightMotor.setDirection(DcMotor.Direction.REVERSE);
+        frontLeftMotor.setDirection(DcMotor.Direction.FORWARD);
         rearLeftMotor.setDirection(DcMotor.Direction.REVERSE);
         rearRightMotor.setDirection(DcMotor.Direction.FORWARD);
 
