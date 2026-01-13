@@ -23,6 +23,8 @@ public class DecodeBot_One__Wheel_Launch {
     public DcMotorEx launchFrontMotor;
     public DcMotorEx launchBackMotor;
 
+    public DcMotor intakeFrontMotor;
+    public DcMotor intakeBackMotor;
 
 
     public Servo LED;
@@ -65,6 +67,10 @@ public class DecodeBot_One__Wheel_Launch {
         launchFrontMotor = hwBot.get(DcMotorEx.class, "front_launch_wheel");;//Port ex 0
         launchBackMotor = hwBot.get(DcMotorEx.class, "back_launch_wheel");;//Port ex 0
 
+        intakeFrontMotor = hwBot.dcMotor.get("front_intake_motor");
+        intakeBackMotor = hwBot.dcMotor.get("back_intake_motor");
+
+
         LED = hwBot.servo.get("led");//Servo 1 Control
 
         // Drivetrain Motor direction mapping
@@ -73,6 +79,8 @@ public class DecodeBot_One__Wheel_Launch {
         rearLeftMotor.setDirection(DcMotor.Direction.REVERSE);
         rearRightMotor.setDirection(DcMotor.Direction.FORWARD);
 
+        intakeFrontMotor.setDirection(DcMotorSimple.Direction.FORWARD);
+        intakeBackMotor.setDirection(DcMotorSimple.Direction.FORWARD);
         // Drivetrain Set Motor Run Modes
         setMotorRunModes(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         setMotorRunModes(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -82,6 +90,9 @@ public class DecodeBot_One__Wheel_Launch {
         frontRightMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rearLeftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rearRightMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+        intakeFrontMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        intakeBackMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
 
         // Flywheel & Feeder Wheel Direction Mapping
@@ -125,9 +136,16 @@ public class DecodeBot_One__Wheel_Launch {
 
     }
     public void stopfeeding(){
-
     }
-
-
-
+    public void intakeControl(boolean ison){
+        double intakeMotorPower = 50;
+        if (ison){
+            intakeFrontMotor.setPower(intakeMotorPower);
+            intakeBackMotor.setPower(intakeMotorPower);
+        }
+        else{
+            intakeFrontMotor.setPower(0);
+            intakeBackMotor.setPower(0);
+        }
+    }
 }

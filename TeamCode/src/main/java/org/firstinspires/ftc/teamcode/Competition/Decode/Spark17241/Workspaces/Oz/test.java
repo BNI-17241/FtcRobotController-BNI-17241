@@ -14,7 +14,7 @@ import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Robots.Decod
 import java.util.ArrayList;
 import java.util.List;
 
-@TeleOp(name = "Decode_One_Wheel_Launch", group = "Drive")
+@TeleOp(name = "Oz Test", group = "Drive")
 public class test extends OpMode {
 
     protected Limelight3A limelight;
@@ -32,26 +32,20 @@ public class test extends OpMode {
 
     protected double moveSpeedMultiply = 0.75;
 
-
     protected static final int PROFILE_1 = 1;
     protected static final int PROFILE_2 = 2;
     protected int currentProfile = PROFILE_1;
 
-
     protected LLResult result;
-
 
     protected double targetVelocity = 0;
     protected double tolerance = 50;
-
 
     protected double min_velocity_drop = 50;
     protected List<Double> previousShotVelocityL = new ArrayList<>();
     protected boolean hasStartedAutoLaunch = false;
     protected boolean hasStartedFeeding = false;
     protected boolean hasReleased = true;
-
-
     public DecodeBot_One__Wheel_Launch decBot = new DecodeBot_One__Wheel_Launch();
 
     @Override
@@ -66,8 +60,6 @@ public class test extends OpMode {
         driveControl();
         telemetryOutput();
     }
-
-
 
     private double getCurrentVelocity() {
         return (decBot.launchFrontMotor.getVelocity() + decBot.launchBackMotor.getVelocity()) / 2.0;

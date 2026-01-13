@@ -6,21 +6,18 @@ import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
-import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Robots.DecodeBot;
+
 import java.util.List;
 import java.util.ArrayList;
 
 import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Robots.DecodeBot_One__Wheel_Launch;
 
-import java.util.List;
-
 //
 
-@TeleOp(name = "Decode_One_Wheel_Launch", group = "Drive")
-public class Decode_One_Wheel_Launch extends OpMode {
+@TeleOp(name = "Decode_One_Wheel_Launch_TeleOP", group = "Drive")
+public class Decode_One_Wheel_Launch_TeleOP extends OpMode {
 
     protected  Limelight3A limelight;
 
