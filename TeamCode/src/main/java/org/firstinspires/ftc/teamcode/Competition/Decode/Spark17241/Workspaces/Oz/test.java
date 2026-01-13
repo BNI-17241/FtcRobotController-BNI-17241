@@ -124,17 +124,12 @@ public class test extends OpMode {
     public void firingControl() {
 
         if (gamepad2.x) {
-            targetVelocity = 700;
+            decBot.intakeControl(true);
         }
         if (gamepad2.a) {
-            targetVelocity = 800;
+            decBot.intakeControl(false);
         }
-        if (gamepad2.b) {
-            targetVelocity = 900;
-        }
-        if (gamepad2.y) {
-            targetVelocity = 1000;
-        }
+
 
         // Velocity adjustments:
         // LT -100, RT +100, LB -50, RB +50
@@ -162,7 +157,9 @@ public class test extends OpMode {
         // Fire sequence button (example: gamepad2.start)
         if (gamepad2.start) {
             launchAuto(targetVelocity, tolerance);
+
         }
+
     }
 
     // ======== Movement (gamepad1) ========
