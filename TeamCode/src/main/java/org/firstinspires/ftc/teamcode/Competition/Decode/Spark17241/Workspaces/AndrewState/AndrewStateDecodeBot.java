@@ -14,15 +14,11 @@ public class AndrewStateDecodeBot {
     public HardwareMap hwBot = null;
 
     //Drivetrain Motors
-    public DcMotor frontLeftMotor;
-    public DcMotor frontRightMotor;
-    public DcMotor rearLeftMotor;
-    public DcMotor rearRightMotor;
+    public DcMotor frontLeftMotor;//1
+    public DcMotor frontRightMotor;//0
+    public DcMotor rearLeftMotor;//3
+    public DcMotor rearRightMotor;//2
 
-    // Fly Wheels and Variable Feeder Motors
-    public DcMotorEx leftFlyWheel;
-    public DcMotorEx rightFlyWheel;
-    public DcMotor feederWheel;
     public Servo LED;
 
     public LinearOpMode LinearOp = null;
@@ -51,23 +47,20 @@ public class AndrewStateDecodeBot {
         hwBot = hwMap;
 
         //Drivetrain Motors HW Mapping
-        frontLeftMotor = hwBot.dcMotor.get("front_left_motor");//Port 0 Control
-        frontRightMotor = hwBot.dcMotor.get("front_right_motor");//Port 1 Control
-        rearLeftMotor = hwBot.dcMotor.get("rear_left_motor");//Port 2 Control
-        rearRightMotor = hwBot.dcMotor.get("rear_right_motor");//Port 3 Control
+        frontLeftMotor = hwBot.dcMotor.get("front_left_motor");//Port 1 Control
+        frontRightMotor = hwBot.dcMotor.get("front_right_motor");//Port 0 Control
+        rearLeftMotor = hwBot.dcMotor.get("rear_left_motor");//Port 3 Control
+        rearRightMotor = hwBot.dcMotor.get("rear_right_motor");//Port 2 Control
 
-        //Flywheels & Feed Wheel
-        leftFlyWheel = hwBot.get(DcMotorEx.class, "left_fly_wheel");;//Port ex 0
-        rightFlyWheel = hwBot.get(DcMotorEx.class, "right_fly_wheel");//Port ex 1
-        feederWheel = hwBot.get(DcMotorEx.class,"feeder_wheel");//Port ex 2
+
 
         LED = hwBot.servo.get("led");//Servo 1 Control
 
         // Drivetrain Motor direction mapping
-        frontLeftMotor.setDirection(DcMotor.Direction.FORWARD);
-        frontRightMotor.setDirection(DcMotor.Direction.REVERSE);
-        rearLeftMotor.setDirection(DcMotor.Direction.FORWARD);
-        rearRightMotor.setDirection(DcMotor.Direction.REVERSE);
+        frontLeftMotor.setDirection(DcMotor.Direction.REVERSE);
+        frontRightMotor.setDirection(DcMotor.Direction.FORWARD);
+        rearLeftMotor.setDirection(DcMotor.Direction.REVERSE);
+        rearRightMotor.setDirection(DcMotor.Direction.FORWARD);
 
         // Drivetrain Set Motor Run Modes
         setMotorRunModes(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -78,23 +71,6 @@ public class AndrewStateDecodeBot {
         frontRightMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rearLeftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rearRightMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-
-
-        // Flywheel & Feeder Wheel Direction Mapping
-        leftFlyWheel.setDirection(DcMotorSimple.Direction.FORWARD);
-        rightFlyWheel.setDirection(DcMotorSimple.Direction.REVERSE);
-        feederWheel.setDirection(DcMotorSimple.Direction.FORWARD);
-
-        // Flywheel & Feed Wheel Breaking
-        leftFlyWheel.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        rightFlyWheel.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        feederWheel.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-
-        // Flywheel & Feed Wheel Encoding for Using Velocity
-        leftFlyWheel.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        rightFlyWheel.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        feederWheel.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
 
         //IMU for Rev Robotics Control Hub
         RevHubOrientationOnRobot.LogoFacingDirection logoDirection = RevHubOrientationOnRobot.LogoFacingDirection.RIGHT;
@@ -112,18 +88,4 @@ public class AndrewStateDecodeBot {
         float n = new float[]{0, .279f, .333f, .388f, .5f, .611f, .722f}[color];
         LED.setPosition(n);
     }
-
-    public void flylaunch(double velocity ){
-
-        leftFlyWheel.setVelocity(velocity);
-        rightFlyWheel.setVelocity(velocity);
-
-    }
-    public void feedArtifact(double speed){
-
-        feederWheel.setPower(speed);
-
-
-    }
-
 }

@@ -53,12 +53,16 @@ public class AndrewStateDecodeTeleop extends OpMode {
     public void init() {
         decBot.initRobot(hardwareMap);
         decBot.imu.resetYaw();// REV
+        limelight = hardwareMap.get(Limelight3A.class, "limelight");
+        limelight.pipelineSwitch(0);
+        limelight.start();
     }
 
     @Override
     public void loop() {
         speedControl();
         limeLightData();
+        autoTarget();
         telemetryOutput();
         robotCentricDrive();
         LEDDriver();
@@ -167,15 +171,36 @@ public class AndrewStateDecodeTeleop extends OpMode {
         } else {
             telemetry.addData("Limelight", "No data available");
         }
-
     }
 
     public void autoTarget() {
+        if (result == null || !result.isValid()) {
+            telemetry.addData("AutoTarget", "No valid Limelight result");
+            return;
+        }
 
+        List<LLResultTypes.FiducialResult> fiducialResults = result.getFiducialResults();
+        telemetry.addData("Result", fiducialResults);
+        for (LLResultTypes.FiducialResult fr : fiducialResults) {
+            Pose3D tagInCam = fr.getTargetPoseCameraSpace();     // pose of tag in CAMERA space
+            double x = tagInCam.getPosition().x;  // right (+)
+            double y = tagInCam.getPosition().y;  // down (+)
+            double forwardMeters = tagInCam.getPosition().z;  // forward/out of camera (+)
+
+            double rangeMeters = Math.sqrt(x * x + y * y + forwardMeters * forwardMeters);// 3D range
+
+            telemetry.addLine("-------------------------------------");
+            telemetry.addData("Tag ID", fr.getFiducialId());
+            telemetry.addData("Forward (m)", "%.3f", forwardMeters);
+            telemetry.addData("Range (m)", "%.3f", rangeMeters);
+            telemetry.addData("Yaw", fr.getTargetXDegrees());
+            telemetry.addLine("-------------------------------------");
+        }
     }
 
     // ***** Helper Method for Telemetry
     public void telemetryOutput() {
+        telemetry.addLine("-------------------------------------");
         telemetry.update();
     }
 
