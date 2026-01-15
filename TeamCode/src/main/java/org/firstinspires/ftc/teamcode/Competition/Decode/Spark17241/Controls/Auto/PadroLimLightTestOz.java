@@ -11,12 +11,15 @@ import com.qualcomm.hardware.limelightvision.LLResult;
 import com.qualcomm.hardware.limelightvision.LLResultTypes;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
 
+import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.pedroPathing.Constants;
+
 
 @Autonomous(name = "padro Limlight TestOz", group = "Drive")
-public class padroLimlightTestOz extends OpMode {
+public class PadroLimLightTestOz extends OpMode {
 
     public Follower follower;
     public Timer pathTimer, opmodeTimer;
+
 
     protected Limelight3A limelight;
 
@@ -72,6 +75,11 @@ public class padroLimlightTestOz extends OpMode {
             Inside_pose = new Pose(48, 34, Math.toRadians(180)); // third closest 23
             Outside_pose = new Pose(32, 34, Math.toRadians(180));
         }
+        if (Inside_pose == null || Outside_pose == null){ // fall back incase error happens
+            Inside_pose = new Pose(48, 81, Math.toRadians(180));
+            Outside_pose = new Pose(32, 81, Math.toRadians(180));
+        }
+
         start_to_ball_inside = follower
                 .pathBuilder()
                 .addPath(
@@ -107,6 +115,8 @@ public class padroLimlightTestOz extends OpMode {
 
     @Override
     public void init() {
+        limelight = hardwareMap.get(Limelight3A.class, "limelight");
+        follower = Constants.createFollower(hardwareMap);
         limelight.start();
         limelight.pipelineSwitch(0);
     }
@@ -143,6 +153,11 @@ public class padroLimlightTestOz extends OpMode {
                 if (!(follower.isBusy())) {
                     follower.followPath(fire_location_to_park);
                     pathState = pathingState.PARK;
+                }
+                break;
+            case PARK:
+                if (!(follower.isBusy())) {
+                    pathState = pathingState.FINISHED;
                 }
                 break;
             case FINISHED:
