@@ -8,6 +8,8 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.CRServo;
+
 
 public class AndrewStateDecodeBot {
 
@@ -24,6 +26,8 @@ public class AndrewStateDecodeBot {
     public DcMotorEx launchBackMotor;
 
     public DcMotor intakeMotor;
+
+    public CRServo transferServo;
 
     public Servo LED;
 
@@ -64,7 +68,7 @@ public class AndrewStateDecodeBot {
 
         intakeMotor = hwBot.dcMotor.get("intake_motor");
 
-
+        transferServo = hwBot.crservo.get("transfer_servo");
         LED = hwBot.servo.get("led");//Servo 1 Control
 
         // Drivetrain Motor direction mapping
@@ -131,5 +135,8 @@ public class AndrewStateDecodeBot {
     {
         float n = new float[]{0, .279f, .333f, .388f, .5f, .611f, .722f}[color];
         LED.setPosition(n);
+    }
+    public void transferSpeedCon(double speed){
+        transferServo.setPower(speed);
     }
 }

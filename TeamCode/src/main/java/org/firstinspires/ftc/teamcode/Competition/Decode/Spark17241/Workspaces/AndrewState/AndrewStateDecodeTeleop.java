@@ -60,6 +60,7 @@ public class AndrewStateDecodeTeleop extends OpMode {
     protected boolean hasStartedFeeding = false;
     protected boolean hasReleased = true;
 
+    protected double transferServoSpeed = 1;
 
     // Instantiation of Robot using Robot Class Constructor
     public AndrewStateDecodeBot decBot = new AndrewStateDecodeBot();
@@ -149,15 +150,7 @@ public class AndrewStateDecodeTeleop extends OpMode {
 
     // ***** Helper Method for Speed Control
     public void speedControl() {
-        if (gamepad1.dpad_up) {
-            moveSpeedMultiply = 0.5;
-        } else if (gamepad1.dpad_right) {
-            moveSpeedMultiply = 0.75;
-        } else if (gamepad1.dpad_down) {
-            moveSpeedMultiply = 0.25;
-        } else if (gamepad1.dpad_left) {
-            moveSpeedMultiply = 1;
-        }
+
     }
 
     //*********  Driver 2 Control Methods *****************
@@ -229,12 +222,14 @@ public class AndrewStateDecodeTeleop extends OpMode {
 
     // ***** Manual Feeder Wheel Controller
     public void driverOneInput() {
+        //Check if tracking april tags
         if (gamepad1.a) {
             isTracking = true;
         }
         if (gamepad1.b) {
             isTracking = false;
         }
+        //Change ground move speed
         if (gamepad1.dpad_right) {
             moveSpeedMultiply = 0.5;
         } else if (gamepad1.dpad_down) {
@@ -243,6 +238,16 @@ public class AndrewStateDecodeTeleop extends OpMode {
             moveSpeedMultiply = 0.25;
         } else if (gamepad1.dpad_left) {
             moveSpeedMultiply = 1;
+        }
+        //Control transfer servo
+        if(gamepad1.left_bumper){
+            decBot.transferSpeedCon(transferServoSpeed);
+        }
+        else if(gamepad1.right_bumper){
+            decBot.transferSpeedCon(-transferServoSpeed);
+        }
+        else{
+            decBot.transferSpeedCon(0);
         }
     }
 
@@ -290,7 +295,7 @@ public class AndrewStateDecodeTeleop extends OpMode {
         {
             autoTargetRotation = 0;
         }
-
+        else{
         List<LLResultTypes.FiducialResult> fiducialResults = result.getFiducialResults();
         for (LLResultTypes.FiducialResult fr : fiducialResults) {
             Pose3D tagInCam = fr.getTargetPoseCameraSpace();     // pose of tag in CAMERA space
@@ -309,17 +314,19 @@ public class AndrewStateDecodeTeleop extends OpMode {
             double tagXDegrees;
 
             //Don't rotate for motif tags
-            if(fr.getFiducialId() == 21 || fr.getFiducialId() == 22 || fr.getFiducialId() == 23) {return;}
+            if (fr.getFiducialId() == 21 || fr.getFiducialId() == 22 || fr.getFiducialId() == 23) {
+                return;
+            }
 
             //Check for tags and get X degrees
             tagXDegrees = fr.getFiducialId() == 20 ? fr.getTargetXDegrees() : 0;
             tagXDegrees = fr.getFiducialId() == 24 ? fr.getTargetXDegrees() : tagXDegrees;
 
             // --- Proportional Drive Control parameters  ---
-            double kP = 0.04;             // Proportional gain for turning and oscillation
-            double maxTurnSpeed = 0.4;   // Max turn power
+            double kP = 0.08;             // Proportional gain for turning and oscillation
+            double maxTurnSpeed = 1;   // Max turn power
             double minTurnSpeed = 0.25;  // Minimum turn power to overcome friction
-            double tolerance = 1.5;      // Deadband in degrees that controls oscillation
+            double tolerance = 2;      // Deadband in degrees that controls oscillation
 
             // If we’re close enough, stop and don’t oscillate
             if (Math.abs(tagXDegrees) < tolerance) {
@@ -346,9 +353,9 @@ public class AndrewStateDecodeTeleop extends OpMode {
             // Map sign so that:
             //  tx < 0 (tag left) so robot turns left (fl -, fr +)
             //  tx > 0 (tag right) so robots turns right (fl +, fr -)
-            double frontLeft =  power;
+            double frontLeft = power;
             double frontRight = -power;
-            double rearLeft =  power;
+            double rearLeft = power;
             double rearRight = -power;
 
             // Set motor powers
@@ -358,6 +365,7 @@ public class AndrewStateDecodeTeleop extends OpMode {
             setMotorPower(decBot.rearRightMotor, rearRight, powerThreshold, 1.0);
 
             telemetry.addData("Align", "tx=%.2f, power=%.2f", tagXDegrees, power);
+            }
         }
     }
 
