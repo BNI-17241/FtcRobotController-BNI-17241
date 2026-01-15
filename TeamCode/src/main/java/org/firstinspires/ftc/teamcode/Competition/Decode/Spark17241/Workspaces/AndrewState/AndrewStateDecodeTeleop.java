@@ -12,6 +12,7 @@ import com.qualcomm.robotcore.util.Range;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
 import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Robots.DecodeBot;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @TeleOp(name = "Andrew State Decode Teleop", group = "Drive")
@@ -30,7 +31,8 @@ public class AndrewStateDecodeTeleop extends OpMode {
     protected double rearLeftSpeed;
     protected double rearRightSpeed;
     protected double powerThreshold;
-    protected double speedMultiply = 0.75;
+
+    protected double moveSpeedMultiply = 0.75;
 
     // Drive Profile Control Variables
     protected  static final int PROFILE_1 = 1;  //User 1
@@ -46,8 +48,17 @@ public class AndrewStateDecodeTeleop extends OpMode {
 
     protected boolean isTracking = false;
 
-    //Velocity of the Launching wheel
-    protected double currentLaunchVelocity;
+    //Velocity of the Launching wheels
+    protected double targetVelocity;
+
+    protected double tolerance = 50;
+
+    protected double min_velocity_drop = 50; // threshold for detecting ball contact
+    protected List<Double> previousShotVelocityL = new ArrayList<>();
+
+    protected boolean hasStartedAutoLaunch = false;
+    protected boolean hasStartedFeeding = false;
+    protected boolean hasReleased = true;
 
 
     // Instantiation of Robot using Robot Class Constructor
@@ -73,6 +84,8 @@ public class AndrewStateDecodeTeleop extends OpMode {
         robotCentricDrive();
         LEDDriver();
     }
+
+
 
 
 
@@ -128,26 +141,89 @@ public class AndrewStateDecodeTeleop extends OpMode {
         rearRightSpeed = Range.clip(rearRightSpeed, -1, 1);
 
         // Setting motor powers (with threshold check)
-        setMotorPower(decBot.frontLeftMotor, frontLeftSpeed, powerThreshold, speedMultiply);
-        setMotorPower(decBot.frontRightMotor, frontRightSpeed, powerThreshold, speedMultiply);
-        setMotorPower(decBot.rearLeftMotor, rearLeftSpeed, powerThreshold, speedMultiply);
-        setMotorPower(decBot.rearRightMotor, rearRightSpeed, powerThreshold, speedMultiply);
+        setMotorPower(decBot.frontLeftMotor, frontLeftSpeed, powerThreshold, moveSpeedMultiply);
+        setMotorPower(decBot.frontRightMotor, frontRightSpeed, powerThreshold, moveSpeedMultiply);
+        setMotorPower(decBot.rearLeftMotor, rearLeftSpeed, powerThreshold, moveSpeedMultiply);
+        setMotorPower(decBot.rearRightMotor, rearRightSpeed, powerThreshold, moveSpeedMultiply);
     }
 
     // ***** Helper Method for Speed Control
     public void speedControl() {
         if (gamepad1.dpad_up) {
-            speedMultiply = 0.5;
+            moveSpeedMultiply = 0.5;
         } else if (gamepad1.dpad_right) {
-            speedMultiply = 0.75;
+            moveSpeedMultiply = 0.75;
         } else if (gamepad1.dpad_down) {
-            speedMultiply = 0.25;
+            moveSpeedMultiply = 0.25;
         } else if (gamepad1.dpad_left) {
-            speedMultiply = 1;
+            moveSpeedMultiply = 1;
         }
     }
 
     //*********  Driver 2 Control Methods *****************
+
+
+
+    //********* Firing Control ****************************
+    public boolean canLaunch(double selected_speed, double tolerance) {
+        double upper_tolerance = Math.max(0, selected_speed + tolerance);
+        double lower_tolerance = Math.max(0, selected_speed - tolerance);
+        double currentVelocity = getCurrentVelocity();
+
+        return currentVelocity >= lower_tolerance && currentVelocity <= upper_tolerance;
+    }
+
+    public boolean velocityDrop() {
+        // Track most recent measurements
+        double currentVelocity = getCurrentVelocity();
+        previousShotVelocityL.add(currentVelocity);
+
+        // Maintain window of last 50 readings
+        if (previousShotVelocityL.size() > 50) {
+            previousShotVelocityL.remove(0);
+        }
+
+        // Detect if significant drop occurred
+        double maxRecentVelocity = previousShotVelocityL.stream()
+                .mapToDouble(v -> v)
+                .max()
+                .orElse(currentVelocity);
+
+        double velocityDrop = maxRecentVelocity - currentVelocity;
+        return velocityDrop >= min_velocity_drop;
+    }
+
+    public void startSpeed(double selectedSpeed) {
+        if (!hasStartedAutoLaunch) { // should be negated
+            hasStartedAutoLaunch = true;
+            decBot.flylaunch(selectedSpeed); // start up motors
+        }
+    }
+
+    public void singleBallFire(double selectedSpeed, double tolerance) {
+        // If speed is within range, start feeding once
+        if (canLaunch(selectedSpeed, tolerance) && !hasStartedFeeding) {
+            hasStartedFeeding = true;
+            hasReleased = false;
+        }
+        boolean hasdroped = velocityDrop();
+        // Stop feeding once velocity drop indicates the ball launched
+        if (hasStartedFeeding && hasdroped) {
+            hasReleased = true;
+            hasStartedFeeding = false;
+        }
+        telemetry.addData("has dropped", hasdroped);
+    }
+
+    public void launchAuto(double selectedSpeed, double tolerance) {
+        startSpeed(selectedSpeed);
+        int ballCount = 3;
+        for (int i = 1; i <= ballCount; i++) {
+            singleBallFire(selectedSpeed, tolerance);
+        }
+    }
+
+
 
 
 
@@ -159,7 +235,35 @@ public class AndrewStateDecodeTeleop extends OpMode {
         if (gamepad1.b) {
             isTracking = false;
         }
+        if (gamepad1.dpad_right) {
+            moveSpeedMultiply = 0.5;
+        } else if (gamepad1.dpad_down) {
+            moveSpeedMultiply = 0.75;
+        } else if (gamepad1.dpad_up) {
+            moveSpeedMultiply = 0.25;
+        } else if (gamepad1.dpad_left) {
+            moveSpeedMultiply = 1;
+        }
+    }
 
+    public void driverTwoInput(){
+        if (gamepad2.x) {       // Square
+            // NEAR preset
+            targetVelocity = 700;
+        }
+        if (gamepad2.a) {   // X
+            targetVelocity = 800;
+        }
+        if (gamepad2.b) { // Circle
+            targetVelocity = 900;
+        }
+        if (gamepad2.y) { // Triangle
+            targetVelocity = 1000;
+        }
+
+        if (gamepad2.dpad_up)     { targetVelocity += 1; }
+        if (gamepad2.dpad_down)   { targetVelocity -= 1; }
+        if (gamepad2.left_bumper) { targetVelocity = 0;  }
 
     }
 
@@ -217,6 +321,17 @@ public class AndrewStateDecodeTeleop extends OpMode {
             double minTurnSpeed = 0.25;  // Minimum turn power to overcome friction
             double tolerance = 1.5;      // Deadband in degrees that controls oscillation
 
+            // If we’re close enough, stop and don’t oscillate
+            if (Math.abs(tagXDegrees) < tolerance) {
+                decBot.frontLeftMotor.setPower(0);
+                decBot.rearLeftMotor.setPower(0);
+                decBot.frontRightMotor.setPower(0);
+                decBot.rearRightMotor.setPower(0);
+                telemetry.addData("Align", "Aligned! tx=%.2f", tagXDegrees);
+                telemetry.addData("Tag", "ID: %d", fr.getFiducialId());
+                return;
+            }
+
             // Proportional turning power
             double power = kP * tagXDegrees;
 
@@ -249,9 +364,16 @@ public class AndrewStateDecodeTeleop extends OpMode {
     // ***** Helper Method for Telemetry
     public void telemetryOutput() {
         telemetry.addLine("-------------------------------------");
+        telemetry.addData("Target Velocity: ", targetVelocity);
+        telemetry.addLine("-------------------------------------");
         telemetry.addData("Is Tracking: ", isTracking);
-        telemetry.addData("XVAL: ", leftStickXVal);
         telemetry.update();
+    }
+
+    //******** Helper Functions **************************
+    private double getCurrentVelocity() {
+        // Averages front and back motor velocity
+        return (decBot.launchFrontMotor.getVelocity() + decBot.launchBackMotor.getVelocity()) / 2.0;
     }
 
     // ****** Helper method to set Motor Power
