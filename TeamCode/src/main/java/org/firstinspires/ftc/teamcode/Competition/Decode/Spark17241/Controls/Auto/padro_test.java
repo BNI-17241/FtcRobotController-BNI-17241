@@ -138,12 +138,28 @@ public class padro_test extends OpMode {
         switch (pathState) {
             case START:
                 follower.followPath(start_to_ball_inside);
-                pathingState pathState = pathingState.INSIDE;
+                pathState = pathingState.INSIDE;
                 break;
             case INSIDE:
                 if (!(follower.isBusy())) {
                     follower.followPath(ball_inside_to_ball_outside);
-                    //pathingState pathState = pathingState.OUTSIDE;
-                }           }
+                    pathState = pathingState.OUTSIDE;
+                }
+                break;
+            case OUTSIDE:
+                if (!(follower.isBusy())) {
+                    follower.followPath(ball_outside_to_fire_location);
+                    pathState = pathingState.FIRING;
+                }
+                break;
+            case FIRING:
+                if (!(follower.isBusy())) {
+                    follower.followPath(fire_location_to_park);
+                    pathState = pathingState.PARK;
+                }
+                break;
+            case FINISHED:
+                break;
+        }
     }
 }
