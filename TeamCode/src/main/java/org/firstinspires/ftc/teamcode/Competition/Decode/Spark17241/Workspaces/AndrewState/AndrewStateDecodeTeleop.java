@@ -316,8 +316,8 @@ public class AndrewStateDecodeTeleop extends OpMode {
             tagXDegrees = fr.getFiducialId() == 24 ? fr.getTargetXDegrees() : tagXDegrees;
 
             // --- Proportional Drive Control parameters  ---
-            double kP = 0.03;             // Proportional gain for turning and oscillation
-            double maxTurnSpeed = 0.50;  // Max turn power
+            double kP = 0.04;             // Proportional gain for turning and oscillation
+            double maxTurnSpeed = 0.4;  // Max turn power
             double minTurnSpeed = 0.25;  // Minimum turn power to overcome friction
             double tolerance = 1.5;      // Deadband in degrees that controls oscillation
 
