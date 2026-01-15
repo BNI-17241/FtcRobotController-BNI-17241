@@ -1,5 +1,4 @@
 package org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Controls.Auto;
-import com.pedropathing.paths.Path;
 import com.pedropathing.paths.PathChain;
 import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.BezierLine;
@@ -11,21 +10,10 @@ import java.util.List;
 import com.qualcomm.hardware.limelightvision.LLResult;
 import com.qualcomm.hardware.limelightvision.LLResultTypes;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
-import com.qualcomm.hardware.limelightvision.LLResult;
-import com.qualcomm.hardware.limelightvision.LLResultTypes;
-import com.qualcomm.hardware.limelightvision.Limelight3A;
-import com.qualcomm.robotcore.eventloop.opmode.OpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.util.ElapsedTime;
-import com.qualcomm.robotcore.util.Range;
 
-import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
-import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Controls.Auto.RedAlliance.RedStartHumanFarLaunch;
-import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Robots.DecodeBot;
 
-@Autonomous(name = "Red:Start Human:Far Launch", group = "Drive")
-public class padro_test extends OpMode {
+@Autonomous(name = "padro Limlight TestOz", group = "Drive")
+public class padroLimlightTestOz extends OpMode {
 
     public Follower follower;
     public Timer pathTimer, opmodeTimer;
@@ -73,16 +61,16 @@ public class padro_test extends OpMode {
 
     public void Paths_generation(int april_tag) {
         if (april_tag == 21){
-             final Pose Inside_pose = new Pose(48, 81, Math.toRadians(180)); // closest to human 21
-             final Pose Outide_pose = new Pose(32, 81, Math.toRadians(180));
+            Inside_pose = new Pose(48, 81, Math.toRadians(180)); // closest to human 21
+            Outside_pose = new Pose(32, 81, Math.toRadians(180));
         }
         if (april_tag == 22){
-            final Pose Inside_pose = new Pose(48, 57.5, Math.toRadians(180)); // secount clostest 22
-            final Pose Outide_pose = new Pose(32, 57.5, Math.toRadians(180));
+            Inside_pose = new Pose(48, 57.5, Math.toRadians(180)); // secount clostest 22
+            Outside_pose = new Pose(32, 57.5, Math.toRadians(180));
         }
         if (april_tag == 23){
-            final Pose Inside_pose = new Pose(48, 34, Math.toRadians(180)); // third closest 23
-            final Pose Outide_pose = new Pose(32, 34, Math.toRadians(180));
+            Inside_pose = new Pose(48, 34, Math.toRadians(180)); // third closest 23
+            Outside_pose = new Pose(32, 34, Math.toRadians(180));
         }
         start_to_ball_inside = follower
                 .pathBuilder()
@@ -120,7 +108,6 @@ public class padro_test extends OpMode {
     @Override
     public void init() {
         limelight.start();
-        limelight = hardwareMap.get(Limelight3A.class, "limelight");
         limelight.pipelineSwitch(0);
     }
 
