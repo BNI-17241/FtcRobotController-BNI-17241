@@ -104,7 +104,7 @@ public class test extends OpMode {
             targetVelocity = Math.max(0, targetVelocity - 100);
         }
         if (gamepad2.right_trigger > 0.5 && !prevRT) {
-            targetVelocity = 0;
+            targetVelocity += 100;
         }
 
         if (gamepad2.left_bumper && !prevLB) {
@@ -119,6 +119,9 @@ public class test extends OpMode {
         }
         if (gamepad2.dpad_right && !prevDpadRight) {
             tolerance += 10;
+        }
+        if (gamepad2.y){
+            targetVelocity = 1000;
         }
 
         prevB = gamepad2.b;
