@@ -25,11 +25,12 @@ public class PadroLimLightTestOz extends OpMode {
 
     public Pose Inside_pose;
     public Pose Outside_pose;
+    // SIMPLE POSES
     public final Pose StartPose = new Pose(42, 8.5, Math.toRadians(0));
     public final Pose FiringPose = new Pose(58, 86, Math.toRadians(135));
     public final Pose ParkPose = new Pose(45, 12, Math.toRadians(0));
 
-
+    // init for april tag value so its public in case needed in outher systems
     public int april_tag_value;
 
 
@@ -66,20 +67,20 @@ public class PadroLimLightTestOz extends OpMode {
         // definie inside/ outside (aka where
 
         if (april_tag == 21){
-            Inside_pose = new Pose(48, 81, Math.toRadians(180)); // closest to human 21
-            Outside_pose = new Pose(16, 81, Math.toRadians(180));
+            Inside_pose = new Pose(48, 37, Math.toRadians(180)); // closest to human 21
+            Outside_pose = new Pose(16, 37, Math.toRadians(180));
         }
         if (april_tag == 22){
-            Inside_pose = new Pose(48, 57.5, Math.toRadians(180)); // secount clostest 22
-            Outside_pose = new Pose(16, 57.5, Math.toRadians(180));
+            Inside_pose = new Pose(48, 61, Math.toRadians(180)); // secount clostest 22
+            Outside_pose = new Pose(16, 61, Math.toRadians(180));
         }
         if (april_tag == 23){
-            Inside_pose = new Pose(48, 34, Math.toRadians(180)); // third closest 23
-            Outside_pose = new Pose(16, 34, Math.toRadians(180));
+            Inside_pose = new Pose(48, 85, Math.toRadians(180)); // third closest 23
+            Outside_pose = new Pose(16, 85, Math.toRadians(180));
         }
         if (Inside_pose == null || Outside_pose == null){ // fall back incase error happens
-            Inside_pose = new Pose(48, 81, Math.toRadians(180));
-            Outside_pose = new Pose(16, 81, Math.toRadians(180));
+            Inside_pose = new Pose(48, 37, Math.toRadians(180));
+            Outside_pose = new Pose(16, 37, Math.toRadians(180));
         }
 
         start_to_ball_inside = follower
@@ -117,6 +118,7 @@ public class PadroLimLightTestOz extends OpMode {
 
     @Override
     public void init() {
+        // turns on all timlight stuff
         limelight = hardwareMap.get(Limelight3A.class, "limelight");
         follower = Constants.createFollower(hardwareMap);
         limelight.start();
@@ -125,16 +127,18 @@ public class PadroLimLightTestOz extends OpMode {
 
     @Override
     public void start(){
+        //gets april tag value
         april_tag_value = limeLightData();
+        //generates path based on april tag
         Paths_generation(april_tag_value);
     }
-
+    //set up simple states
     public enum pathingState {START, INSIDE, OUTSIDE, FIRING, PARK, FINISHED}
     public pathingState pathState = pathingState.START;
 
     @Override
     public void loop() {
-        // very simple movment test path
+        // very simple movment test
         switch (pathState) {
             case START:
                 follower.followPath(start_to_ball_inside);
@@ -168,3 +172,5 @@ public class PadroLimLightTestOz extends OpMode {
         }
     }
 }
+
+//I added coment
