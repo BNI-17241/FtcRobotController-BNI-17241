@@ -63,21 +63,23 @@ public class PadroLimLightTestOz extends OpMode {
     }
 
     public void Paths_generation(int april_tag) {
+        // definie inside/ outside (aka where
+
         if (april_tag == 21){
             Inside_pose = new Pose(48, 81, Math.toRadians(180)); // closest to human 21
-            Outside_pose = new Pose(32, 81, Math.toRadians(180));
+            Outside_pose = new Pose(16, 81, Math.toRadians(180));
         }
         if (april_tag == 22){
             Inside_pose = new Pose(48, 57.5, Math.toRadians(180)); // secount clostest 22
-            Outside_pose = new Pose(32, 57.5, Math.toRadians(180));
+            Outside_pose = new Pose(16, 57.5, Math.toRadians(180));
         }
         if (april_tag == 23){
             Inside_pose = new Pose(48, 34, Math.toRadians(180)); // third closest 23
-            Outside_pose = new Pose(32, 34, Math.toRadians(180));
+            Outside_pose = new Pose(16, 34, Math.toRadians(180));
         }
         if (Inside_pose == null || Outside_pose == null){ // fall back incase error happens
             Inside_pose = new Pose(48, 81, Math.toRadians(180));
-            Outside_pose = new Pose(32, 81, Math.toRadians(180));
+            Outside_pose = new Pose(16, 81, Math.toRadians(180));
         }
 
         start_to_ball_inside = follower
@@ -132,6 +134,7 @@ public class PadroLimLightTestOz extends OpMode {
 
     @Override
     public void loop() {
+        // very simple movment test path
         switch (pathState) {
             case START:
                 follower.followPath(start_to_ball_inside);
