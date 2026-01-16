@@ -26,9 +26,9 @@ public class PadroLimLightTestOz extends OpMode {
     public Pose Inside_pose;
     public Pose Outside_pose;
     // SIMPLE POSES
-    public final Pose StartPose = new Pose(42, 8.5, Math.toRadians(0));
+    public final Pose StartPose = new Pose(42, 8.5, Math.toRadians(90));
     public final Pose FiringPose = new Pose(58, 86, Math.toRadians(135));
-    public final Pose ParkPose = new Pose(45, 12, Math.toRadians(0));
+    public final Pose ParkPose = new Pose(45, 18, Math.toRadians(90));
 
     // init for april tag value so its public in case needed in outher systems
     public int april_tag_value;
