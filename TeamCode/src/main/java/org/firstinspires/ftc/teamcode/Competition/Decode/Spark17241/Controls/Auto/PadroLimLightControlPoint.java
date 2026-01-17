@@ -1,21 +1,24 @@
 package org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Controls.Auto;
-import com.pedropathing.paths.PathChain;
+
 import com.pedropathing.follower.Follower;
+import com.pedropathing.geometry.BezierCurve;
 import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
+import com.pedropathing.paths.PathChain;
 import com.pedropathing.util.Timer;
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.OpMode;
-import java.util.List;
 import com.qualcomm.hardware.limelightvision.LLResult;
 import com.qualcomm.hardware.limelightvision.LLResultTypes;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.pedroPathing.Constants;
 
+import java.util.List;
+
 
 @Autonomous(name = "padro Limlight TestOz", group = "Drive")
-public class PadroLimLightTestOz extends OpMode {
+public class PadroLimLightControlPoint extends OpMode {
 
     public Follower follower;
     public Timer pathTimer, opmodeTimer;
@@ -30,6 +33,8 @@ public class PadroLimLightTestOz extends OpMode {
     public final Pose FiringPose = new Pose(58, 86, Math.toRadians(135));
     public final Pose ParkPose = new Pose(45, 18, Math.toRadians(90));
 
+    public final Pose ControlPointFiringLocation = new Pose(50, 30);
+
     // init for april tag value so its public in case needed in outher systems
     public int april_tag_value;
 
@@ -43,8 +48,8 @@ public class PadroLimLightTestOz extends OpMode {
 //    protected final Pose GPPPose = new Pose(48, 34, Math.toRadians(180)); // third closest 23
 //    protected final Pose GPPPosePickup = new Pose(32, 34, Math.toRadians(180));
 
-
-    protected PathChain start_to_ball_inside;
+    protected PathChain start_to_fire_location;
+    protected PathChain fire_location_to_ball_inside;
     protected PathChain ball_inside_to_ball_outside;
     protected PathChain ball_outside_to_fire_location;
     protected PathChain fire_location_to_park;
@@ -83,12 +88,17 @@ public class PadroLimLightTestOz extends OpMode {
             Outside_pose = new Pose(16, 37, Math.toRadians(180));
         }
 
-        start_to_ball_inside = follower
+        start_to_fire_location = follower
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(StartPose, Inside_pose)
+                        new BezierLine(StartPose, FiringPose)
                 )
-                .setLinearHeadingInterpolation(StartPose.getHeading(), Inside_pose.getHeading())
+                .setLinearHeadingInterpolation(StartPose.getHeading(), FiringPose.getHeading())
+                .build();
+        fire_location_to_ball_inside = follower.
+                pathBuilder().
+                addPath(new BezierLine(FiringPose, Inside_pose))
+                .setLinearHeadingInterpolation(FiringPose.getHeading(), Inside_pose.getHeading())
                 .build();
 
         ball_inside_to_ball_outside = follower
@@ -102,7 +112,7 @@ public class PadroLimLightTestOz extends OpMode {
         ball_outside_to_fire_location = follower
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(Outside_pose, FiringPose)
+                        new BezierCurve(Outside_pose, ControlPointFiringLocation, FiringPose)
                 )
                 .setLinearHeadingInterpolation(Outside_pose.getHeading(), FiringPose.getHeading())
                 .build();
@@ -133,7 +143,7 @@ public class PadroLimLightTestOz extends OpMode {
         Paths_generation(april_tag_value);
     }
     //set up simple states
-    public enum pathingState {START, INSIDE, OUTSIDE, FIRING, PARK, FINISHED}
+    public enum pathingState {START, First_Firing ,INSIDE, OUTSIDE, SECOND_FIRING, PARK, FINISHED}
     public pathingState pathState = pathingState.START;
 
     @Override
@@ -143,8 +153,14 @@ public class PadroLimLightTestOz extends OpMode {
         // very simple movment test
         switch (pathState) {
             case START:
-                follower.followPath(start_to_ball_inside);
-                pathState = pathingState.INSIDE;
+                follower.followPath(start_to_fire_location);
+                pathState = pathingState.First_Firing;
+                break;
+            case First_Firing:
+                if (!(follower.isBusy())) {
+                    follower.followPath(fire_location_to_ball_inside);
+                    pathState = pathingState.INSIDE;
+                }
                 break;
             case INSIDE:
                 if (!(follower.isBusy())) {
@@ -155,10 +171,10 @@ public class PadroLimLightTestOz extends OpMode {
             case OUTSIDE:
                 if (!(follower.isBusy())) {
                     follower.followPath(ball_outside_to_fire_location);
-                    pathState = pathingState.FIRING;
+                    pathState = pathingState.SECOND_FIRING;
                 }
                 break;
-            case FIRING:
+            case SECOND_FIRING:
                 if (!(follower.isBusy())) {
                     follower.followPath(fire_location_to_park);
                     pathState = pathingState.PARK;
