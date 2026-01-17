@@ -16,9 +16,9 @@ public class Constants {
 
     // Weight of Robot
     public static FollowerConstants followerConstants = new FollowerConstants()
-            .mass(10.2)   // Kilograms of Robot Weighed on 10/28
-            .forwardZeroPowerAcceleration(-33.8697)    // Tested on 10/30
-            .lateralZeroPowerAcceleration(-65.6387);   // Tested on 10/30
+            .mass(6.0)   // Kilograms of Robot Weighed on 1/17 oz
+            .forwardZeroPowerAcceleration(-41.048)    // Tested on 1/17
+            .lateralZeroPowerAcceleration(-76.565);   // Tested on 10/30
 
     // Drivetrain Constants based on DecBot
     public static MecanumConstants driveConstants = new MecanumConstants()
@@ -27,24 +27,24 @@ public class Constants {
             .rightRearMotorName("rear_right_motor")
             .leftRearMotorName("rear_left_motor")
             .leftFrontMotorName("front_left_motor")
-            .leftFrontMotorDirection(DcMotorSimple.Direction.REVERSE)
+            .leftFrontMotorDirection(DcMotorSimple.Direction.FORWARD)
             .leftRearMotorDirection(DcMotorSimple.Direction.REVERSE)
-            .rightFrontMotorDirection(DcMotorSimple.Direction.FORWARD)
+            .rightFrontMotorDirection(DcMotorSimple.Direction.REVERSE)
             .rightRearMotorDirection(DcMotorSimple.Direction.FORWARD)
-            .xVelocity(61.8028)    // Tested on 10/30
-            .yVelocity(45.3907);   // Tested on 10/30
+            .xVelocity(50.78)    // Tested on 1/17
+            .yVelocity(58.3140);   // Tested on 1/17
 
     // Localization (Pinpoint Two Wheel Odometry Constants
     // Use the Qualcom GoBiilda Drive, not local package
 
     public static PinpointConstants localizerConstants = new PinpointConstants()
             .forwardPodY(1)         // Measured on 10/28
-            .strafePodX(0.0)        // Measured on 10/28
+            .strafePodX(0)        // Measured on 10/28
             .distanceUnit(DistanceUnit.INCH)
             .hardwareMapName("odo")
             .encoderResolution(com.qualcomm.hardware.gobilda.GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_4_BAR_POD)  //
-            .forwardEncoderDirection(com.qualcomm.hardware.gobilda.GoBildaPinpointDriver.EncoderDirection.REVERSED)  // Tested 10/28
-            .strafeEncoderDirection(com.qualcomm.hardware.gobilda.GoBildaPinpointDriver.EncoderDirection.REVERSED);  // Tested 10/28
+            .forwardEncoderDirection(GoBildaPinpointDriver.EncoderDirection.REVERSED)  // Tested 10/28
+            .strafeEncoderDirection(GoBildaPinpointDriver.EncoderDirection.FORWARD);  // Tested 10/28
 
     public static PathConstraints pathConstraints = new PathConstraints(0.99, 100, 1, 1);
 
@@ -68,8 +68,8 @@ public class Constants {
             .leftRearMotorDirection(DcMotorSimple.Direction.REVERSE)
             .rightFrontMotorDirection(DcMotorSimple.Direction.FORWARD)
             .rightRearMotorDirection(DcMotorSimple.Direction.FORWARD)
-            .xVelocity(61.8028)    // Tested on 10/30
-            .yVelocity(45.3907);   // Tested on 10/30
+            .xVelocity(50.78)    // Tested on 1/17
+            .yVelocity(58.3140);   // Tested on 1/17
 
     public static Follower slowFollower(HardwareMap hardwareMap) {
         return new FollowerBuilder(followerConstants, hardwareMap)

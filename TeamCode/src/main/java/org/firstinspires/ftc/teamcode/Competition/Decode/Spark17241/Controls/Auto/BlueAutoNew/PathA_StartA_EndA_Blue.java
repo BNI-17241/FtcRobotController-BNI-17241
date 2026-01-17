@@ -18,7 +18,7 @@ import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.pedroPathing
 import java.util.List;
 
 
-@Autonomous(name = "padro Limlight TestOz", group = "Drive")
+@Autonomous(name = "PathA_StartA_EndA_Blue", group = "Drive")
 public class PathA_StartA_EndA_Blue extends AutoMainNew {
 
     public Follower follower;
@@ -169,7 +169,7 @@ public class PathA_StartA_EndA_Blue extends AutoMainNew {
                     if (LaunchBalls(3)) {
                         follower.followPath(fire_location_to_ball_inside);
                         pathState = pathingState.INSIDE;
-                        decBot.intakeControl(true);
+                        decBot.intakeControl(50);
                     }
                 }
                 break;
@@ -183,7 +183,7 @@ public class PathA_StartA_EndA_Blue extends AutoMainNew {
                 if (!(follower.isBusy())) {
                     follower.followPath(ball_outside_to_fire_location);
                     pathState = pathingState.SECOND_FIRING;
-                    decBot.intakeControl(false);
+                    decBot.intakeControl(0);
                 }
                 break;
             case SECOND_FIRING:

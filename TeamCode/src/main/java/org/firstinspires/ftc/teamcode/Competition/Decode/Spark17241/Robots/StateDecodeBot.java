@@ -121,14 +121,8 @@ public class StateDecodeBot {
         launchBackMotor.setVelocity(velocity);
     }
 
-    public void intakeControl(boolean ison){
-        double intakeMotorPower = 50;
-        if (ison){
-            intakeMotor.setPower(intakeMotorPower);
-        }
-        else{
-            intakeMotor.setPower(0);
-        }
+    public void intakeControl(double speed){
+        intakeMotor.setPower(speed);
     }
 
     public void beginFeed(){

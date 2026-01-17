@@ -14,7 +14,7 @@ import com.qualcomm.hardware.limelightvision.Limelight3A;
 import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.pedroPathing.Constants;
 
 
-@Autonomous(name = "padro Limlight TestOz", group = "Drive")
+@Autonomous(name = "Pedro Limelight Control Test Oz", group = "Drive")
 public class PadroLimLightTestOz extends OpMode {
 
     public Follower follower;
@@ -139,6 +139,10 @@ public class PadroLimLightTestOz extends OpMode {
     @Override
     public void loop() {
         follower.update();
+        telemetry.addData("X", follower.getPose().getX());
+        telemetry.addData("Y", follower.getPose().getY());
+        telemetry.update();
+        //telemetry.addData("Pose", Pose)
 
         // very simple movment test
         switch (pathState) {

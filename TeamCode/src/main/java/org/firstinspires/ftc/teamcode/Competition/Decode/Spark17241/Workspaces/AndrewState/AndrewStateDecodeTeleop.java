@@ -60,6 +60,7 @@ public class AndrewStateDecodeTeleop extends OpMode {
     protected boolean hasReleased = true;
 
     protected double transferServoSpeed = 1;
+    protected double intakeMotorSpeed = 50;
 
     // Instantiation of Robot using Robot Class Constructor
     public StateDecodeBot decBot = new StateDecodeBot();
@@ -77,6 +78,7 @@ public class AndrewStateDecodeTeleop extends OpMode {
     @Override
     public void loop() {
         driverOneInput();
+        driverTwoInput();
         speedControl();
         limeLightData();
         autoTarget();
@@ -89,7 +91,6 @@ public class AndrewStateDecodeTeleop extends OpMode {
 
 
 
-    //*********  Driver 1 Control Methods *****************
 
 
     // Robot Centric Drive Method
@@ -152,10 +153,6 @@ public class AndrewStateDecodeTeleop extends OpMode {
 
     }
 
-    //*********  Driver 2 Control Methods *****************
-
-
-
     //********* Firing Control ****************************
     public boolean canLaunch(double selected_speed, double tolerance) {
         double upper_tolerance = Math.max(0, selected_speed + tolerance);
@@ -215,10 +212,6 @@ public class AndrewStateDecodeTeleop extends OpMode {
         }
     }
 
-
-
-
-
     // ***** Manual Feeder Wheel Controller
     public void driverOneInput() {
         //Check if tracking april tags
@@ -238,36 +231,47 @@ public class AndrewStateDecodeTeleop extends OpMode {
         } else if (gamepad1.dpad_left) {
             moveSpeedMultiply = 1;
         }
+
+        //Intake control
+        //if right trigger, go forward, if not and left, go back, else 0
+        decBot.intakeControl(gamepad1.right_trigger > .5 ? intakeMotorSpeed :
+                gamepad1.left_trigger > .5 ? -intakeMotorSpeed : 0);
+    }
+
+    public void driverTwoInput(){
+
         //Control transfer servo
-        if(gamepad1.left_bumper){
+        if(gamepad2.left_bumper){
             decBot.transferSpeedCon(transferServoSpeed);
         }
-        else if(gamepad1.right_bumper){
+        else if(gamepad2.right_bumper){
             decBot.transferSpeedCon(-transferServoSpeed);
         }
         else{
             decBot.transferSpeedCon(0);
         }
-    }
 
-    public void driverTwoInput(){
         if (gamepad2.x) {       // Square
             // NEAR preset
-            targetVelocity = 700;
+            targetVelocity = 1500;
         }
         if (gamepad2.a) {   // X
-            targetVelocity = 800;
+            targetVelocity = 2500;
         }
         if (gamepad2.b) { // Circle
-            targetVelocity = 900;
+            targetVelocity = 1750;
         }
         if (gamepad2.y) { // Triangle
-            targetVelocity = 1000;
+            targetVelocity = 2000;
         }
 
         if (gamepad2.dpad_up)     { targetVelocity += 1; }
         if (gamepad2.dpad_down)   { targetVelocity -= 1; }
         if (gamepad2.left_bumper) { targetVelocity = 0;  }
+
+        if (gamepad2.right_bumper){
+            launchAuto(targetVelocity, tolerance);
+        }
 
     }
 
@@ -383,7 +387,6 @@ public class AndrewStateDecodeTeleop extends OpMode {
         return (decBot.launchFrontMotor.getVelocity() + decBot.launchBackMotor.getVelocity()) / 2.0;
     }
 
-    // ****** Helper method to set Motor Power
     public void setMotorPower(DcMotor motor, double speed, double threshold, double multiplier) {
         if (speed <= threshold && speed >= -threshold) {
             motor.setPower(0);
