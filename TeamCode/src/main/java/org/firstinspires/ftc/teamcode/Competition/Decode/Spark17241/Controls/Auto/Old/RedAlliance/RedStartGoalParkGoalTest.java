@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Controls.Auto.RedAlliance;
+package org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Controls.Auto.Old.RedAlliance;
 
 import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.BezierLine;
@@ -9,24 +9,33 @@ import com.pedropathing.util.Timer;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
-import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Controls.Auto.AutoMain;
+import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Controls.Auto.Old.AutoMain;
 import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.pedroPathing.Constants;
 
-@Autonomous(name = "Red:Start Human:Far Launch", group = "Drive")
-public class RedStartHumanFarLaunch extends AutoMain {
-//
+@Disabled
+@Autonomous(name = "Red:Start Goal:Park Goal Test", group = "Drive")
+public class RedStartGoalParkGoalTest extends AutoMain {
+
+
+
+    /** Pause timing */
+    public Timer autoTimer;
+    public int startDelay = 5;
+    public int postShootDelay = 5;
+
+
     /**  Pedro Pathing Variables, Poses, Paths & States */
     public Follower follower;
     public Timer pathTimer, opmodeTimer;
 
-    public final Pose startPose = new Pose(100, 10, Math.toRadians(90));     // Red Far Launch Zone start
-    public final Pose scorePose = new Pose(84, 18, Math.toRadians(64));    // Red goal scoring pose // 80 x 80
-    public final Pose parkPose = new Pose(101, 12, Math.toRadians(90)); // Red Home (park)
+    public final Pose startPose = new Pose(122, 122, Math.toRadians(45));     // Red Far Launch Zone start
+    public final Pose scorePose = new Pose(87, 80, Math.toRadians(45));    // Red goal scoring pose
+    public final Pose parkPose = new Pose(96, 130, Math.toRadians(270)); // Red Home (park)
 
     public Path scorePreload;
     public PathChain goPark;
 
-    public enum pathingState { START, Shooting, GO_PARK, READY }
+    public enum pathingState {START_PAUSE, START, SCORE_PRELOAD, POST_SHOOT_PAUSE, GO_PARK, READY }
     pathingState pathState = pathingState.READY;
     private boolean parkPathStarted = false;
 
@@ -37,6 +46,8 @@ public class RedStartHumanFarLaunch extends AutoMain {
     public void init() {
         pathTimer = new Timer();
         opmodeTimer = new Timer();
+        autoTimer = new Timer();
+
         follower = Constants.createFollower(hardwareMap);
         buildPaths();
         follower.setStartingPose(startPose);
@@ -49,11 +60,10 @@ public class RedStartHumanFarLaunch extends AutoMain {
 
     @Override
     public void start() {
-
         opmodeTimer.resetTimer();
         pathTimer.resetTimer();
 
-        pathState = pathingState.START;
+        pathState = pathingState.START_PAUSE;
         scoringState = scoreState.IDLE;
         launchZone = LaunchZone.NONE;
 
@@ -61,12 +71,12 @@ public class RedStartHumanFarLaunch extends AutoMain {
         shotsFired = 0;
         parkPathStarted = false;
 
-        firstShotVelocity = 870;
-        secountShotVelocity = 845;
-        thirdShotVelocity = 830;
+        firstShotVelocity = 740;
+        secountShotVelocity = 720;
+        thirdShotVelocity = 700;
 
-        feedMsOne = 550;
-        feedMSTwo = 270;
+        feedMsOne = 600;
+        feedMSTwo = 250;
         feedMSThree = 600;
     }
 
@@ -76,24 +86,32 @@ public class RedStartHumanFarLaunch extends AutoMain {
 
         switch (pathState) {
 
-            case START:
-                follower.followPath(scorePreload);
-                pathState = pathingState.Shooting;
+            case START_PAUSE:
+                if(autoTimer.getElapsedTimeSeconds() >= startDelay)
+                {
+                    pathState = pathingState.START;
+                    break;
+                }
                 break;
 
-            case Shooting:
+            case START:
+                follower.followPath(scorePreload);
+                pathState = pathingState.SCORE_PRELOAD;
+                break;
+
+            case SCORE_PRELOAD:
                 /**  If still driving to goal, optionally spin up early */
                 if (follower.isBusy()) {
-                    launchZone = LaunchZone.FAR;
+                    launchZone = LaunchZone.NEAR;
                     onLoopStart();
-                    updateFlywheelAndGate(firstShotVelocity, secountShotVelocity, thirdShotVelocity);
+                    updateFlywheelAndGate();
                     break;
                 }
 
                 /**  Begin scoring session. Adjust for number of shots and time limit */
                 if (!isScoringActive()) {
 
-                    startScoring(LaunchZone.FAR, 4, 8.0, opmodeTimer.getElapsedTimeSeconds());
+                    startScoring(LaunchZone.NEAR, 4, 8.0, opmodeTimer.getElapsedTimeSeconds());
                 }
 
                 /**  Edge Case Handling for Max Shots or Out of Autonomous Time  */
@@ -102,7 +120,16 @@ public class RedStartHumanFarLaunch extends AutoMain {
 
                 if (done || timeToLeave) {
                     stopScoring(); // safe even if already inactive
+                    pathState = pathingState.POST_SHOOT_PAUSE;
+                }
+                break;
+
+
+            case POST_SHOOT_PAUSE:
+                if(autoTimer.getElapsedTimeSeconds() >= postShootDelay)
+                {
                     pathState = pathingState.GO_PARK;
+                    break;
                 }
                 break;
 
@@ -114,7 +141,7 @@ public class RedStartHumanFarLaunch extends AutoMain {
                 }
                 launchZone = LaunchZone.NONE;    // spin down while driving to park
                 onLoopStart();
-                updateFlywheelAndGate(firstShotVelocity, secountShotVelocity, thirdShotVelocity);         // harmless when NONE
+                updateFlywheelAndGate();         // harmless when NONE
                 // When park path finishes, advance to READY
                 if (parkPathStarted && !follower.isBusy()) {
                     pathState = pathingState.READY;
@@ -124,7 +151,7 @@ public class RedStartHumanFarLaunch extends AutoMain {
             case READY:
                 // Do nothing, keep robot safe
                 onLoopStart();
-                updateFlywheelAndGate(firstShotVelocity, secountShotVelocity, thirdShotVelocity);
+                updateFlywheelAndGate();
                 break;
         }
 

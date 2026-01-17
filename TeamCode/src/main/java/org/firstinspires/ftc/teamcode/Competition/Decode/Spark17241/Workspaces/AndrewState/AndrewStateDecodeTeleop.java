@@ -6,11 +6,10 @@ import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
-import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Robots.DecodeBot;
+import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Robots.StateDecodeBot;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -63,7 +62,7 @@ public class AndrewStateDecodeTeleop extends OpMode {
     protected double transferServoSpeed = 1;
 
     // Instantiation of Robot using Robot Class Constructor
-    public AndrewStateDecodeBot decBot = new AndrewStateDecodeBot();
+    public StateDecodeBot decBot = new StateDecodeBot();
 
 
     @Override

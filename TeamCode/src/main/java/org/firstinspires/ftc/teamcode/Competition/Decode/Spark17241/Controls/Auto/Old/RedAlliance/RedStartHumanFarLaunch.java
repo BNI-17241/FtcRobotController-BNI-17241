@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Controls.Auto.BlueAlliance;
+package org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Controls.Auto.Old.RedAlliance;
 
 import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.BezierLine;
@@ -7,27 +7,25 @@ import com.pedropathing.paths.Path;
 import com.pedropathing.paths.PathChain;
 import com.pedropathing.util.Timer;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
-import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Controls.Auto.AutoMain;
+import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Controls.Auto.Old.AutoMain;
 import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.pedroPathing.Constants;
 
-
-@Autonomous(name = "Blue:Start Goal:Park Goal", group = "Drive")
-public class BlueStartGoalParkGoal extends AutoMain {
-
+@Autonomous(name = "Red:Start Human:Far Launch", group = "Drive")
+public class RedStartHumanFarLaunch extends AutoMain {
+//
     /**  Pedro Pathing Variables, Poses, Paths & States */
     public Follower follower;
     public Timer pathTimer, opmodeTimer;
 
-    public final Pose startPose = new Pose(22, 122, Math.toRadians(135));     // Red Far Launch Zone start
-    public final Pose scorePose = new Pose(55, 80, Math.toRadians(131));    // Red goal scoring pose
-    public final Pose parkPose = new Pose(50, 130, Math.toRadians(270)); // Red Home (park)
+    public final Pose startPose = new Pose(100, 10, Math.toRadians(90));     // Red Far Launch Zone start
+    public final Pose scorePose = new Pose(84, 18, Math.toRadians(64));    // Red goal scoring pose // 80 x 80
+    public final Pose parkPose = new Pose(101, 12, Math.toRadians(90)); // Red Home (park)
 
     public Path scorePreload;
     public PathChain goPark;
 
-    public enum pathingState { START, SCORE_PRELOAD, GO_PARK, READY }
+    public enum pathingState { START, Shooting, GO_PARK, READY }
     pathingState pathState = pathingState.READY;
     private boolean parkPathStarted = false;
 
@@ -51,7 +49,6 @@ public class BlueStartGoalParkGoal extends AutoMain {
     @Override
     public void start() {
 
-
         opmodeTimer.resetTimer();
         pathTimer.resetTimer();
 
@@ -63,13 +60,13 @@ public class BlueStartGoalParkGoal extends AutoMain {
         shotsFired = 0;
         parkPathStarted = false;
 
-        firstShotVelocity = 705;
-        secountShotVelocity = 715;
-        thirdShotVelocity = 700;
+        firstShotVelocity = 870;
+        secountShotVelocity = 845;
+        thirdShotVelocity = 830;
 
-        feedMsOne = 536;
-        feedMSTwo = 240;
-        feedMSThree = 115;
+        feedMsOne = 550;
+        feedMSTwo = 270;
+        feedMSThree = 600;
     }
 
     @Override
@@ -80,13 +77,13 @@ public class BlueStartGoalParkGoal extends AutoMain {
 
             case START:
                 follower.followPath(scorePreload);
-                pathState = pathingState.SCORE_PRELOAD;
+                pathState = pathingState.Shooting;
                 break;
 
-            case SCORE_PRELOAD:
+            case Shooting:
                 /**  If still driving to goal, optionally spin up early */
                 if (follower.isBusy()) {
-                    launchZone = LaunchZone.NEAR;
+                    launchZone = LaunchZone.FAR;
                     onLoopStart();
                     updateFlywheelAndGate(firstShotVelocity, secountShotVelocity, thirdShotVelocity);
                     break;
@@ -94,7 +91,8 @@ public class BlueStartGoalParkGoal extends AutoMain {
 
                 /**  Begin scoring session. Adjust for number of shots and time limit */
                 if (!isScoringActive()) {
-                    startScoring(LaunchZone.NEAR, 4, 8.0, opmodeTimer.getElapsedTimeSeconds());
+
+                    startScoring(LaunchZone.FAR, 4, 8.0, opmodeTimer.getElapsedTimeSeconds());
                 }
 
                 /**  Edge Case Handling for Max Shots or Out of Autonomous Time  */

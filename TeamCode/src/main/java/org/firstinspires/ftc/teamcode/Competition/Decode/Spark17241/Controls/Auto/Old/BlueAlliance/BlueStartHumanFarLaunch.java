@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Controls.Auto.RedAlliance;
+package org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Controls.Auto.Old.BlueAlliance;
 
 import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.BezierLine;
@@ -8,25 +8,29 @@ import com.pedropathing.paths.PathChain;
 import com.pedropathing.util.Timer;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
-import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Controls.Auto.AutoMain;
+import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Controls.Auto.Old.AutoMain;
 import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.pedroPathing.Constants;
 
 
-@Autonomous(name = "Red:Start Goal:Park Goal", group = "Drive")
-public class RedStartGoalParkGoal extends AutoMain {
-
+@Autonomous(name = "Blue:Start Human Far Launch", group = "Drive")
+public class BlueStartHumanFarLaunch extends AutoMain {
+//
     /**  Pedro Pathing Variables, Poses, Paths & States */
     public Follower follower;
     public Timer pathTimer, opmodeTimer;
 
-    public final Pose startPose = new Pose(122, 122, Math.toRadians(45));     // Red Far Launch Zone start
-    public final Pose scorePose = new Pose(87, 80, Math.toRadians(45));    // Red goal scoring pose
-    public final Pose parkPose = new Pose(96, 130, Math.toRadians(270)); // Red Home (park)
+    /*public final Pose startPose = new Pose(44, 10, Math.toRadians(90));     // start pos
+    public final Pose scoreFarPose = new Pose(60, 20, Math.toRadians(111));    // blue shoot far
+    public final Pose parkPose = new Pose(56, 35, Math.toRadians(0));*/ // Red Home (park)
+
+    public final Pose startPose = new Pose(44, 10, Math.toRadians(90));     // start pos
+    public final Pose scoreFarPose = new Pose(60, 20, Math.toRadians(110));    // blue shoot far
+    public final Pose parkPose = new Pose(43, 12, Math.toRadians(90)); //  Home (park)
 
     public Path scorePreload;
     public PathChain goPark;
 
-    public enum pathingState { START, SCORE_PRELOAD, GO_PARK, READY }
+    public enum pathingState { START, Shooting, GO_PARK, READY }
     pathingState pathState = pathingState.READY;
     private boolean parkPathStarted = false;
 
@@ -63,30 +67,31 @@ public class RedStartGoalParkGoal extends AutoMain {
         shotsFired = 0;
         parkPathStarted = false;
 
-        firstShotVelocity = 705;
-        secountShotVelocity = 715;
-        thirdShotVelocity = 700;
+        firstShotVelocity = 865;
+        secountShotVelocity = 845;
+        thirdShotVelocity = 815;
 
-        feedMsOne = 536;
-        feedMSTwo = 240;
-        feedMSThree = 115;
+
+        feedMsOne = 550;
+        feedMSTwo = 270;
+        feedMSThree = 600;
     }
 
     @Override
     public void loop() {
         follower.update();
-
+        LEDDriver();
         switch (pathState) {
 
             case START:
                 follower.followPath(scorePreload);
-                pathState = pathingState.SCORE_PRELOAD;
+                pathState = pathingState.Shooting;
                 break;
 
-            case SCORE_PRELOAD:
+            case Shooting:
                 /**  If still driving to goal, optionally spin up early */
                 if (follower.isBusy()) {
-                    launchZone = LaunchZone.NEAR;
+                    launchZone = LaunchZone.FAR;
                     onLoopStart();
                     updateFlywheelAndGate(firstShotVelocity, secountShotVelocity, thirdShotVelocity);
                     break;
@@ -94,7 +99,7 @@ public class RedStartGoalParkGoal extends AutoMain {
 
                 /**  Begin scoring session. Adjust for number of shots and time limit */
                 if (!isScoringActive()) {
-                    startScoring(LaunchZone.NEAR, 4, 8.0, opmodeTimer.getElapsedTimeSeconds());
+                    startScoring(LaunchZone.FAR, 4, 9.0, opmodeTimer.getElapsedTimeSeconds());
                 }
 
                 /**  Edge Case Handling for Max Shots or Out of Autonomous Time  */
@@ -128,7 +133,6 @@ public class RedStartGoalParkGoal extends AutoMain {
                 updateFlywheelAndGate(firstShotVelocity, secountShotVelocity, thirdShotVelocity);
                 break;
         }
-
         /** LED Driver for Gate Control */
         LEDDriver();
 
@@ -149,13 +153,13 @@ public class RedStartGoalParkGoal extends AutoMain {
 
     public void buildPaths() {
         // Start Pose -> Score Pose
-        scorePreload = new Path(new BezierLine(startPose, scorePose));
-        scorePreload.setLinearHeadingInterpolation(startPose.getHeading(), scorePose.getHeading());
+        scorePreload = new Path(new BezierLine(startPose, scoreFarPose));
+        scorePreload.setLinearHeadingInterpolation(startPose.getHeading(), scoreFarPose.getHeading());
 
         // Score Pose -> Park Home Pose
         goPark = follower.pathBuilder()
-                .addPath(new BezierLine(scorePose, parkPose))
-                .setLinearHeadingInterpolation(scorePose.getHeading(), parkPose.getHeading())
+                .addPath(new BezierLine(scoreFarPose, parkPose))
+                .setLinearHeadingInterpolation(scoreFarPose.getHeading(), parkPose.getHeading())
                 .build();
     }
 }

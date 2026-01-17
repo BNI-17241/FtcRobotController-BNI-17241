@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Workspaces.AndrewState;
+package org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Robots;
 
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -11,7 +11,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.CRServo;
 
 
-public class AndrewStateDecodeBot {
+public class StateDecodeBot {
 
     public HardwareMap hwBot = null;
 
@@ -50,7 +50,7 @@ public class AndrewStateDecodeBot {
     }
 
 
-    public AndrewStateDecodeBot() {}
+    public StateDecodeBot() {}
 
     //Init Method
     public void initRobot(HardwareMap hwMap) {
@@ -129,6 +129,13 @@ public class AndrewStateDecodeBot {
         else{
             intakeMotor.setPower(0);
         }
+    }
+
+    public void beginFeed(){
+        //fill up with feeder logic
+    }
+    public void stopFeed(){
+        //fill up with feeder logic
     }
 
     public void LEDCon(int color)

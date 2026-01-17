@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Controls.Auto.BlueAlliance;
+package org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Controls.Auto.Old.RedAlliance;
 
 import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.BezierLine;
@@ -7,22 +7,21 @@ import com.pedropathing.paths.Path;
 import com.pedropathing.paths.PathChain;
 import com.pedropathing.util.Timer;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
-import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Controls.Auto.AutoMain;
-import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Workspaces.Oz.AutoMainOzV2;
+import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Controls.Auto.Old.AutoMain;
 import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.pedroPathing.Constants;
 
-@Autonomous(name = "Blue:Start Human:Park Spike", group = "Drive")
-public class BlueStartHumanParkSpike extends AutoMain{
-//
+
+@Autonomous(name = "Red:Start Goal:Park Goal", group = "Drive")
+public class RedStartGoalParkGoal extends AutoMain {
+
     /**  Pedro Pathing Variables, Poses, Paths & States */
     public Follower follower;
     public Timer pathTimer, opmodeTimer;
 
-    public final Pose startPose = new Pose(44, 8, Math.toRadians(90));     // Red Far Launch Zone start
-    public final Pose scorePose = new Pose(59, 81, Math.toRadians(133));    // Red goal scoring pose // 80 x 80
-    public final Pose parkPose = new Pose(43, 12, Math.toRadians(90)); // Red Home (park)
+    public final Pose startPose = new Pose(122, 122, Math.toRadians(45));     // Red Far Launch Zone start
+    public final Pose scorePose = new Pose(87, 80, Math.toRadians(45));    // Red goal scoring pose
+    public final Pose parkPose = new Pose(96, 130, Math.toRadians(270)); // Red Home (park)
 
     public Path scorePreload;
     public PathChain goPark;
@@ -44,8 +43,9 @@ public class BlueStartHumanParkSpike extends AutoMain{
         decBot.initRobot(hardwareMap);
 
         /**  Optional per-path tuning */
-        maxShots = 6 ;                       // Adjust for shot attempts
+        maxShots = 4;                       // Adjust for shot attempts
         parkLeaveTime = 25.0;               // Adjust if this path is long
+
     }
 
     @Override
@@ -94,7 +94,7 @@ public class BlueStartHumanParkSpike extends AutoMain{
 
                 /**  Begin scoring session. Adjust for number of shots and time limit */
                 if (!isScoringActive()) {
-                    startScoring(LaunchZone.NEAR, 4, 10.0, opmodeTimer.getElapsedTimeSeconds());
+                    startScoring(LaunchZone.NEAR, 4, 8.0, opmodeTimer.getElapsedTimeSeconds());
                 }
 
                 /**  Edge Case Handling for Max Shots or Out of Autonomous Time  */
@@ -128,6 +128,7 @@ public class BlueStartHumanParkSpike extends AutoMain{
                 updateFlywheelAndGate(firstShotVelocity, secountShotVelocity, thirdShotVelocity);
                 break;
         }
+
         /** LED Driver for Gate Control */
         LEDDriver();
 

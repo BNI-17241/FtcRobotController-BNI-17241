@@ -5,8 +5,6 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.Range;
 
-import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Robots.DecodeBot_One__Wheel_Launch;
-
 @TeleOp(name = "Oz big scary Test", group = "Test")
 public class test extends OpMode {
 
