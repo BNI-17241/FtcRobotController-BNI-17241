@@ -60,10 +60,14 @@ public class AndrewStateDecodeTeleop extends OpMode {
     protected boolean hasReleased = true;
 
     protected double transferServoSpeed = 1;
-    protected double intakeMotorSpeed = 50;
+    protected double intakeMotorSpeed = 1;
 
     // Instantiation of Robot using Robot Class Constructor
     public StateDecodeBot decBot = new StateDecodeBot();
+
+
+    //Shooting variables
+    protected boolean isLaunching = false;
 
 
     @Override
@@ -79,12 +83,12 @@ public class AndrewStateDecodeTeleop extends OpMode {
     public void loop() {
         driverOneInput();
         driverTwoInput();
-        speedControl();
+        setFlywheelSpeed();
         limeLightData();
         autoTarget();
-        telemetryOutput();
         robotCentricDrive();
         LEDDriver();
+        telemetryOutput();
     }
 
 
@@ -110,19 +114,19 @@ public class AndrewStateDecodeTeleop extends OpMode {
         switch (currentProfile) {
             // Name of Driver using Profile 1
             case PROFILE_1:
-                // leftStickXVal controls rotation, and rightStickXVal controls strafing.
-                frontLeftSpeed = leftStickYVal + leftStickXVal + rightStickXVal; // Vertical + Rotation + Staffing
-                frontRightSpeed = leftStickYVal - leftStickXVal - rightStickXVal;// Vertical - Rotation - Strafing
-                rearLeftSpeed = leftStickYVal - leftStickXVal + rightStickXVal;
-                rearRightSpeed = leftStickYVal + leftStickXVal - rightStickXVal;
-
-                break;
-            case PROFILE_2:
-                //leftStickXVal controls strafing, and rightStickXVal controls rotation.
+                // leftStickXVal controls strafing, and rightStickXVal controls rotation.
                 frontLeftSpeed = leftStickYVal + rightStickXVal + leftStickXVal;    // Vertical + Rotation + Staffing
                 frontRightSpeed = leftStickYVal - rightStickXVal - leftStickXVal;   // Vertical - Rotation - Strafing(sign in front is the way the motor is turning in relation to the others)
                 rearLeftSpeed = leftStickYVal - rightStickXVal + leftStickXVal;
                 rearRightSpeed = leftStickYVal + rightStickXVal - leftStickXVal;
+
+                break;
+            case PROFILE_2:
+                //leftStickXVal controls rotation, and rightStickXVal controls strafing.
+                frontLeftSpeed = leftStickYVal + leftStickXVal + rightStickXVal; // Vertical + Rotation + Staffing
+                frontRightSpeed = leftStickYVal - leftStickXVal - rightStickXVal;// Vertical - Rotation - Strafing
+                rearLeftSpeed = leftStickYVal - leftStickXVal + rightStickXVal;
+                rearRightSpeed = leftStickYVal + leftStickXVal - rightStickXVal;
                 break;
 
                 // Default Driver Profile
@@ -148,10 +152,7 @@ public class AndrewStateDecodeTeleop extends OpMode {
         setMotorPower(decBot.rearRightMotor, rearRightSpeed, powerThreshold, moveSpeedMultiply);
     }
 
-    // ***** Helper Method for Speed Control
-    public void speedControl() {
 
-    }
 
     //********* Firing Control ****************************
     public boolean canLaunch(double selected_speed, double tolerance) {
@@ -212,6 +213,10 @@ public class AndrewStateDecodeTeleop extends OpMode {
         }
     }
 
+    public void setFlywheelSpeed(){
+        //Launch if is allowed to
+        decBot.flylaunch(isLaunching ? targetVelocity : 0);
+    }
     // ***** Manual Feeder Wheel Controller
     public void driverOneInput() {
         //Check if tracking april tags
@@ -224,11 +229,11 @@ public class AndrewStateDecodeTeleop extends OpMode {
         //Change ground move speed
         if (gamepad1.dpad_right) {
             moveSpeedMultiply = 0.5;
-        } else if (gamepad1.dpad_down) {
+        } else if (gamepad1.dpad_left) {
             moveSpeedMultiply = 0.75;
         } else if (gamepad1.dpad_up) {
             moveSpeedMultiply = 0.25;
-        } else if (gamepad1.dpad_left) {
+        } else if (gamepad1.dpad_down) {
             moveSpeedMultiply = 1;
         }
 
@@ -241,36 +246,42 @@ public class AndrewStateDecodeTeleop extends OpMode {
     public void driverTwoInput(){
 
         //Control transfer servo
-        if(gamepad2.left_bumper){
+        if(gamepad2.right_bumper){
             decBot.transferSpeedCon(transferServoSpeed);
         }
-        else if(gamepad2.right_bumper){
+        else if(gamepad2.left_bumper){
             decBot.transferSpeedCon(-transferServoSpeed);
         }
         else{
             decBot.transferSpeedCon(0);
         }
 
-        if (gamepad2.x) {       // Square
+        if (gamepad2.x) { // Square
             // NEAR preset
-            targetVelocity = 1500;
+            targetVelocity = 1209;
         }
-        if (gamepad2.a) {   // X
-            targetVelocity = 2500;
+        if (gamepad2.a) { // X
+            targetVelocity = 1259;
         }
         if (gamepad2.b) { // Circle
-            targetVelocity = 1750;
+            targetVelocity = 1368;
         }
         if (gamepad2.y) { // Triangle
-            targetVelocity = 2000;
+            targetVelocity = 1520;
+        }
+        if(gamepad2.right_stick_button)
+        {
+            targetVelocity = 1530;
         }
 
         if (gamepad2.dpad_up)     { targetVelocity += 1; }
         if (gamepad2.dpad_down)   { targetVelocity -= 1; }
-        if (gamepad2.left_bumper) { targetVelocity = 0;  }
 
-        if (gamepad2.right_bumper){
-            launchAuto(targetVelocity, tolerance);
+        if (gamepad2.left_trigger > 0.5){
+            isLaunching = false;
+        }
+        if (gamepad2.right_trigger > 0.5){
+            isLaunching = true;
         }
 
     }
@@ -378,6 +389,7 @@ public class AndrewStateDecodeTeleop extends OpMode {
         telemetry.addData("Target Velocity: ", targetVelocity);
         telemetry.addLine("-------------------------------------");
         telemetry.addData("Is Tracking: ", isTracking);
+        telemetry.addData("Is Launching", isLaunching);
         telemetry.update();
     }
 

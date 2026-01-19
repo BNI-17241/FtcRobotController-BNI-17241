@@ -17,8 +17,8 @@ public class Constants {
     // Weight of Robot
     public static FollowerConstants followerConstants = new FollowerConstants()
             .mass(6.0)   // Kilograms of Robot Weighed on 1/17 oz
-            .forwardZeroPowerAcceleration(-41.048)    // Tested on 1/17
-            .lateralZeroPowerAcceleration(-76.565);   // Tested on 10/30
+            .forwardZeroPowerAcceleration(-37.186)    // Tested on 1/19 (Andrew)
+            .lateralZeroPowerAcceleration(-59.037);   // Tested on 1/19 (Andrew)
 
     // Drivetrain Constants based on DecBot
     public static MecanumConstants driveConstants = new MecanumConstants()
@@ -27,19 +27,19 @@ public class Constants {
             .rightRearMotorName("rear_right_motor")
             .leftRearMotorName("rear_left_motor")
             .leftFrontMotorName("front_left_motor")
-            .leftFrontMotorDirection(DcMotorSimple.Direction.FORWARD)
+            .leftFrontMotorDirection(DcMotorSimple.Direction.REVERSE)
             .leftRearMotorDirection(DcMotorSimple.Direction.REVERSE)
-            .rightFrontMotorDirection(DcMotorSimple.Direction.REVERSE)
+            .rightFrontMotorDirection(DcMotorSimple.Direction.FORWARD)
             .rightRearMotorDirection(DcMotorSimple.Direction.FORWARD)
-            .xVelocity(50.78)    // Tested on 1/17
-            .yVelocity(58.3140);   // Tested on 1/17
+            .xVelocity(61.148)    // Tested on 1/19 (Andrew)
+            .yVelocity(51.230);   // Tested on 1/19 (Andrew)
 
     // Localization (Pinpoint Two Wheel Odometry Constants
     // Use the Qualcom GoBiilda Drive, not local package
 
     public static PinpointConstants localizerConstants = new PinpointConstants()
-            .forwardPodY(1)         // Measured on 10/28
-            .strafePodX(0)        // Measured on 10/28
+            .forwardPodY(0)         // Measured on 1/19 (Andrew)
+            .strafePodX(-2)        // Measured on 1/19 (Andrew)
             .distanceUnit(DistanceUnit.INCH)
             .hardwareMapName("odo")
             .encoderResolution(com.qualcomm.hardware.gobilda.GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_4_BAR_POD)  //
