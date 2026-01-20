@@ -14,7 +14,7 @@ import com.qualcomm.hardware.limelightvision.Limelight3A;
 import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.pedroPathing.Constants;
 
 
-@Autonomous(name = "Pedro Limelight Control Test Oz", group = "Drive")
+@Autonomous(name = "Pedro Limelight og oz", group = "Drive")
 public class PadroLimLightTestOz extends OpMode {
 
     public Follower follower;

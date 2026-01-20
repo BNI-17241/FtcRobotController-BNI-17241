@@ -17,7 +17,7 @@ import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.pedroPathing
 import java.util.List;
 
 
-@Autonomous(name = "padro Limlight TestOz", group = "Drive")
+@Autonomous(name = "padro Limlight TestOz control", group = "Drive")
 public class PadroLimLightControlPoint extends OpMode {
 
     public Follower follower;
