@@ -27,13 +27,22 @@ public class BlueStartHumanParkSpikeTester extends OpMode {
     public final Pose scorePose = new Pose(59, 81, Math.toRadians(133));    // Red goal scoring pose // 80 x 80
     public final Pose parkPose = new Pose(43, 12, Math.toRadians(90)); // Red Home (park)
 
+    //Delay before intial movement
+    public final float startDelay = 3;
+    //Delay at goal after firing
+    public final float fireDelay  = 5;
+
+
+    //Help view elapsed time on wait cases
+    public float delayStartTime = 0;
+
     public Path scorePreload;
 
     protected PathChain start_to_fire_location;
     protected PathChain fire_location_to_park;
 
     //set up simple states
-    public enum pathingState {START, FIRING, PARK, FINISHED}
+    public enum pathingState {STARTDELAY, START, FIRINGDELAY, FIRING, PARK, END}
     public pathingState pathState = pathingState.START;
 
     public void pathGen(){
@@ -69,8 +78,9 @@ public class BlueStartHumanParkSpikeTester extends OpMode {
     public void start(){
         opmodeTimer.resetTimer();
         pathTimer.resetTimer();
-        pathState = pathingState.START;
-
+        pathState = pathingState.STARTDELAY;
+        //Get the time of the starting delay
+        delayStartTime = opmodeTimer.getElapsedTime();
     }
 
 
@@ -85,22 +95,43 @@ public class BlueStartHumanParkSpikeTester extends OpMode {
 
         // very simple movment test
         switch (pathState) {
+            case STARTDELAY:
+                //Check if wait has been fulfilled
+                if(delayStartTime <= opmodeTimer.getElapsedTime() - startDelay) {
+                    pathState = pathingState.START;
+                }
+                break;
+
+
             case START:
+                //Move to the firing location
                 follower.followPath(start_to_fire_location);
                 pathState = pathingState.FIRING;
                 break;
+
             case FIRING:
                 if (!(follower.isBusy())) {
                     follower.followPath(fire_location_to_park);
+                    pathState = pathingState.FIRINGDELAY;
+                    //Reset delay
+                    delayStartTime = opmodeTimer.getElapsedTime();
+                }
+                break;
+
+            case FIRINGDELAY:
+                //Check if wait has been fulfilled
+                if(delayStartTime <= opmodeTimer.getElapsedTime() - fireDelay) {
                     pathState = pathingState.PARK;
                 }
                 break;
+
+
             case PARK:
                 if (!(follower.isBusy())) {
-                    pathState = pathingState.FINISHED;
+                    pathState = pathingState.END;
                 }
                 break;
-            case FINISHED:
+            case END:
                 break;
         }
     }
