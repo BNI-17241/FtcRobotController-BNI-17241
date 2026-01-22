@@ -27,10 +27,10 @@ public class BlueStartHumanParkSpikeTester extends OpMode {
     public final Pose scorePose = new Pose(59, 81, Math.toRadians(133));    // Red goal scoring pose // 80 x 80
     public final Pose parkPose = new Pose(43, 12, Math.toRadians(90)); // Red Home (park)
 
-    //Delay before intial movement
-    public final float startDelay = 3;
-    //Delay at goal after firing
-    public final float fireDelay  = 5;
+    //Delay before intial movement (ms)
+    public final float startDelay = 3000;
+    //Delay at goal after firing (ms)
+    public final float fireDelay  = 5000;
 
 
     //Help view elapsed time on wait cases
@@ -89,6 +89,9 @@ public class BlueStartHumanParkSpikeTester extends OpMode {
         follower.update();
         telemetry.addData("X", follower.getPose().getX());
         telemetry.addData("Y", follower.getPose().getY());
+        telemetry.addData("Current time : ", opmodeTimer.getElapsedTime());
+        telemetry.addData("Wait time : ", delayStartTime);
+
         telemetry.addData("Current state :", pathState);
         telemetry.update();
         //telemetry.addData("Pose", Pose)
