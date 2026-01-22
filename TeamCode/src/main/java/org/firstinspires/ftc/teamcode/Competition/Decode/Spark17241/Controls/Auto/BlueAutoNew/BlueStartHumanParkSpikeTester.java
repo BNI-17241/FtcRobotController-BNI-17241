@@ -114,7 +114,6 @@ public class BlueStartHumanParkSpikeTester extends OpMode {
 
             case FIRING:
                 if (!(follower.isBusy())) {
-                    follower.followPath(fire_location_to_park);
                     pathState = pathingState.FIRINGDELAY;
                     //Reset delay
                     delayStartTime = opmodeTimer.getElapsedTime();
@@ -124,6 +123,7 @@ public class BlueStartHumanParkSpikeTester extends OpMode {
             case FIRINGDELAY:
                 //Check if wait has been fulfilled
                 if(delayStartTime <= opmodeTimer.getElapsedTime() - fireDelay) {
+                    follower.followPath(fire_location_to_park);
                     pathState = pathingState.PARK;
                 }
                 break;
