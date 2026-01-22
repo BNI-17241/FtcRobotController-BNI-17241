@@ -71,7 +71,7 @@ public class PadroLimLightControlPoint extends OpMode {
     public void Paths_generation(int april_tag) {
         // definie inside/ outside (aka where
 
-        if (april_tag == 21){
+        if (april_tag == 23){
             Inside_pose = new Pose(48, 36, Math.toRadians(180)); // closest to human 21
             Outside_pose = new Pose(16, 36, Math.toRadians(180));
         }
@@ -79,7 +79,7 @@ public class PadroLimLightControlPoint extends OpMode {
             Inside_pose = new Pose(48, 61, Math.toRadians(180)); // secount clostest 22
             Outside_pose = new Pose(16, 61, Math.toRadians(180));
         }
-        if (april_tag == 23){
+        if (april_tag == 21){
             Inside_pose = new Pose(48, 85, Math.toRadians(180)); // third closest 23
             Outside_pose = new Pose(16, 85, Math.toRadians(180));
         }
