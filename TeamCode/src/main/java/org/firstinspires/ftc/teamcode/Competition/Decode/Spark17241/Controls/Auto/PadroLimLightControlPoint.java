@@ -129,6 +129,7 @@ public class PadroLimLightControlPoint extends OpMode {
     @Override
     public void init() {
         // turns on all timlight stuff
+        follower.setStartingPose(StartPose);
         limelight = hardwareMap.get(Limelight3A.class, "limelight");
         follower = Constants.createFollower(hardwareMap);
         limelight.start();
@@ -137,6 +138,7 @@ public class PadroLimLightControlPoint extends OpMode {
 
     @Override
     public void start(){
+        follower.setStartingPose(StartPose);
         //gets april tag value
         april_tag_value = limeLightData();
         //generates path based on april tag
@@ -148,6 +150,9 @@ public class PadroLimLightControlPoint extends OpMode {
 
     @Override
     public void loop() {
+        telemetry.addData("X", follower.getPose().getX());
+        telemetry.addData("Y", follower.getPose().getY());
+        telemetry.update();
         follower.update();
 
         // very simple movment test

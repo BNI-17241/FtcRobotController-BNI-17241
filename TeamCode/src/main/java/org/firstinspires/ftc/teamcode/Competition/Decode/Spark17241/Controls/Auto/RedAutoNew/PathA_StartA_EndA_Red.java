@@ -129,11 +129,14 @@ public class PathA_StartA_EndA_Red extends AutoMainNew {
         AutoMainTelemetry();
         telemetry.addData("pathState", pathState);
         telemetry.addData("april tag", april_tag_value);
+        telemetry.addData("X", follower.getPose().getX());
+        telemetry.addData("Y", follower.getPose().getY());
         telemetry.update();
     }
 
     @Override
     public void init() {
+        follower.setStartingPose(StartPose);
         // turns on all timlight stuff
         limelight = hardwareMap.get(Limelight3A.class, "limelight");
         follower = Constants.createFollower(hardwareMap);
