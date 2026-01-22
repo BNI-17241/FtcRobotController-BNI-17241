@@ -14,6 +14,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 public class Constants {
 
+
     // Weight of Robot
     public static FollowerConstants followerConstants = new FollowerConstants()
             .mass(6.0)   // Kilograms of Robot Weighed on 1/17 oz
@@ -44,7 +45,7 @@ public class Constants {
             .hardwareMapName("odo")
             .encoderResolution(com.qualcomm.hardware.gobilda.GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_4_BAR_POD)  //
             .forwardEncoderDirection(GoBildaPinpointDriver.EncoderDirection.REVERSED)  // Tested 10/28
-            .strafeEncoderDirection(GoBildaPinpointDriver.EncoderDirection.FORWARD);  // Tested 10/28
+            .strafeEncoderDirection(GoBildaPinpointDriver.EncoderDirection.REVERSED);  // Tested 10/28
 
     public static PathConstraints pathConstraints = new PathConstraints(0.99, 100, 1, 1);
 
