@@ -89,6 +89,9 @@ public class BlueStartHumanParkSpikeTester extends OpMode {
         follower.update();
         telemetry.addData("X", follower.getPose().getX());
         telemetry.addData("Y", follower.getPose().getY());
+        telemetry.addData("Current time : ", opmodeTimer.getElapsedTime());
+        telemetry.addData("Wait time : ", delayStartTime);
+
         telemetry.addData("Current state :", pathState);
         telemetry.update();
         //telemetry.addData("Pose", Pose)
