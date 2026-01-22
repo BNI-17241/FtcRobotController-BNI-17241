@@ -14,7 +14,7 @@ import com.qualcomm.hardware.limelightvision.Limelight3A;
 import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.pedroPathing.Constants;
 
 
-@Autonomous(name = "Multi test", group = "Drive")
+@Autonomous(name = "Pedro Limelight og oz", group = "Drive")
 public class PadroLimLightTestOz extends OpMode {
 
     public Follower follower;
@@ -118,6 +118,7 @@ public class PadroLimLightTestOz extends OpMode {
 
     @Override
     public void init() {
+        follower.setStartingPose(StartPose);
         // turns on all timlight stuff
         limelight = hardwareMap.get(Limelight3A.class, "limelight");
         follower = Constants.createFollower(hardwareMap);
