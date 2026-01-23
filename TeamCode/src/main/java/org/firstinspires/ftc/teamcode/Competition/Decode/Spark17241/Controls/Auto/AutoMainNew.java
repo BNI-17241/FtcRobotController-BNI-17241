@@ -127,6 +127,7 @@ public abstract class AutoMainNew extends OpMode {
     protected float launchStartTime;
     protected boolean hasStartedPrepare = false;
     protected boolean hasStartedLaunch = false;
+    protected boolean isfiring = false;
     public boolean LaunchBalls(Timer timer){// main launch method
         if (!hasStartedPrepare) {
             hasStartedPrepare = true;
@@ -135,11 +136,13 @@ public abstract class AutoMainNew extends OpMode {
         if (LaunchWheelsInGate(target_velocity, gateTolerance) && (!hasStartedLaunch)){
             hasStartedPrepare = true;
             launchStartTime = timer.getElapsedTime();
+            isfiring = true;
             decBot.beginFeed();
         }
         if (timer.getElapsedTime() - fireDelay >= launchStartTime){
             hasStartedPrepare = false;
             hasStartedLaunch = false;
+            isfiring = false;
             decBot.flylaunch(0);
             return true;
         }
@@ -149,6 +152,7 @@ public abstract class AutoMainNew extends OpMode {
         telemetry.addData("target velocity", target_velocity);
         telemetry.addData("Gate Tolerance", gateTolerance);
         telemetry.addData("shots fired", shotsFired);
+        telemetry.addData("isFiring", isfiring);
     }
 
 }
