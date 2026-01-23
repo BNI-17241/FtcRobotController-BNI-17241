@@ -11,21 +11,18 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
+import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Controls.Auto.AutoMainNew;
 import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Controls.Auto.Old.BlueAlliance.BlueStartHumanParkSpike;
 import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.pedroPathing.Constants;
 
 
 
 @Autonomous(name = "Blue:Start Human:Park Spike State Test", group = "Drive")
-public class BlueStartHumanParkSpikeTester extends OpMode {
+public class BlueStartHumanParkSpikeTester extends AutoMainNew {
 //
     /**  Pedro Pathing Variables, Poses, Paths & States */
     public Follower follower;
     public Timer pathTimer, opmodeTimer;
-
-    public final Pose startPose = new Pose(44, 8, Math.toRadians(90));     // Red Far Launch Zone start
-    public final Pose scorePose = new Pose(59, 81, Math.toRadians(133));    // Red goal scoring pose // 80 x 80
-    public final Pose parkPose = new Pose(43, 12, Math.toRadians(90)); // Red Home (park)
 
     //Delay before intial movement (ms)
     public final float startDelay = 3000;
@@ -38,28 +35,28 @@ public class BlueStartHumanParkSpikeTester extends OpMode {
 
     public Path scorePreload;
 
-    protected PathChain start_to_fire_location;
-    protected PathChain fire_location_to_park;
+    protected PathChain path0;
+    protected PathChain path1;
 
     //set up simple states
     public enum pathingState {STARTDELAY, START, FIRINGDELAY, FIRING, PARK, END}
     public pathingState pathState = pathingState.START;
 
     public void pathGen(){
-        start_to_fire_location = follower
+        path0 = follower
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(startPose, scorePose)
+                        new BezierLine(BlueFarStartPose, BlueMidShootPose)
                 )
-                .setLinearHeadingInterpolation(startPose.getHeading(), scorePose.getHeading())
+                .setLinearHeadingInterpolation(BlueFarStartPose.getHeading(), BlueMidShootPose.getHeading())
                 .build();
 
-        fire_location_to_park = follower
+        path1 = follower
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(scorePose, parkPose)
+                        new BezierLine(BlueMidShootPose, BlueFarParkPose)
                 )
-                .setLinearHeadingInterpolation(scorePose.getHeading(), parkPose.getHeading())
+                .setLinearHeadingInterpolation(BlueMidShootPose.getHeading(), BlueFarParkPose.getHeading())
                 .build();
     }
 
@@ -71,7 +68,7 @@ public class BlueStartHumanParkSpikeTester extends OpMode {
         opmodeTimer = new Timer();
         follower = Constants.createFollower(hardwareMap);
         pathGen();
-        follower.setStartingPose(startPose);
+        follower.setStartingPose(BlueFarStartPose);
     }
 
     @Override
@@ -108,7 +105,7 @@ public class BlueStartHumanParkSpikeTester extends OpMode {
 
             case START:
                 //Move to the firing location
-                follower.followPath(start_to_fire_location);
+                follower.followPath(path0);
                 pathState = pathingState.FIRING;
                 break;
 
@@ -123,7 +120,7 @@ public class BlueStartHumanParkSpikeTester extends OpMode {
             case FIRINGDELAY:
                 //Check if wait has been fulfilled
                 if(delayStartTime <= opmodeTimer.getElapsedTime() - fireDelay) {
-                    follower.followPath(fire_location_to_park);
+                    follower.followPath(path1);
                     pathState = pathingState.PARK;
                 }
                 break;

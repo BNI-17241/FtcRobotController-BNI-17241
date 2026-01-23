@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Controls.Auto;
 
+import com.pedropathing.geometry.Pose;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Robots.StateDecodeBot;
@@ -22,6 +23,29 @@ public abstract class AutoMainNew extends OpMode {
 
 
     public StateDecodeBot decBot = new StateDecodeBot();
+
+
+    //----------------- NORMAL POSES ---------------------------
+
+    //------------Blue----------------
+
+    public final Pose BlueFarStartPose = new Pose(44, 8, Math.toRadians(90)); // Left corner of small triangle
+    public final Pose BlueMidShootPose = new Pose(59, 81, Math.toRadians(133));// Blue goal scoring pose
+    public final Pose BlueFarShootPose = new Pose(60, 20, Math.toRadians(110));// Blue goal scoring pose from small triangle
+    public final Pose BlueFarParkPose = new Pose(43, 12, Math.toRadians(90)); // Blue Home (park)
+
+    // Spike closest to human
+    public final Pose BlueSpikeAInsidePose = new Pose(97, 36, Math.toRadians(0));
+    public final Pose BlueSpikeAOutsidePose = new Pose(128, 36, Math.toRadians(0));
+
+    // Middle spike
+    public final Pose BlueSpikeBInsidePose = new Pose(97, 61, Math.toRadians(0));
+    public final Pose BlueSpikeBOutsidePose = new Pose(128, 61, Math.toRadians(0));
+
+    //Farthest Spike
+    public final Pose BlueSpikeCInsidePose = new Pose(97, 85, Math.toRadians(0));
+    public final Pose BlueSpikeCOutsidePose = new Pose(128, 85, Math.toRadians(0));
+    //----------------------------------------------------------
 
 
     protected double min_velocity_drop = 50; // threshold for detecting ball contact
