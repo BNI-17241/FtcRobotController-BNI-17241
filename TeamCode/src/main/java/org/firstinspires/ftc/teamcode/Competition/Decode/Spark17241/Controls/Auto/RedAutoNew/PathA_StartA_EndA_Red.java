@@ -10,6 +10,7 @@ import com.qualcomm.hardware.limelightvision.LLResult;
 import com.qualcomm.hardware.limelightvision.LLResultTypes;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Controls.Auto.AutoMainNew;
 import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.pedroPathing.Constants;
@@ -168,7 +169,7 @@ public class PathA_StartA_EndA_Red extends AutoMainNew {
                 break;
             case First_Firing:
                 if (!(follower.isBusy())) {
-                    if (LaunchBalls(3)) {
+                    if (LaunchBalls()) {
                         follower.followPath(fire_location_to_ball_inside);
                         pathState = pathingState.INSIDE;
                         decBot.intakeControl(50);
@@ -190,7 +191,7 @@ public class PathA_StartA_EndA_Red extends AutoMainNew {
                 break;
             case SECOND_FIRING:
                 if (!(follower.isBusy())) {
-                    if (LaunchBalls(3)) {
+                    if (LaunchBalls()) {
                         follower.followPath(fire_location_to_park);
                         pathState = pathingState.PARK;
                     }
