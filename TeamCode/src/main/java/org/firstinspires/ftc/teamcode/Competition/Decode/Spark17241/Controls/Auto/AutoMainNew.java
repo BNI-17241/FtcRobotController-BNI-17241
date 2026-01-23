@@ -1,12 +1,14 @@
 package org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Controls.Auto;
 
 import com.pedropathing.geometry.Pose;
+import com.pedropathing.util.Timer;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Robots.StateDecodeBot;
 
 import java.util.ArrayList;
 import java.util.List;
+
 
 //Auto main class writen by Oz Joswick
 //Contains general functions for individulized autos based on decode new robot
@@ -16,6 +18,8 @@ import java.util.List;
 
 // Limlight to be kept in individaul code files as must remember to init diffrent aspects
 public abstract class AutoMainNew extends OpMode {
+    public com.pedropathing.util.Timer pathTimer, opmodeTimer;
+
     protected double target_velocity = 0.0;
     protected double gateTolerance = 20.0;
 
@@ -89,6 +93,8 @@ public abstract class AutoMainNew extends OpMode {
 
     }
 
+
+    /*
     public enum firing {beginFeed, waiting, stopFeed}
     public firing FiringState = firing.beginFeed;
 
@@ -96,7 +102,7 @@ public abstract class AutoMainNew extends OpMode {
         return false;
     }
 
-    /*
+
     public void launchOneBall(){
         switch (FiringState){
             case beginFeed:
@@ -117,18 +123,32 @@ public abstract class AutoMainNew extends OpMode {
     }
 
     */
-
-    public boolean LaunchBalls(int num){// main launch method
-        prepareForLaunch();
-
-
+    protected float fireDelay = 4.0f;
+    protected float launchStartTime;
+    protected boolean hasStartedPrepare = false;
+    protected boolean hasStartedLaunch = false;
+    public boolean LaunchBalls(Timer timer){// main launch method
+        if (!hasStartedPrepare) {
+            hasStartedPrepare = true;
+            prepareForLaunch();
+        }
+        if (LaunchWheelsInGate(target_velocity, gateTolerance) && (!hasStartedLaunch)){
+            hasStartedPrepare = true;
+            launchStartTime = timer.getElapsedTime();
+            decBot.beginFeed();
+        }
+        if (timer.getElapsedTime() - fireDelay >= launchStartTime){
+            hasStartedPrepare = false;
+            hasStartedLaunch = false;
+            decBot.flylaunch(0);
+            return true;
+        }
         return false;
         }
     public void AutoMainTelemetry(){
         telemetry.addData("target velocity", target_velocity);
         telemetry.addData("Gate Tolerance", gateTolerance);
         telemetry.addData("shots fired", shotsFired);
-        telemetry.addData("Firing state", FiringState);
     }
 
 }
