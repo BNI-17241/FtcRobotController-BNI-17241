@@ -48,6 +48,7 @@ public abstract class AutoMainNew extends OpMode {
     //----------------------------------------------------------
 
 
+    /* Velocity drop function and vars
     protected double min_velocity_drop = 50; // threshold for detecting ball contact
     protected List<Double> previousShotVelocityL = new ArrayList<>();
     public boolean velocityDrop() {
@@ -68,7 +69,7 @@ public abstract class AutoMainNew extends OpMode {
 
         double velocityDrop = maxRecentVelocity - currentVelocity;
         return velocityDrop >= min_velocity_drop;
-    }
+    }*/
 
 
     public double getCurrentVelocity() {
@@ -90,34 +91,37 @@ public abstract class AutoMainNew extends OpMode {
 
     public enum firing {beginFeed, waiting, stopFeed}
     public firing FiringState = firing.beginFeed;
+
+    public boolean shotFiredCondition(){
+        return false;
+    }
+
+    /*
     public void launchOneBall(){
         switch (FiringState){
             case beginFeed:
-                decBot.beginFeed();
+                if (LaunchWheelsInGate(target_velocity, gateTolerance)){
+                    decBot.beginFeed();
+                }
+                break;
             case waiting:  // current system used to detect if ball has been fired could be changed
-                if (velocityDrop()){
+                if (shotFiredCondition()){
                     FiringState = firing.stopFeed;
-            }
+                }
+                break;
             case stopFeed:
                 shotsFired ++;
-                decBot.stopFeed();
-
-
+                decBot.beginFeed();
+                break;
         }
     }
+
+    */
+
     public boolean LaunchBalls(int num){// main launch method
         prepareForLaunch();
-        if (shotsFired <= num){
-            if (LaunchWheelsInGate(target_velocity, gateTolerance)) {
-                launchOneBall();
-            }
-        }
-        else {
-            FiringState = firing.beginFeed;
-            decBot.flylaunch(0);
-            shotsFired = 0;
-            return true;
-        }
+
+
         return false;
         }
     public void AutoMainTelemetry(){
