@@ -79,7 +79,7 @@ protected double maxTime = 25.0;
     public void Paths_generation(int april_tag) {
         // definie inside/ outside (aka where
 
-        if (april_tag == 21){
+        if (april_tag == 23){
             Inside_pose = new Pose(97, 36, Math.toRadians(0)); // closest to human 21
             Outside_pose = new Pose(128, 36, Math.toRadians(0));
         }
@@ -87,7 +87,7 @@ protected double maxTime = 25.0;
             Inside_pose = new Pose(97, 61, Math.toRadians(0)); // secount clostest 22
             Outside_pose = new Pose(128, 61, Math.toRadians(0));
         }
-        if (april_tag == 23){
+        if (april_tag == 21){
             Inside_pose = new Pose(97, 85, Math.toRadians(0)); // third closest 23
             Outside_pose = new Pose(128, 85, Math.toRadians(0));
         }
