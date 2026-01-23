@@ -132,6 +132,7 @@ public class Blue_Far_TwoSpike extends AutoMainNew {
     @Override
     public void loop() {
         follower.update();
+        AutoMainTelemetry();
         telemetry.addData("X", follower.getPose().getX());
         telemetry.addData("Y", follower.getPose().getY());
         telemetry.addData("Current time : ", opmodeTimer.getElapsedTime());
