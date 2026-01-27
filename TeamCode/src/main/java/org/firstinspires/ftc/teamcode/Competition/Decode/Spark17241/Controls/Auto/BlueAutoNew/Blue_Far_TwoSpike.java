@@ -9,6 +9,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Controls.Auto.AutoMainNew;
 import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.pedroPathing.Constants;
+import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.pedroPathing.MainContraints;
 
 
 @Autonomous(name = "Blue: Far Two Spike", group = "Drive")
@@ -137,7 +138,7 @@ public class Blue_Far_TwoSpike extends AutoMainNew {
     public void init() {
         pathTimer = new Timer();
         opmodeTimer = new Timer();
-        follower = Constants.createFollower(hardwareMap);
+        follower = MainContraints.createFollower(hardwareMap);
         pathGen();
         follower.setStartingPose(BlueFarStartPose);
     }
@@ -180,7 +181,7 @@ public class Blue_Far_TwoSpike extends AutoMainNew {
             case START:
                 //Move to the first spike
                 follower.followPath(start_to_spike1);
-                pathState = pathingState.FIRING;
+                pathState = pathingState.INTAKESPIKES;
                 break;
 
 
@@ -238,7 +239,7 @@ public class Blue_Far_TwoSpike extends AutoMainNew {
                             //3rd spike to fire
                             if(moveToPointChain == spike1_traversal){
                                 moveToPointChain = spike1_to_fire;
-                                returnState = pathingState.INTAKESPIKES;
+                                returnState = pathingState.END;
                                 pathState = pathingState.MOVETOPOINT;
                                 break;
                             }
