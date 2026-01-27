@@ -141,6 +141,7 @@ public class Blue_Far_TwoSpike extends AutoMainNew {
     public void init() {
         pathTimer = new Timer();
         opmodeTimer = new Timer();
+        decBot.initRobot(hardwareMap);
         follower = MainContraints.createFollower(hardwareMap);
         pathGen();
         follower.setStartingPose(BlueFarStartPose);
@@ -301,14 +302,13 @@ public class Blue_Far_TwoSpike extends AutoMainNew {
                 break;
 
             case FIREANDRETURNSTATE:
-                /*
+
                 if(burnerLaunch(targetVelocity, opmodeTimer.getElapsedTime(), startFireTime))
                 {
                     decBot.flylaunch(0);
                     pathState = returnState;
                     spikesTaken += 1;
                 }
-                */
 
                 break;
 
