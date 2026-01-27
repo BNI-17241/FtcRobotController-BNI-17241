@@ -54,6 +54,7 @@ public abstract class AutoMainNew extends OpMode {
 
     //------------Red-----------------
     public final Pose RedFarStartPose =  new Pose(100, 8, Math.toRadians(90));
+
     public final Pose RedMidShootPose = new Pose(85, 81, Math.toRadians(45));// Red goal scoring pose
     public final Pose RedFarShootPose =  new Pose(84, 20, Math.toRadians(64)); // Red goal scoring pose from small triangle
     public final Pose RedFarParkPose = new Pose(101, 12, Math.toRadians(90)); // Red Home (park)
@@ -145,7 +146,8 @@ public abstract class AutoMainNew extends OpMode {
     protected boolean hasStartedPrepare = false;
     protected boolean hasStartedLaunch = false;
     protected boolean isfiring = false;
-    public boolean LaunchBalls(){// main launch method
+    public boolean LaunchBalls(double target){// main launch method
+        target_velocity = target;
         if (!hasStartedPrepare) {
             hasStartedPrepare = true;
             prepareForLaunch();

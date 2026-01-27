@@ -296,7 +296,7 @@ public class Blue_Far_TwoSpike extends AutoMainNew {
                 break;
 
             case FIREANDRETURNSTATE:
-                if(LaunchBalls())
+                if(LaunchBalls(900))
                 {
                     pathState = returnState;
                     spikesTaken += 1;
