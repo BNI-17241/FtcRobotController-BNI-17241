@@ -14,7 +14,7 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Controls.Auto.AutoMainNew;
 import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Controls.Auto.Old.BlueAlliance.BlueStartHumanParkSpike;
 import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.pedroPathing.Constants;
-
+import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.pedroPathing.MainContraints;
 
 
 @Autonomous(name = "Blue:Start Human:Park Spike State Test", group = "Drive")
@@ -66,7 +66,7 @@ public class BlueStartHumanParkSpikeTester extends AutoMainNew {
     public void init() {
         pathTimer = new Timer();
         opmodeTimer = new Timer();
-        follower = Constants.createFollower(hardwareMap);
+        follower = MainContraints.createFollower(hardwareMap);
         pathGen();
         follower.setStartingPose(BlueFarStartPose);
     }
