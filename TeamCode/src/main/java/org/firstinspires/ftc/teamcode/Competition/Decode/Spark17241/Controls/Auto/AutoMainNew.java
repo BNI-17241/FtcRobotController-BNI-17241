@@ -112,6 +112,18 @@ public abstract class AutoMainNew extends OpMode {
     }
 
 
+    public boolean burnerLaunch(double velocity, Timer timer, double startTime){
+        if(timer.getElapsedTime() - 5000 > startTime){
+            decBot.flylaunch(0);
+            return true;
+        }
+        else{
+            decBot.flylaunch(velocity);
+            return false;
+        }
+    }
+
+
     /*
     public enum firing {beginFeed, waiting, stopFeed}
     public firing FiringState = firing.beginFeed;

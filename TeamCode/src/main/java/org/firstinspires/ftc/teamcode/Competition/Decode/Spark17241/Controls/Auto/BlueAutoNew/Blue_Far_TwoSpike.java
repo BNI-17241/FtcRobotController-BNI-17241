@@ -33,6 +33,8 @@ public class Blue_Far_TwoSpike extends AutoMainNew {
     //How many spikes have been intook
     public int spikesTaken = 0;
 
+    public double startFireTime;
+
     public boolean AtoCIntake = true;
 
     /*
@@ -217,6 +219,7 @@ public class Blue_Far_TwoSpike extends AutoMainNew {
                             //Fire ball
                             if(moveToPointChain == spike1_to_fire){
                                 moveToPointChain = null;
+                                startFireTime = opmodeTimer.getElapsedTime();
                                 returnState = pathingState.INTAKESPIKES;
                                 pathState = pathingState.FIREANDRETURNSTATE;
                                 break;
@@ -272,6 +275,7 @@ public class Blue_Far_TwoSpike extends AutoMainNew {
                         //Fire ball
                         if(moveToPointChain == spike2_to_fire){
                             moveToPointChain = null;
+                            startFireTime = opmodeTimer.getElapsedTime();
                             returnState = pathingState.INTAKESPIKES;
                             pathState = pathingState.FIREANDRETURNSTATE;
                             break;
@@ -297,7 +301,7 @@ public class Blue_Far_TwoSpike extends AutoMainNew {
                 break;
 
             case FIREANDRETURNSTATE:
-                if(LaunchBalls(targetVelocity))
+                if(burnerLaunch(targetVelocity, opmodeTimer, startFireTime))
                 {
                     decBot.flylaunch(0);
                     pathState = returnState;
