@@ -146,6 +146,7 @@ protected double maxTime = 25.0;
         // turns on all timlight stuff
         limelight = hardwareMap.get(Limelight3A.class, "limelight");
         follower = Constants.createFollower(hardwareMap);
+        follower.setStartingPose(StartPose);
         limelight.start();
         limelight.pipelineSwitch(0);
     }
