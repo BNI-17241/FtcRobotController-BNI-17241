@@ -64,7 +64,8 @@ public class Blue_Far_TwoSpike extends AutoMainNew {
     protected PathChain fire_to_park;
 
 
-
+    //Base target velocity
+    public double targetVelocity = 900;
 
     //set up simple states
     public enum pathingState {STARTDELAY, START, INTAKESPIKES, FIRING, FIRINGDELAY, PARK, END, MOVETOPOINT, RETURNMOVETOPOINT, FIREANDRETURNSTATE}
@@ -296,8 +297,9 @@ public class Blue_Far_TwoSpike extends AutoMainNew {
                 break;
 
             case FIREANDRETURNSTATE:
-                if(LaunchBalls(900))
+                if(LaunchBalls(targetVelocity))
                 {
+                    decBot.flylaunch(0);
                     pathState = returnState;
                     spikesTaken += 1;
                 }
