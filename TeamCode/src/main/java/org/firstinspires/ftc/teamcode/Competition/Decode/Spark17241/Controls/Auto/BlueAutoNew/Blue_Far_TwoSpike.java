@@ -26,6 +26,9 @@ public class Blue_Far_TwoSpike extends AutoMainNew {
     //How many spikes are needed? 0-2
     public final int spikeAmount = 2;
 
+    //Initial fire check
+    public boolean initialFire = false;
+
     //How many spikes have been intook
     public int spikesTaken = 0;
 
@@ -160,6 +163,7 @@ public class Blue_Far_TwoSpike extends AutoMainNew {
         telemetry.addData("Wait time : ", delayStartTime);
 
         telemetry.addData("Current state :", pathState);
+        telemetry.addData("Spikes Intook", spikesTaken);
         telemetry.update();
         //telemetry.addData("Pose", Pose)
 
@@ -242,7 +246,34 @@ public class Blue_Far_TwoSpike extends AutoMainNew {
                     }
                     //Intake Spike B
                     if(spikesTaken == 1){
-
+                        //Start 2nd spike intake
+                        if(moveToPointChain == null){
+                            moveToPointChain = fire_to_spike2;
+                            returnState = pathingState.INTAKESPIKES;
+                            pathState = pathingState.MOVETOPOINT;
+                            break;
+                        }
+                        //2nd spike inside to outside
+                        if(moveToPointChain == fire_to_spike2){
+                            moveToPointChain = spike2_traversal;
+                            returnState = pathingState.INTAKESPIKES;
+                            pathState = pathingState.MOVETOPOINT;
+                            break;
+                        }
+                        //2nd spike to fire
+                        if(moveToPointChain == spike2_traversal){
+                            moveToPointChain = spike2_to_fire;
+                            returnState = pathingState.INTAKESPIKES;
+                            pathState = pathingState.MOVETOPOINT;
+                            break;
+                        }
+                        //Fire ball
+                        if(moveToPointChain == spike2_to_fire){
+                            moveToPointChain = null;
+                            returnState = pathingState.INTAKESPIKES;
+                            pathState = pathingState.FIREANDRETURNSTATE;
+                            break;
+                        }
                     }
                 }
                 break;
@@ -251,6 +282,8 @@ public class Blue_Far_TwoSpike extends AutoMainNew {
             case MOVETOPOINT:
                 //Uses moveToPointChain (Path) and returnState (pathingState)
                 follower.followPath(moveToPointChain);
+                telemetry.addData("Current Path:", moveToPointChain);
+
                 pathState = pathingState.RETURNMOVETOPOINT;
                 break;
 
@@ -262,8 +295,11 @@ public class Blue_Far_TwoSpike extends AutoMainNew {
                 break;
 
             case FIREANDRETURNSTATE:
-
-
+                if(LaunchBalls())
+                {
+                    pathState = returnState;
+                    spikesTaken += 1;
+                }
                 break;
 
             case FIRING:
