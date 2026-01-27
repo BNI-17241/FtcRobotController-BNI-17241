@@ -129,16 +129,17 @@ public class PadroLimLightControlPoint extends OpMode {
     @Override
     public void init() {
         // turns on all timlight stuff
+
+       follower = MainContraints.createFollower(hardwareMap);
         follower.setStartingPose(StartPose);
+
         limelight = hardwareMap.get(Limelight3A.class, "limelight");
-        follower = MainContraints.createFollower(hardwareMap);
-        limelight.start();
-        limelight.pipelineSwitch(0);
+       limelight.start();
+       limelight.pipelineSwitch(0);
     }
 
     @Override
     public void start(){
-        follower.setStartingPose(StartPose);
         //gets april tag value
         april_tag_value = limeLightData();
         //generates path based on april tag
