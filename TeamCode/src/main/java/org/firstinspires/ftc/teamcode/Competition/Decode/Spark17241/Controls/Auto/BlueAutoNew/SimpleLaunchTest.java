@@ -51,7 +51,7 @@ public class SimpleLaunchTest extends AutoMainNew {
 
         switch (pathState) {
             case FIRE:
-                burnerLaunch(900, opmodeTimer.getElapsedTime(), 0);
+                burnerLaunch(900);
         }
     }
 }

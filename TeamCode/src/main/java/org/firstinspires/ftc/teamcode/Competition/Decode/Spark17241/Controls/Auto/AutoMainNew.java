@@ -112,7 +112,7 @@ public abstract class AutoMainNew extends OpMode {
     }
 
 
-    public void burnerLaunch(double velocity, double timer, double startTime){
+    public void burnerLaunch(double velocity){
         decBot.flylaunch(velocity);
     }
 
