@@ -11,6 +11,7 @@ import com.qualcomm.hardware.limelightvision.LLResultTypes;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Controls.Auto.AutoMainNew;
 import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.pedroPathing.Constants;
@@ -22,8 +23,7 @@ import java.util.List;
 public class PathA_StartA_EndA_Blue extends AutoMainNew {
 
     public Follower follower;
-    public Timer pathTimer, opmodeTimer;
-
+    public Timer opmodeTimer;
 
     protected Limelight3A limelight;
 
@@ -67,6 +67,13 @@ public class PathA_StartA_EndA_Blue extends AutoMainNew {
             }
         }
         return 21;
+    }
+protected double maxTime = 25.0;
+    public boolean MaxTimeBreakout(){
+        if (opmodeTimer.getElapsedTime() >= maxTime){
+            return true;
+        }
+        return false;
     }
 
     public void Paths_generation(int april_tag) {
@@ -130,14 +137,12 @@ public class PathA_StartA_EndA_Blue extends AutoMainNew {
         AutoMainTelemetry();
         telemetry.addData("pathState", pathState);
         telemetry.addData("april tag", april_tag_value);
-        telemetry.addData("X", follower.getPose().getX());
-        telemetry.addData("Y", follower.getPose().getY());
         telemetry.update();
     }
 
     @Override
     public void init() {
-        follower.setStartingPose(StartPose);
+        opmodeTimer = new Timer();
         // turns on all timlight stuff
         limelight = hardwareMap.get(Limelight3A.class, "limelight");
         follower = Constants.createFollower(hardwareMap);
@@ -147,6 +152,7 @@ public class PathA_StartA_EndA_Blue extends AutoMainNew {
 
     @Override
     public void start(){
+        opmodeTimer.resetTimer();
         //gets april tag value
         april_tag_value = limeLightData();
         //generates path based on april tag
@@ -169,7 +175,7 @@ public class PathA_StartA_EndA_Blue extends AutoMainNew {
                 break;
             case First_Firing:
                 if (!(follower.isBusy())) {
-                    if (LaunchBalls(3)) {
+                    if (LaunchBalls()) {
                         follower.followPath(fire_location_to_ball_inside);
                         pathState = pathingState.INSIDE;
                         decBot.intakeControl(50);
@@ -190,9 +196,15 @@ public class PathA_StartA_EndA_Blue extends AutoMainNew {
                 }
                 break;
             case SECOND_FIRING:
+                if (MaxTimeBreakout()){
+                    pathState = pathingState.PARK;
+                    decBot.flylaunch(0);
+                    decBot.stopFeed();
+                }
                 if (!(follower.isBusy())) {
-                    if (LaunchBalls(3)) {
+                    if (LaunchBalls()) {
                         follower.followPath(fire_location_to_park);
+                        decBot.flylaunch(0);
                         pathState = pathingState.PARK;
                     }
                 }
