@@ -175,7 +175,7 @@ protected double maxTime = 25.0;
                 break;
             case First_Firing:
                 if (!(follower.isBusy())) {
-                    if (LaunchBalls(3)) {
+                    if (LaunchBalls()) {
                         follower.followPath(fire_location_to_ball_inside);
                         pathState = pathingState.INSIDE;
                         decBot.intakeControl(50);
@@ -202,7 +202,7 @@ protected double maxTime = 25.0;
                     decBot.stopFeed();
                 }
                 if (!(follower.isBusy())) {
-                    if (LaunchBalls(3)) {
+                    if (LaunchBalls()) {
                         follower.followPath(fire_location_to_park);
                         decBot.flylaunch(0);
                         pathState = pathingState.PARK;
