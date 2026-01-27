@@ -1,11 +1,15 @@
 package org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Controls.Auto;
 
+import com.pedropathing.geometry.Pose;
+import com.pedropathing.util.Timer;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Robots.StateDecodeBot;
 
 import java.util.ArrayList;
 import java.util.List;
+
 
 //Auto main class writen by Oz Joswick
 //Contains general functions for individulized autos based on decode new robot
@@ -15,6 +19,8 @@ import java.util.List;
 
 // Limlight to be kept in individaul code files as must remember to init diffrent aspects
 public abstract class AutoMainNew extends OpMode {
+    public com.pedropathing.util.Timer pathTimer, opmodeTimer;
+
     protected double target_velocity = 0.0;
     protected double gateTolerance = 20.0;
 
@@ -24,6 +30,46 @@ public abstract class AutoMainNew extends OpMode {
     public StateDecodeBot decBot = new StateDecodeBot();
 
 
+    //----------------- NORMAL POSES ---------------------------
+
+    //------------Blue----------------
+
+    public final Pose BlueFarStartPose = new Pose(44, 8, Math.toRadians(90)); // Left corner of small triangle
+    public final Pose BlueMidShootPose = new Pose(59, 81, Math.toRadians(133));// Blue goal scoring pose
+    public final Pose BlueFarShootPose = new Pose(60, 20, Math.toRadians(110));// Blue goal scoring pose from small triangle
+    public final Pose BlueFarParkPose = new Pose(43, 12, Math.toRadians(0)); // Blue Home (park)
+
+    // Spike closest to human
+    public final Pose BlueSpikeAInsidePose = new Pose(97, 36, Math.toRadians(0));
+    public final Pose BlueSpikeAOutsidePose = new Pose(128, 36, Math.toRadians(0));
+
+    // Middle spike
+    public final Pose BlueSpikeBInsidePose = new Pose(97, 61, Math.toRadians(0));
+    public final Pose BlueSpikeBOutsidePose = new Pose(128, 61, Math.toRadians(0));
+
+    //Farthest Spike
+    public final Pose BlueSpikeCInsidePose = new Pose(97, 85, Math.toRadians(0));
+    public final Pose BlueSpikeCOutsidePose = new Pose(128, 85, Math.toRadians(0));
+    //----------------------------------------------------------
+
+    //------------Red-----------------
+    public final Pose RedFarStartPose =  new Pose(100, 8, Math.toRadians(90));
+    public final Pose RedMidShootPose = new Pose(85, 81, Math.toRadians(45));// Red goal scoring pose
+    public final Pose RedFarShootPose =  new Pose(84, 20, Math.toRadians(64)); // Red goal scoring pose from small triangle
+    public final Pose RedFarParkPose = new Pose(101, 12, Math.toRadians(90)); // Red Home (park)
+
+    public final Pose RedSpikeAInsidePose = new Pose(48, 36, Math.toRadians(180)); // closest to human 23
+    public final Pose RedSpikeAOutsidePose = new Pose(16, 36, Math.toRadians(180));
+
+    public final Pose RedSpikeBInsidePose = new Pose(48, 61, Math.toRadians(180)); // secount clostest 22
+    public final Pose RedSpikeBOutsidePose = new Pose(16, 61, Math.toRadians(180));
+
+    public final Pose RedSpikeCInsidePose = new Pose(48, 85, Math.toRadians(180)); // third closest 21
+    public final Pose RedSpikeCOutsidePose = new Pose(16, 85, Math.toRadians(180));
+
+
+
+    /* Velocity drop function and vars
     protected double min_velocity_drop = 50; // threshold for detecting ball contact
     protected List<Double> previousShotVelocityL = new ArrayList<>();
     public boolean velocityDrop() {
@@ -44,7 +90,7 @@ public abstract class AutoMainNew extends OpMode {
 
         double velocityDrop = maxRecentVelocity - currentVelocity;
         return velocityDrop >= min_velocity_drop;
-    }
+    }*/
 
 
     public double getCurrentVelocity() {
@@ -64,35 +110,57 @@ public abstract class AutoMainNew extends OpMode {
 
     }
 
+
+    /*
     public enum firing {beginFeed, waiting, stopFeed}
     public firing FiringState = firing.beginFeed;
+
+    public boolean shotFiredCondition(){
+        return false;
+    }
+
 
     public void launchOneBall(){
         switch (FiringState){
             case beginFeed:
-                decBot.beginFeed();
+                if (LaunchWheelsInGate(target_velocity, gateTolerance)){
+                    decBot.beginFeed();
+                }
+                break;
             case waiting:  // current system used to detect if ball has been fired could be changed
-                if (velocityDrop()){
+                if (shotFiredCondition()){
                     FiringState = firing.stopFeed;
-            }
+                }
+                break;
             case stopFeed:
                 shotsFired ++;
-                decBot.stopFeed();
-
-
+                decBot.beginFeed();
+                break;
         }
     }
-    public boolean LaunchBalls(int num){// main launch method
-        prepareForLaunch();
-        if (shotsFired <= num){
-            if (LaunchWheelsInGate(target_velocity, gateTolerance)) {
-                launchOneBall();
-            }
+
+    */
+    protected float fireDelay = 4.0f;
+    protected float launchStartTime;
+    protected boolean hasStartedPrepare = false;
+    protected boolean hasStartedLaunch = false;
+    protected boolean isfiring = false;
+    public boolean LaunchBalls(){// main launch method
+        if (!hasStartedPrepare) {
+            hasStartedPrepare = true;
+            prepareForLaunch();
         }
-        else {
-            FiringState = firing.beginFeed;
+        if (LaunchWheelsInGate(target_velocity, gateTolerance) && (!hasStartedLaunch)){
+            hasStartedPrepare = true;
+            launchStartTime = opmodeTimer.getElapsedTime();
+            isfiring = true;
+            decBot.beginFeed();
+        }
+        if (opmodeTimer.getElapsedTime() - fireDelay >= launchStartTime){
+            hasStartedPrepare = false;
+            hasStartedLaunch = false;
+            isfiring = false;
             decBot.flylaunch(0);
-            shotsFired = 0;
             return true;
         }
         return false;
@@ -101,7 +169,7 @@ public abstract class AutoMainNew extends OpMode {
         telemetry.addData("target velocity", target_velocity);
         telemetry.addData("Gate Tolerance", gateTolerance);
         telemetry.addData("shots fired", shotsFired);
-        telemetry.addData("Firing state", FiringState);
+        telemetry.addData("isFiring", isfiring);
     }
 
 }

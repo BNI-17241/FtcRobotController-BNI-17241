@@ -2,23 +2,17 @@ package org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Controls.Au
 
 import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.BezierLine;
-import com.pedropathing.geometry.Pose;
 import com.pedropathing.paths.Path;
 import com.pedropathing.paths.PathChain;
 import com.pedropathing.util.Timer;
-import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
-import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Controls.Auto.AutoMainNew;
-import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Controls.Auto.Old.BlueAlliance.BlueStartHumanParkSpike;
 import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.pedroPathing.Constants;
 
 
-
-@Autonomous(name = "Blue:Start Human:Park Spike State Test", group = "Drive")
-public class BlueStartHumanParkSpikeTester extends AutoMainNew {
+@Autonomous(name = "Blue: Far Two Spike", group = "Drive")
+public class Blue_Far_TwoSpike extends AutoMainNew {
 //
     /**  Pedro Pathing Variables, Poses, Paths & States */
     public Follower follower;
@@ -29,34 +23,87 @@ public class BlueStartHumanParkSpikeTester extends AutoMainNew {
     //Delay at goal after firing (ms)
     public final float fireDelay  = 5000;
 
+    //How many spikes are needed? 0-2
+    public final int spikeAmount = 2;
+
+    //How many spikes have been intook
+    public int spikesTaken = 0;
 
     //Help view elapsed time on wait cases
     public float delayStartTime = 0;
 
     public Path scorePreload;
 
-    protected PathChain path0;
-    protected PathChain path1;
+    protected PathChain start_to_spike1;
+    protected PathChain spike1_traversal;
+    protected PathChain spike1_to_fire;
+    protected PathChain fire_to_spike2;
+    protected PathChain spike2_traversal;
+    protected PathChain spike2_to_fire;
+    protected PathChain fire_to_park;
+
+
+
 
     //set up simple states
-    public enum pathingState {STARTDELAY, START, FIRINGDELAY, FIRING, PARK, END}
+    public enum pathingState {STARTDELAY, START, INTAKESPIKES, FIRING, FIRINGDELAY, PARK, END}
     public pathingState pathState = pathingState.START;
 
     public void pathGen(){
-        path0 = follower
+        start_to_spike1 = follower
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(BlueFarStartPose, BlueMidShootPose)
+                        new BezierLine(BlueFarStartPose, BlueSpikeAInsidePose)
                 )
                 .setLinearHeadingInterpolation(BlueFarStartPose.getHeading(), BlueMidShootPose.getHeading())
                 .build();
 
-        path1 = follower
+        spike1_traversal = follower
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(BlueMidShootPose, BlueFarParkPose)
+                        new BezierLine(BlueSpikeAInsidePose, BlueSpikeAOutsidePose)
                 )
-                .setLinearHeadingInterpolation(BlueMidShootPose.getHeading(), BlueFarParkPose.getHeading())
+                .setLinearHeadingInterpolation(BlueFarStartPose.getHeading(), BlueMidShootPose.getHeading())
+                .build();
+
+        spike1_to_fire = follower
+                .pathBuilder()
+                .addPath(
+                        new BezierLine(BlueSpikeAOutsidePose, BlueFarShootPose)
+                )
+                .setLinearHeadingInterpolation(BlueFarStartPose.getHeading(), BlueMidShootPose.getHeading())
+                .build();
+
+        fire_to_spike2 = follower
+                .pathBuilder()
+                .addPath(
+                        new BezierLine(BlueFarShootPose, BlueSpikeBInsidePose)
+                )
+                .setLinearHeadingInterpolation(BlueFarStartPose.getHeading(), BlueMidShootPose.getHeading())
+                .build();
+
+        spike2_traversal = follower
+                .pathBuilder()
+                .addPath(
+                        new BezierLine(BlueSpikeBInsidePose, BlueSpikeBOutsidePose)
+                )
+                .setLinearHeadingInterpolation(BlueFarStartPose.getHeading(), BlueMidShootPose.getHeading())
+                .build();
+
+        spike2_to_fire = follower
+                .pathBuilder()
+                .addPath(
+                        new BezierLine(BlueSpikeBOutsidePose, BlueFarShootPose)
+                )
+                .setLinearHeadingInterpolation(BlueFarStartPose.getHeading(), BlueMidShootPose.getHeading())
+                .build();
+
+        fire_to_park = follower
+                .pathBuilder()
+                .addPath(
+                        new BezierLine(BlueFarShootPose, BlueFarParkPose)
+                )
+                .setLinearHeadingInterpolation(BlueFarStartPose.getHeading(), BlueMidShootPose.getHeading())
                 .build();
     }
 
@@ -78,12 +125,14 @@ public class BlueStartHumanParkSpikeTester extends AutoMainNew {
         pathState = pathingState.STARTDELAY;
         //Get the time of the starting delay
         delayStartTime = opmodeTimer.getElapsedTime();
+        spikesTaken = 0;
     }
 
 
     @Override
     public void loop() {
         follower.update();
+        AutoMainTelemetry();
         telemetry.addData("X", follower.getPose().getX());
         telemetry.addData("Y", follower.getPose().getY());
         telemetry.addData("Current time : ", opmodeTimer.getElapsedTime());
@@ -104,10 +153,26 @@ public class BlueStartHumanParkSpikeTester extends AutoMainNew {
 
 
             case START:
-                //Move to the firing location
-                follower.followPath(path0);
+                //Move to the first spike
+                follower.followPath(start_to_spike1);
                 pathState = pathingState.FIRING;
                 break;
+
+
+            case INTAKESPIKES:
+                //If you need to intake at all
+                if(spikesTaken < spikeAmount)
+                {
+                    if(spikesTaken == 0){
+
+                    }
+
+                    if(spikesTaken == 1){
+
+                    }
+                }
+                break;
+
 
             case FIRING:
                 if (!(follower.isBusy())) {
@@ -120,7 +185,7 @@ public class BlueStartHumanParkSpikeTester extends AutoMainNew {
             case FIRINGDELAY:
                 //Check if wait has been fulfilled
                 if(delayStartTime <= opmodeTimer.getElapsedTime() - fireDelay) {
-                    follower.followPath(path1);
+                    //follower.followPath();
                     pathState = pathingState.PARK;
                 }
                 break;

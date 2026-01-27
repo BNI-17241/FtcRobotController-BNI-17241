@@ -163,56 +163,6 @@ public class AndrewStateDecodeTeleop extends OpMode {
         return currentVelocity >= lower_tolerance && currentVelocity <= upper_tolerance;
     }
 
-    public boolean velocityDrop() {
-        // Track most recent measurements
-        double currentVelocity = getCurrentVelocity();
-        previousShotVelocityL.add(currentVelocity);
-
-        // Maintain window of last 50 readings
-        if (previousShotVelocityL.size() > 50) {
-            previousShotVelocityL.remove(0);
-        }
-
-        // Detect if significant drop occurred
-        double maxRecentVelocity = previousShotVelocityL.stream()
-                .mapToDouble(v -> v)
-                .max()
-                .orElse(currentVelocity);
-
-        double velocityDrop = maxRecentVelocity - currentVelocity;
-        return velocityDrop >= min_velocity_drop;
-    }
-
-    public void startSpeed(double selectedSpeed) {
-        if (!hasStartedAutoLaunch) { // should be negated
-            hasStartedAutoLaunch = true;
-            decBot.flylaunch(selectedSpeed); // start up motors
-        }
-    }
-
-    public void singleBallFire(double selectedSpeed, double tolerance) {
-        // If speed is within range, start feeding once
-        if (canLaunch(selectedSpeed, tolerance) && !hasStartedFeeding) {
-            hasStartedFeeding = true;
-            hasReleased = false;
-        }
-        boolean hasdroped = velocityDrop();
-        // Stop feeding once velocity drop indicates the ball launched
-        if (hasStartedFeeding && hasdroped) {
-            hasReleased = true;
-            hasStartedFeeding = false;
-        }
-        telemetry.addData("has dropped", hasdroped);
-    }
-
-    public void launchAuto(double selectedSpeed, double tolerance) {
-        startSpeed(selectedSpeed);
-        int ballCount = 3;
-        for (int i = 1; i <= ballCount; i++) {
-            singleBallFire(selectedSpeed, tolerance);
-        }
-    }
-
     public void setFlywheelSpeed(){
         //Launch if is allowed to
         decBot.flylaunch(isLaunching ? targetVelocity : 0);
