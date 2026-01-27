@@ -301,7 +301,7 @@ public class Blue_Far_TwoSpike extends AutoMainNew {
                 break;
 
             case FIREANDRETURNSTATE:
-                if(burnerLaunch(targetVelocity, opmodeTimer, startFireTime))
+                if(burnerLaunch(targetVelocity, opmodeTimer.getElapsedTime(), startFireTime))
                 {
                     decBot.flylaunch(0);
                     pathState = returnState;
