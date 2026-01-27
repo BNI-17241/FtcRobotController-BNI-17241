@@ -19,7 +19,7 @@ public abstract class AutoMain extends OpMode {
     protected double targetVelocity = 0;        // default
     protected double gatePercent = 0.02;     // was ±2% gate window
     protected double feederPower = 1.0;      // feeder wheel power (0..1)
-    protected long   feedMs = 600;           // was 700 ms to run feeder during a shot
+    protected long   feedMs = 600;           // was 600 ms to run feeder during a shot
     protected double boostFactor = 1.0;     // temporary +2% velocity during feed
     protected long   boostMs = 350;          // recovery delay after feed
 

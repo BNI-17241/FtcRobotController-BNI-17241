@@ -66,6 +66,7 @@ public abstract class AutoMainNew extends OpMode {
 
     public enum firing {beginFeed, waiting, stopFeed}
     public firing FiringState = firing.beginFeed;
+
     public void launchOneBall(){
         switch (FiringState){
             case beginFeed:
