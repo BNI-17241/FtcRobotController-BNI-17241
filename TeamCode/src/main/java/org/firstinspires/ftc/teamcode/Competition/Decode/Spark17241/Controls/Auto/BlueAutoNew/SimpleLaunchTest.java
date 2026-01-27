@@ -18,6 +18,8 @@ public class SimpleLaunchTest extends AutoMainNew {
     public Follower follower;
     public Timer pathTimer, opmodeTimer;
 
+
+
     //set up simple states
     public enum pathingState {FIRE}
     public pathingState pathState = pathingState.FIRE;
@@ -29,6 +31,7 @@ public class SimpleLaunchTest extends AutoMainNew {
     public void init() {
         pathTimer = new Timer();
         opmodeTimer = new Timer();
+        decBot.initRobot(hardwareMap);
         follower = MainContraints.createFollower(hardwareMap);
         follower.setStartingPose(BlueFarStartPose);
     }
