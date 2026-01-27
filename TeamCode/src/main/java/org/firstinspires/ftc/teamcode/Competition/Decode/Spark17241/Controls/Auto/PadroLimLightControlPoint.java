@@ -73,19 +73,19 @@ public class PadroLimLightControlPoint extends OpMode {
 
         if (april_tag == 23){
             Inside_pose = new Pose(48, 36, Math.toRadians(180)); // closest to human 21
-            Outside_pose = new Pose(16, 36, Math.toRadians(180));
+            Outside_pose = new Pose(18, 36, Math.toRadians(180));
         }
         if (april_tag == 22){
             Inside_pose = new Pose(48, 61, Math.toRadians(180)); // secount clostest 22
-            Outside_pose = new Pose(16, 61, Math.toRadians(180));
+            Outside_pose = new Pose(18, 61, Math.toRadians(180));
         }
         if (april_tag == 21){
             Inside_pose = new Pose(48, 85, Math.toRadians(180)); // third closest 23
-            Outside_pose = new Pose(16, 85, Math.toRadians(180));
+            Outside_pose = new Pose(18, 85, Math.toRadians(180));
         }
         if (Inside_pose == null || Outside_pose == null){ // fall back incase error happens
             Inside_pose = new Pose(48, 37, Math.toRadians(180));
-            Outside_pose = new Pose(16, 37, Math.toRadians(180));
+            Outside_pose = new Pose(18, 37, Math.toRadians(180));
         }
 
         start_to_fire_location = follower
