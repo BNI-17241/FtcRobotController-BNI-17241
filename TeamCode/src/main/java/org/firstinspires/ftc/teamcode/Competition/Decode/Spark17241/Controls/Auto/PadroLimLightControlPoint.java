@@ -12,7 +12,7 @@ import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
-import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.pedroPathing.Constants;
+import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.pedroPathing.MainContraints;
 
 import java.util.List;
 
@@ -131,7 +131,7 @@ public class PadroLimLightControlPoint extends OpMode {
         // turns on all timlight stuff
         follower.setStartingPose(StartPose);
         limelight = hardwareMap.get(Limelight3A.class, "limelight");
-        follower = Constants.createFollower(hardwareMap);
+        follower = MainContraints.createFollower(hardwareMap);
         limelight.start();
         limelight.pipelineSwitch(0);
     }
