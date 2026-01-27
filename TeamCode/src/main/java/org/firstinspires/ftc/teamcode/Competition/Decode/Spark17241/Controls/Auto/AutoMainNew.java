@@ -40,12 +40,12 @@ public abstract class AutoMainNew extends OpMode {
     public final Pose BlueFarParkPose = new Pose(43, 12, Math.toRadians(0)); // Blue Home (park)
 
     // Spike closest to human
-    public final Pose BlueSpikeAInsidePose = new Pose(97, 36, Math.toRadians(0));
-    public final Pose BlueSpikeAOutsidePose = new Pose(128, 36, Math.toRadians(0));
+    public final Pose BlueSpikeAInsidePose = new Pose(48, 36, Math.toRadians(180));
+    public final Pose BlueSpikeAOutsidePose = new Pose(16, 36, Math.toRadians(180));
 
     // Middle spike
-    public final Pose BlueSpikeBInsidePose = new Pose(97, 61, Math.toRadians(0));
-    public final Pose BlueSpikeBOutsidePose = new Pose(128, 61, Math.toRadians(0));
+    public final Pose BlueSpikeBInsidePose = new Pose(48, 61, Math.toRadians(180));;
+    public final Pose BlueSpikeBOutsidePose = new Pose(16, 61, Math.toRadians(180));
 
     //Farthest Spike
     public final Pose BlueSpikeCInsidePose = new Pose(97, 85, Math.toRadians(0));
