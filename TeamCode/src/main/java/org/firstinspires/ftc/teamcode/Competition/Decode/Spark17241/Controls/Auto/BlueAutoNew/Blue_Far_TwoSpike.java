@@ -29,6 +29,23 @@ public class Blue_Far_TwoSpike extends AutoMainNew {
     //How many spikes have been intook
     public int spikesTaken = 0;
 
+    public boolean AtoCIntake = true;
+
+    /*
+    Order of intake
+    true:
+    C ----- ^
+    B ----- |
+    A ----- |
+    false:
+    C ----- |
+    B ----- |
+    A ----- V
+    */
+
+    //path for the moveToPoint case used in spike navigation
+    public PathChain moveToPointChain;
+
     //Help view elapsed time on wait cases
     public float delayStartTime = 0;
 
@@ -46,8 +63,12 @@ public class Blue_Far_TwoSpike extends AutoMainNew {
 
 
     //set up simple states
-    public enum pathingState {STARTDELAY, START, INTAKESPIKES, FIRING, FIRINGDELAY, PARK, END}
+    public enum pathingState {STARTDELAY, START, INTAKESPIKES, FIRING, FIRINGDELAY, PARK, END, MOVETOPOINT, RETURNMOVETOPOINT, FIREANDRETURNSTATE}
     public pathingState pathState = pathingState.START;
+
+    //State to return to after moveToPoint case
+    public pathingState returnState;
+
 
     public void pathGen(){
         start_to_spike1 = follower
@@ -162,16 +183,87 @@ public class Blue_Far_TwoSpike extends AutoMainNew {
                 //If you need to intake at all
                 if(spikesTaken < spikeAmount)
                 {
+                    //Intake Spike A or C depending on bool AtoCIntake
                     if(spikesTaken == 0){
-
+                        if(AtoCIntake){
+                            //Start 1st spike intake
+                            if(moveToPointChain == null){
+                                moveToPointChain = start_to_spike1;
+                                returnState = pathingState.INTAKESPIKES;
+                                pathState = pathingState.MOVETOPOINT;
+                                break;
+                            }
+                            //1st spike inside to outside
+                            if(moveToPointChain == start_to_spike1){
+                                moveToPointChain = spike1_traversal;
+                                returnState = pathingState.INTAKESPIKES;
+                                pathState = pathingState.MOVETOPOINT;
+                                break;
+                            }
+                            //1st spike to fire
+                            if(moveToPointChain == spike1_traversal){
+                                moveToPointChain = spike1_to_fire;
+                                returnState = pathingState.INTAKESPIKES;
+                                pathState = pathingState.MOVETOPOINT;
+                                break;
+                            }
+                            //Fire ball
+                            if(moveToPointChain == spike1_to_fire){
+                                moveToPointChain = null;
+                                returnState = pathingState.INTAKESPIKES;
+                                pathState = pathingState.FIREANDRETURNSTATE;
+                                break;
+                            }
+                        }
+                        else{
+                            //Start 3rd spike intake
+                            if(moveToPointChain == null){
+                                moveToPointChain = start_to_spike1;
+                                returnState = pathingState.INTAKESPIKES;
+                                pathState = pathingState.MOVETOPOINT;
+                                break;
+                            }
+                            //3rd spike inside to outside
+                            if(moveToPointChain == start_to_spike1){
+                                moveToPointChain = spike1_traversal;
+                                returnState = pathingState.INTAKESPIKES;
+                                pathState = pathingState.MOVETOPOINT;
+                                break;
+                            }
+                            //3rd spike to fire
+                            if(moveToPointChain == spike1_traversal){
+                                moveToPointChain = spike1_to_fire;
+                                returnState = pathingState.INTAKESPIKES;
+                                pathState = pathingState.MOVETOPOINT;
+                                break;
+                            }
+                        }
                     }
-
+                    //Intake Spike B
                     if(spikesTaken == 1){
 
                     }
                 }
                 break;
 
+
+            case MOVETOPOINT:
+                //Uses moveToPointChain (Path) and returnState (pathingState)
+                follower.followPath(moveToPointChain);
+                pathState = pathingState.RETURNMOVETOPOINT;
+                break;
+
+            case RETURNMOVETOPOINT:
+                //Just returns to the case
+                if (!(follower.isBusy())) {
+                    pathState = returnState;
+                }
+                break;
+
+            case FIREANDRETURNSTATE:
+
+
+                break;
 
             case FIRING:
                 if (!(follower.isBusy())) {
