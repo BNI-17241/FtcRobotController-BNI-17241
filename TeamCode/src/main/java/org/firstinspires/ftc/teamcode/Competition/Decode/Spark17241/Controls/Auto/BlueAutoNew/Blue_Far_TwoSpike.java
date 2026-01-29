@@ -200,12 +200,6 @@ public class Blue_Far_TwoSpike extends AutoMainNew {
                 //If you need to intake at all
                 if(spikesTaken < spikeAmount)
                 {
-                    if(spikesTaken + 1 >= spikeAmount){
-                        moveToPointChain = fire_to_park;
-                        returnState = pathingState.PARK;
-                        pathState = pathingState.MOVETOPOINT;
-                        break;
-                    }
                     //Intake Spike A or C depending on bool AtoCIntake
                     if(spikesTaken == 0){
                         if(AtoCIntake){
@@ -257,7 +251,7 @@ public class Blue_Far_TwoSpike extends AutoMainNew {
                             //3rd spike to fire
                             if(moveToPointChain == spike1_traversal){
                                 moveToPointChain = spike1_to_fire;
-                                returnState = pathingState.END;
+                                returnState = pathingState.INTAKESPIKES;
                                 pathState = pathingState.MOVETOPOINT;
                                 break;
                             }
@@ -295,6 +289,12 @@ public class Blue_Far_TwoSpike extends AutoMainNew {
                             break;
                         }
                     }
+                }
+                else{
+                    moveToPointChain = fire_to_park;
+                    returnState = pathingState.PARK;
+                    pathState = pathingState.MOVETOPOINT;
+                    break;
                 }
                 break;
 
