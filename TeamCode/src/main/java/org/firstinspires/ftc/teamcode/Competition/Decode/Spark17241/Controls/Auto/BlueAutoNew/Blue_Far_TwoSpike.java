@@ -69,6 +69,9 @@ public class Blue_Far_TwoSpike extends AutoMainNew {
     //Base target velocity
     public double targetVelocity = 900;
 
+    //Base intake spin speed
+    public double intakeSpeed = 1;
+
     //set up simple states
     public enum pathingState {STARTDELAY, START, INTAKESPIKES, FIRING, FIRINGDELAY, PARK, END, MOVETOPOINT, RETURNMOVETOPOINT, FIREANDRETURNSTATE}
     public pathingState pathState = pathingState.START;
@@ -184,6 +187,8 @@ public class Blue_Far_TwoSpike extends AutoMainNew {
 
             case START:
                 //Move to the first spike
+                decBot.intakeControl(intakeSpeed);
+
                 follower.followPath(start_to_spike1);
                 pathState = pathingState.INTAKESPIKES;
                 break;
@@ -300,6 +305,7 @@ public class Blue_Far_TwoSpike extends AutoMainNew {
                     pathState = returnState;
                 }
                 break;
+
 
             case FIREANDRETURNSTATE:
 
