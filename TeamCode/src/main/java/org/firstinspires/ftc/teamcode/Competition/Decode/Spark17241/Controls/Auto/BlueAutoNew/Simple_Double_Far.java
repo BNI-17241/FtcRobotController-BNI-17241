@@ -19,7 +19,7 @@ import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.pedroPathing
 import java.util.List;
 
 
-@Autonomous(name = "PathA_StartA_EndA_Blue", group = "Drive")
+@Autonomous(name = "oz code", group = "Drive")
 public class Simple_Double_Far extends AutoMainNew {
 
     public Follower follower;
