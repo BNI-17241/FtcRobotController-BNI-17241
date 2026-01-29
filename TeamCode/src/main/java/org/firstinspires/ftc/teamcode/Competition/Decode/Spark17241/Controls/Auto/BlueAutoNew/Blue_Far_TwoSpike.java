@@ -86,7 +86,7 @@ public class Blue_Far_TwoSpike extends AutoMainNew {
                 .addPath(
                         new BezierLine(BlueFarStartPose, BlueSpikeAInsidePose)
                 )
-                .setLinearHeadingInterpolation(BlueFarStartPose.getHeading(), BlueMidShootPose.getHeading())
+                .setLinearHeadingInterpolation(BlueFarStartPose.getHeading(), BlueSpikeAInsidePose.getHeading())
                 .build();
 
         spike1_traversal = follower
@@ -94,7 +94,7 @@ public class Blue_Far_TwoSpike extends AutoMainNew {
                 .addPath(
                         new BezierLine(BlueSpikeAInsidePose, BlueSpikeAOutsidePose)
                 )
-                .setLinearHeadingInterpolation(BlueFarStartPose.getHeading(), BlueMidShootPose.getHeading())
+                .setLinearHeadingInterpolation(BlueSpikeAInsidePose.getHeading(), BlueSpikeAOutsidePose.getHeading())
                 .build();
 
         spike1_to_fire = follower
@@ -102,7 +102,7 @@ public class Blue_Far_TwoSpike extends AutoMainNew {
                 .addPath(
                         new BezierLine(BlueSpikeAOutsidePose, BlueFarShootPose)
                 )
-                .setLinearHeadingInterpolation(BlueFarStartPose.getHeading(), BlueMidShootPose.getHeading())
+                .setLinearHeadingInterpolation(BlueSpikeAOutsidePose.getHeading(), BlueFarShootPose.getHeading())
                 .build();
 
         fire_to_spike2 = follower
@@ -110,7 +110,7 @@ public class Blue_Far_TwoSpike extends AutoMainNew {
                 .addPath(
                         new BezierLine(BlueFarShootPose, BlueSpikeBInsidePose)
                 )
-                .setLinearHeadingInterpolation(BlueFarStartPose.getHeading(), BlueMidShootPose.getHeading())
+                .setLinearHeadingInterpolation(BlueFarShootPose.getHeading(), BlueSpikeBInsidePose.getHeading())
                 .build();
 
         spike2_traversal = follower
@@ -118,7 +118,7 @@ public class Blue_Far_TwoSpike extends AutoMainNew {
                 .addPath(
                         new BezierLine(BlueSpikeBInsidePose, BlueSpikeBOutsidePose)
                 )
-                .setLinearHeadingInterpolation(BlueFarStartPose.getHeading(), BlueMidShootPose.getHeading())
+                .setLinearHeadingInterpolation(BlueSpikeBInsidePose.getHeading(), BlueSpikeBOutsidePose.getHeading())
                 .build();
 
         spike2_to_fire = follower
@@ -126,7 +126,7 @@ public class Blue_Far_TwoSpike extends AutoMainNew {
                 .addPath(
                         new BezierLine(BlueSpikeBOutsidePose, BlueFarShootPose)
                 )
-                .setLinearHeadingInterpolation(BlueFarStartPose.getHeading(), BlueMidShootPose.getHeading())
+                .setLinearHeadingInterpolation(BlueSpikeBOutsidePose.getHeading(), BlueFarShootPose.getHeading())
                 .build();
 
         fire_to_park = follower
@@ -134,7 +134,7 @@ public class Blue_Far_TwoSpike extends AutoMainNew {
                 .addPath(
                         new BezierLine(BlueFarShootPose, BlueFarParkPose)
                 )
-                .setLinearHeadingInterpolation(BlueFarStartPose.getHeading(), BlueMidShootPose.getHeading())
+                .setLinearHeadingInterpolation(BlueFarShootPose.getHeading(), BlueFarParkPose.getHeading())
                 .build();
     }
 
@@ -145,7 +145,7 @@ public class Blue_Far_TwoSpike extends AutoMainNew {
         pathTimer = new Timer();
         opmodeTimer = new Timer();
         decBot.initRobot(hardwareMap);
-        follower = MainContraints.createFollower(hardwareMap);
+        follower = Constants.createFollower(hardwareMap);
         pathGen();
         follower.setStartingPose(BlueFarStartPose);
     }
