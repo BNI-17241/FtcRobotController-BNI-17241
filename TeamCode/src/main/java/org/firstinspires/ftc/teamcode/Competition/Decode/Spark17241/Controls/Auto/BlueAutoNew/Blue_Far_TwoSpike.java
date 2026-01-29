@@ -188,6 +188,8 @@ public class Blue_Far_TwoSpike extends AutoMainNew {
             case START:
                 //Move to the first spike
                 decBot.intakeControl(intakeSpeed);
+                decBot.flylaunch(target_velocity);
+
 
                 follower.followPath(start_to_spike1);
                 pathState = pathingState.INTAKESPIKES;
@@ -311,7 +313,6 @@ public class Blue_Far_TwoSpike extends AutoMainNew {
 
                 if(burnerLaunch(targetVelocity, opmodeTimer.getElapsedTime(), startFireTime))
                 {
-                    decBot.flylaunch(0);
                     pathState = returnState;
                     spikesTaken += 1;
                 }
