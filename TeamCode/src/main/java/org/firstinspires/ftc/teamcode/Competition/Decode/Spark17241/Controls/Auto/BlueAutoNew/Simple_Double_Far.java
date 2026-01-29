@@ -43,7 +43,8 @@ public class Simple_Double_Far extends AutoMainNew {
 
 
 
-protected double maxTime = 25.0;
+    protected double maxTime = 25.0;
+
     public boolean MaxTimeBreakout(){
         if (opmodeTimer.getElapsedTime() >= maxTime){
             return true;
@@ -52,7 +53,7 @@ protected double maxTime = 25.0;
     }
 
     public void pathGen() {
-        // definie inside/ outside (aka where
+
 
         start_to_fire_location = follower
                 .pathBuilder()
@@ -123,18 +124,18 @@ protected double maxTime = 25.0;
     public void init() {
         decBot.initRobot(hardwareMap);
         opmodeTimer = new Timer();
-        // turns on all timlight stuff
-        limelight = hardwareMap.get(Limelight3A.class, "limelight");
+        pathGen();
+
         follower = Constants.createFollower(hardwareMap);
         follower.setStartingPose(BlueFarStartPose);
-        limelight.start();
-        limelight.pipelineSwitch(0);
+
     }
 
     @Override
     public void start(){
         opmodeTimer.resetTimer();
     }
+
     //set up simple states
     public enum pathingState {START, First_Firing ,INSIDE_A, OUTSIDE_A, SECOND_FIRING, PARK, FINISHED, INSIDE_B, OUTSIDE_B, Third_Fire}
     public pathingState pathState = pathingState.START;
