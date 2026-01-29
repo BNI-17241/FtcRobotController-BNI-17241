@@ -303,7 +303,7 @@ public class Blue_Far_TwoSpike extends AutoMainNew {
                 //Just returns to the case
                 if (!(follower.isBusy())) {
                     pathState = returnState;
-                }
+                } 
                 break;
 
 
