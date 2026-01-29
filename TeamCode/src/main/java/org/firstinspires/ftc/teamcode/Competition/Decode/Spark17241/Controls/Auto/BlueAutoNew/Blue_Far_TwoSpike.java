@@ -188,7 +188,7 @@ public class Blue_Far_TwoSpike extends AutoMainNew {
             case START:
                 //Move to the first spike
                 decBot.intakeControl(intakeSpeed);
-                decBot.flylaunch(target_velocity);
+                decBot.flylaunch(targetVelocity);
 
 
                 follower.followPath(start_to_spike1);
