@@ -200,7 +200,7 @@ public class Blue_Far_TwoSpike extends AutoMainNew {
                 //If you need to intake at all
                 if(spikesTaken < spikeAmount)
                 {
-                    if(spikesTaken >= spikeAmount){
+                    if(spikesTaken + 1 >= spikeAmount){
                         moveToPointChain = fire_to_park;
                         returnState = pathingState.PARK;
                         pathState = pathingState.MOVETOPOINT;
