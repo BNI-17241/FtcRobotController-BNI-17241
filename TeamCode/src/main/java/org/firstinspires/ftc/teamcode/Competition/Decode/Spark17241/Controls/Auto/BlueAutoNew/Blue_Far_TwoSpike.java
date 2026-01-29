@@ -145,7 +145,7 @@ public class Blue_Far_TwoSpike extends AutoMainNew {
         pathTimer = new Timer();
         opmodeTimer = new Timer();
         decBot.initRobot(hardwareMap);
-        follower = Constants.createFollower(hardwareMap);
+        follower = MainContraints.createFollower(hardwareMap);
         pathGen();
         follower.setStartingPose(BlueFarStartPose);
     }
