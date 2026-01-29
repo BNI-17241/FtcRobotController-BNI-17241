@@ -7,7 +7,7 @@ import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Controls.Auto.AutoMainNew;
-import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.pedroPathing.Constants;
+import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.pedroPathing.ProgramConstants;
 
 @Autonomous(name = "9 ball auto hard code blue", group = "Drive")
 public class NineBallAutoHardCodeBlue extends AutoMainNew {
@@ -81,7 +81,7 @@ public class NineBallAutoHardCodeBlue extends AutoMainNew {
     @Override
     public void init() {
         decBot.initRobot(hardwareMap);
-        follower = Constants.createFollower(hardwareMap);
+        follower = ProgramConstants.createFollower(hardwareMap);
         follower.setStartingPose(BlueFarStartPose);
         pathGen();
     }

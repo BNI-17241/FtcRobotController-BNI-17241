@@ -10,7 +10,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Workspaces.Andrew.AutoMain_NewAndrew;
-import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.pedroPathing.Constants;
+import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.pedroPathing.ProgramConstants;
 
 @Disabled
 @Autonomous(name = "Blue:Start Human Park Spike  Meet Two ", group = "Drive")
@@ -43,7 +43,7 @@ public class BlueStartHumanParkSpikeDecodeMeetTwo extends AutoMain_NewAndrew {
     public void init() {
         pathTimer = new Timer();
         opmodeTimer = new Timer();
-        follower = Constants.createFollower(hardwareMap);
+        follower = ProgramConstants.createFollower(hardwareMap);
         buildPaths();
         follower.setStartingPose(startPose);
         decBot.initRobot(hardwareMap);

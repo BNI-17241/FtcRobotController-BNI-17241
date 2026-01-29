@@ -9,7 +9,7 @@ import com.pedropathing.util.Timer;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
-import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.pedroPathing.Constants;
+import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.pedroPathing.ProgramConstants;
 
 @Disabled
 
@@ -39,7 +39,7 @@ public class BlueStartHumanFarLaunchNewAndrew extends AutoMain_NewAndrew {
     public void init() {
         pathTimer = new Timer();
         opmodeTimer = new Timer();
-        follower = Constants.createFollower(hardwareMap);
+        follower = ProgramConstants.createFollower(hardwareMap);
         buildPaths();
         follower.setStartingPose(startPose);
         decBot.initRobot(hardwareMap);

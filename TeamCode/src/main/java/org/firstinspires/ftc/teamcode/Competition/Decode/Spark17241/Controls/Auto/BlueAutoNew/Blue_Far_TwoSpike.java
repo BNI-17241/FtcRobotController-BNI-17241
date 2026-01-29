@@ -8,8 +8,7 @@ import com.pedropathing.util.Timer;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Controls.Auto.AutoMainNew;
-import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.pedroPathing.Constants;
-import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.pedroPathing.MainContraints;
+import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.pedroPathing.ProgramConstants;
 
 
 @Autonomous(name = "Blue: Far Two Spike", group = "Drive")
@@ -145,7 +144,7 @@ public class Blue_Far_TwoSpike extends AutoMainNew {
         pathTimer = new Timer();
         opmodeTimer = new Timer();
         decBot.initRobot(hardwareMap);
-        follower = MainContraints.createFollower(hardwareMap);
+        follower = ProgramConstants.createFollower(hardwareMap);
         pathGen();
         follower.setStartingPose(BlueFarStartPose);
     }

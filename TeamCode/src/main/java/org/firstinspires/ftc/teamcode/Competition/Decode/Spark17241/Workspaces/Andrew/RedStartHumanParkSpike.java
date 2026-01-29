@@ -7,9 +7,8 @@ import com.pedropathing.paths.Path;
 import com.pedropathing.paths.PathChain;
 import com.pedropathing.util.Timer;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
-import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.pedroPathing.Constants;
+import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.pedroPathing.ProgramConstants;
 
 
 @Autonomous(name = "Red:Start Human:Park Spike Andrew", group = "Drive")
@@ -45,7 +44,7 @@ public class RedStartHumanParkSpike extends AutoMain_Andrew {
         opmodeTimer = new Timer();
         autoTimer = new Timer();
 
-        follower = Constants.createFollower(hardwareMap);
+        follower = ProgramConstants.createFollower(hardwareMap);
         buildPaths();
         follower.setStartingPose(startPose);
         decBot.initRobot(hardwareMap);

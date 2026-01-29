@@ -8,7 +8,7 @@ import com.pedropathing.paths.PathChain;
 import com.pedropathing.util.Timer;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
-import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.pedroPathing.Constants;
+import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.pedroPathing.ProgramConstants;
 
 @Autonomous(name = "OZ Test BSHP", group = "Drive")
 public class BlueStartHumanParkSpikeOz extends AutoMainOzV2{
@@ -35,7 +35,7 @@ public class BlueStartHumanParkSpikeOz extends AutoMainOzV2{
     public void init() {
         pathTimer = new Timer();
         opmodeTimer = new Timer();
-        follower = Constants.createFollower(hardwareMap);
+        follower = ProgramConstants.createFollower(hardwareMap);
         buildPaths();
         follower.setStartingPose(startPose);
         decBot.initRobot(hardwareMap);

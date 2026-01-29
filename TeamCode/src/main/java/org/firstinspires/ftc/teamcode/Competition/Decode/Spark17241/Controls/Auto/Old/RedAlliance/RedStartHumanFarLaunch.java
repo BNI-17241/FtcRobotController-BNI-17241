@@ -1,7 +1,5 @@
 package org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Controls.Auto.Old.RedAlliance;
 
-import android.media.MediaDrm;
-
 import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
@@ -12,7 +10,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Controls.Auto.Old.AutoMain;
-import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.pedroPathing.Constants;
+import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.pedroPathing.ProgramConstants;
 
 @Disabled
 @Autonomous(name = "Red:Start Human:Far Launch", group = "Drive")
@@ -40,7 +38,7 @@ public class RedStartHumanFarLaunch extends AutoMain {
     public void init() {
         pathTimer = new Timer();
         opmodeTimer = new Timer();
-        follower = Constants.createFollower(hardwareMap);
+        follower = ProgramConstants.createFollower(hardwareMap);
         buildPaths();
         follower.setStartingPose(startPose);
         decBot.initRobot(hardwareMap);

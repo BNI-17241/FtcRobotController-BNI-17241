@@ -11,7 +11,7 @@ import com.qualcomm.hardware.limelightvision.LLResult;
 import com.qualcomm.hardware.limelightvision.LLResultTypes;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
 
-import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.pedroPathing.Constants;
+import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.pedroPathing.ProgramConstants;
 
 
 @Autonomous(name = "PadroLimLightTestOz", group = "Drive")
@@ -121,7 +121,7 @@ public class PadroLimLightTestOz extends OpMode {
         // turns on all timlight stuff
         follower.setStartingPose(StartPose);
         limelight = hardwareMap.get(Limelight3A.class, "limelight");
-        follower = Constants.createFollower(hardwareMap);
+        follower = ProgramConstants.createFollower(hardwareMap);
         limelight.start();
         limelight.pipelineSwitch(0);
     }

@@ -10,7 +10,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Controls.Auto.Old.AutoMain;
-import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.pedroPathing.Constants;
+import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.pedroPathing.ProgramConstants;
 
 @Disabled
 @Autonomous(name = "Tester 1: Slow Red:Start Human:Park Spike", group = "Drive")
@@ -50,8 +50,8 @@ public class RedStartHumanParkSpikeSLOW extends AutoMain {
     public void init() {
         pathTimer = new Timer();
         opmodeTimer = new Timer();
-        follower = Constants.createFollower(hardwareMap);
-        slowFollower = Constants.slowFollower(hardwareMap);
+        follower = ProgramConstants.createFollower(hardwareMap);
+        slowFollower = ProgramConstants.slowFollower(hardwareMap);
         buildPaths();
         follower.setStartingPose(startPose);
         slowFollower.setStartingPose(startPose);
