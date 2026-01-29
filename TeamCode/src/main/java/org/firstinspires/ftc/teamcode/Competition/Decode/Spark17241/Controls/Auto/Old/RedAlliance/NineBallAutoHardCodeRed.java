@@ -65,7 +65,7 @@ public class NineBallAutoHardCodeRed extends AutoMainNew {
                 .addPath(
                         new BezierLine(RedSpikeAInsidePose, RedSpikeAOutsidePose)
                 )
-                .setConstantHeadingInterpolation(RedSpikeAInsidePose.getHeading())
+                .setConstantHeadingInterpolation(RedSpikeBInsidePose.getHeading())
                 .build();
 
         ball_outside_A_to_fire_location = follower
@@ -116,11 +116,9 @@ public class NineBallAutoHardCodeRed extends AutoMainNew {
     public void init() {
         decBot.initRobot(hardwareMap);
         opmodeTimer = new Timer();
-        pathGen();
-
         follower = Constants.createFollower(hardwareMap);
         follower.setStartingPose(RedFarStartPose);
-
+        pathGen();
     }
 
     @Override
@@ -208,6 +206,7 @@ public class NineBallAutoHardCodeRed extends AutoMainNew {
                 break;
             case PARK:
                 if (!(follower.isBusy())) {
+                    follower.followPath(firing_location_to_park);
                     pathState = pathingState.FINISHED;
                 }
                 break;
