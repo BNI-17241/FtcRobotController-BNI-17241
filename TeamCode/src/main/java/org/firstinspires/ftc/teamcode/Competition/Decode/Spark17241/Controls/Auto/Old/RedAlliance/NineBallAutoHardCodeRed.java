@@ -1,26 +1,18 @@
-package org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Controls.Auto.BlueAutoNew;
+package org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Controls.Auto.Old.RedAlliance;
 
 import com.pedropathing.follower.Follower;
-import com.pedropathing.geometry.BezierCurve;
 import com.pedropathing.geometry.BezierLine;
-import com.pedropathing.geometry.Pose;
 import com.pedropathing.paths.PathChain;
 import com.pedropathing.util.Timer;
-import com.qualcomm.hardware.limelightvision.LLResult;
-import com.qualcomm.hardware.limelightvision.LLResultTypes;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Controls.Auto.AutoMainNew;
-import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Robots.DecodeBot;
-import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Robots.StateDecodeBot;
 import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.pedroPathing.Constants;
 
-import java.util.List;
 
-
-@Autonomous(name = "oz code", group = "Drive")
-public class Simple_Double_Far extends AutoMainNew {
+@Autonomous(name = "9 ball auto hard code red", group = "Drive")
+public class NineBallAutoHardCodeRed extends AutoMainNew {
 
     public Follower follower;
     public Timer opmodeTimer;
@@ -58,58 +50,58 @@ public class Simple_Double_Far extends AutoMainNew {
         start_to_fire_location = follower
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(BlueFarStartPose, BlueFarShootPose)
+                        new BezierLine(RedFarStartPose, RedFarShootPose)
                 )
-                .setLinearHeadingInterpolation(BlueFarStartPose.getHeading(), BlueFarShootPose.getHeading())
+                .setLinearHeadingInterpolation(RedFarStartPose.getHeading(), RedFarShootPose.getHeading())
                 .build();
         fire_location_to_inside_Spike_A = follower.
                 pathBuilder().
-                addPath(new BezierLine(BlueFarShootPose, BlueSpikeAInsidePose))
-                .setLinearHeadingInterpolation(BlueFarShootPose.getHeading(), BlueSpikeAInsidePose.getHeading())
+                addPath(new BezierLine(RedFarShootPose, RedSpikeAInsidePose))
+                .setLinearHeadingInterpolation(RedFarShootPose.getHeading(), RedSpikeAInsidePose.getHeading())
                 .build();
 
         ball_inside_to_ball_outside_Spike_A = follower
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(BlueSpikeAInsidePose, BlueSpikeAOutsidePose)
+                        new BezierLine(RedSpikeAInsidePose, RedSpikeAOutsidePose)
                 )
-                .setConstantHeadingInterpolation(BlueSpikeAInsidePose.getHeading())
+                .setConstantHeadingInterpolation(RedSpikeBInsidePose.getHeading())
                 .build();
 
         ball_outside_A_to_fire_location = follower
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(BlueSpikeAOutsidePose, BlueFarShootPose)
+                        new BezierLine(RedSpikeAOutsidePose, RedFarShootPose)
                 )
-                .setLinearHeadingInterpolation(BlueSpikeAOutsidePose.getHeading(), BlueFarShootPose.getHeading())
+                .setLinearHeadingInterpolation(RedSpikeAOutsidePose.getHeading(), RedFarShootPose.getHeading())
                 .build();
         fire_location_to_inside_SPike_B = follower
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(BlueFarShootPose, BlueSpikeBInsidePose)
+                        new BezierLine(RedFarShootPose, RedSpikeBInsidePose)
                 )
-                .setLinearHeadingInterpolation(BlueFarShootPose.getHeading(), BlueSpikeBInsidePose.getHeading())
+                .setLinearHeadingInterpolation(RedFarShootPose.getHeading(), RedSpikeBInsidePose.getHeading())
                 .build();
         ball_inside_to_ball_outside_Spike_B = follower.
                 pathBuilder()
                 .addPath(
-                        new BezierLine(BlueSpikeBInsidePose, BlueSpikeBOutsidePose)
+                        new BezierLine(RedSpikeBInsidePose, RedSpikeBOutsidePose)
                 )
-                .setConstantHeadingInterpolation(BlueSpikeAInsidePose.getHeading())
+                .setConstantHeadingInterpolation(RedSpikeAInsidePose.getHeading())
                 .build();
         ball_outside_B_to_fire_location = follower
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(BlueSpikeBOutsidePose, BlueFarShootPose)
+                        new BezierLine(RedSpikeBOutsidePose, RedFarShootPose)
                 )
-                .setLinearHeadingInterpolation(BlueSpikeBOutsidePose.getHeading(), BlueFarShootPose.getHeading())
+                .setLinearHeadingInterpolation(RedSpikeBOutsidePose.getHeading(), RedFarShootPose.getHeading())
                 .build();
         firing_location_to_park = follower
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(BlueFarShootPose, BlueFarParkPose)
+                        new BezierLine(RedFarShootPose, RedFarParkPose)
                 )
-                .setLinearHeadingInterpolation(BlueFarShootPose.getHeading(), BlueFarParkPose.getHeading())
+                .setLinearHeadingInterpolation(RedFarShootPose.getHeading(), RedFarParkPose.getHeading())
                 .build();
 
     }
@@ -124,11 +116,9 @@ public class Simple_Double_Far extends AutoMainNew {
     public void init() {
         decBot.initRobot(hardwareMap);
         opmodeTimer = new Timer();
-        pathGen();
-
         follower = Constants.createFollower(hardwareMap);
-        follower.setStartingPose(BlueFarStartPose);
-
+        follower.setStartingPose(RedFarStartPose);
+        pathGen();
     }
 
     @Override
@@ -216,6 +206,7 @@ public class Simple_Double_Far extends AutoMainNew {
                 break;
             case PARK:
                 if (!(follower.isBusy())) {
+                    follower.followPath(firing_location_to_park);
                     pathState = pathingState.FINISHED;
                 }
                 break;
