@@ -1,26 +1,18 @@
 package org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Controls.Auto.BlueAutoNew;
 
 import com.pedropathing.follower.Follower;
-import com.pedropathing.geometry.BezierCurve;
 import com.pedropathing.geometry.BezierLine;
-import com.pedropathing.geometry.Pose;
 import com.pedropathing.paths.PathChain;
 import com.pedropathing.util.Timer;
-import com.qualcomm.hardware.limelightvision.LLResult;
-import com.qualcomm.hardware.limelightvision.LLResultTypes;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Controls.Auto.AutoMainNew;
-import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Robots.DecodeBot;
-import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Robots.StateDecodeBot;
 import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.pedroPathing.Constants;
 
-import java.util.List;
 
-
-@Autonomous(name = "oz code", group = "Drive")
-public class Simple_Double_Far extends AutoMainNew {
+@Autonomous(name = "9 ball auto hard code blue", group = "Drive")
+public class NineBallAutoHardCodeBlue extends AutoMainNew {
 
     public Follower follower;
     public Timer opmodeTimer;
