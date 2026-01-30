@@ -7,12 +7,12 @@ import com.pedropathing.paths.PathChain;
 import com.pedropathing.util.Timer;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
-import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Controls.Auto.AutoMainNew;
+import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Controls.Auto.StateAutoMain;
 import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.pedroPathing.MainContraints;
 
 
 @Autonomous(name = "Blue:Start Human:Park Spike State Test", group = "Drive")
-public class BlueStartHumanParkSpikeTester extends AutoMainNew {
+public class BlueStartHumanParkSpikeTester extends StateAutoMain {
 //
     /**  Pedro Pathing Variables, Poses, Paths & States */
     public Follower follower;

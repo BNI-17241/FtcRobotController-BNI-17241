@@ -1,14 +1,9 @@
 package org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Controls.Auto;
 
 import com.pedropathing.geometry.Pose;
-import com.pedropathing.util.Timer;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
-import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Robots.StateDecodeBot;
-
-import java.util.ArrayList;
-import java.util.List;
 
 
 //Auto main class writen by Oz Joswick
@@ -18,7 +13,7 @@ import java.util.List;
 // no init, start, or loop called in this called in individual autos
 
 // Limlight to be kept in individaul code files as must remember to init diffrent aspects
-public abstract class AutoMainNew extends OpMode {
+public abstract class StateAutoMain extends OpMode {
     public com.pedropathing.util.Timer pathTimer, opmodeTimer;
 
     protected double target_velocity = 0.0;
