@@ -9,6 +9,7 @@ import com.pedropathing.util.Timer;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Controls.Auto.StateAutoMain;
+import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.pedroPathing.MainContraints;
 import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.pedroPathing.ProgramConstants;
 
 
@@ -23,11 +24,14 @@ public class StateVariableAutoMaster extends StateAutoMain {
     //Park Pose
     public final Pose ParkingPose = BlueNearParkPose;
 
+    //Optional Pose for shooting after Third Spike
+    public final Pose ThirdShootPose = BlueFarShootPose;
+
     //Delay before intial movement (ms)
     public final float startDelay = 0;
 
     //How many spikes are needed? 0-3
-    public final int spikeAmount = 3;
+    public final int spikeAmount = 2;
 
     /*
     Order of intake
@@ -79,7 +83,7 @@ public class StateVariableAutoMaster extends StateAutoMain {
     protected PathChain spike2_to_fire;
     protected PathChain spike3_to_fire;
     protected PathChain fire_to_park;
-
+    protected PathChain third_spike_to_shoot;
 
     //Base target velocity
     public double targetVelocity = 900;
@@ -183,6 +187,25 @@ public class StateVariableAutoMaster extends StateAutoMain {
                 )
                 .setLinearHeadingInterpolation(ShootingPose.getHeading(), ParkingPose.getHeading())
                 .build();
+
+        if(AtoCIntake){
+            third_spike_to_shoot = follower
+                    .pathBuilder()
+                    .addPath(
+                            new BezierLine(BlueSpikeCOutsidePose, ThirdShootPose)
+                    )
+                    .setLinearHeadingInterpolation(BlueSpikeCOutsidePose.getHeading(), ThirdShootPose.getHeading())
+                    .build();
+        }
+        else{
+            third_spike_to_shoot = follower
+                    .pathBuilder()
+                    .addPath(
+                            new BezierLine(BlueSpikeAOutsidePose, ThirdShootPose)
+                    )
+                    .setLinearHeadingInterpolation(BlueSpikeAOutsidePose.getHeading(), ThirdShootPose.getHeading())
+                    .build();
+        }
     }
 
     /**  Required OpMode Autonomous Control Methods  */
@@ -192,7 +215,7 @@ public class StateVariableAutoMaster extends StateAutoMain {
         pathTimer = new Timer();
         opmodeTimer = new Timer();
         decBot.initRobot(hardwareMap);
-        follower = ProgramConstants.createFollower(hardwareMap);
+        follower = MainContraints.createFollower(hardwareMap);
         pathGen();
         follower.setStartingPose(StartingPose);
     }
@@ -274,7 +297,12 @@ public class StateVariableAutoMaster extends StateAutoMain {
                             }
                             //1st spike to fire
                             if(moveToPointChain == spike1_traversal){
-                                moveToPointChain = spike1_to_fire;
+                                if(spikesTaken == 2){
+                                    moveToPointChain = third_spike_to_shoot;
+                                }
+                                else {
+                                    moveToPointChain = spike1_to_fire;
+                                }
                                 returnState = pathingState.INTAKESPIKES;
                                 pathState = pathingState.MOVETOPOINT;
                                 break;
@@ -304,9 +332,14 @@ public class StateVariableAutoMaster extends StateAutoMain {
                                 pathState = pathingState.MOVETOPOINT;
                                 break;
                             }
-                            //1st spike to fire
+                            //3rd spike to fire
                             if(moveToPointChain == spike3_traversal){
-                                moveToPointChain = spike3_to_fire;
+                                if(spikesTaken == 2){
+                                    moveToPointChain = third_spike_to_shoot;
+                                }
+                                else {
+                                    moveToPointChain = spike3_to_fire;
+                                }
                                 returnState = pathingState.INTAKESPIKES;
                                 pathState = pathingState.MOVETOPOINT;
                                 break;
