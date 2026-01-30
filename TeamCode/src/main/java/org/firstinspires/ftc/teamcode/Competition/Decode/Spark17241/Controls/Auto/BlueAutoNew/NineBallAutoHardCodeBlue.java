@@ -140,6 +140,7 @@ public class NineBallAutoHardCodeBlue extends StateAutoMain {
                 follower.followPath(start_to_fire_location);
                 pathState = pathingState.First_Firing;
                 decBot.flylaunch(1000);
+                decBot.intakeControl(1);
                 break;
             case First_Firing:
                 if (!(follower.isBusy())) {
@@ -215,6 +216,7 @@ public class NineBallAutoHardCodeBlue extends StateAutoMain {
                         follower.followPath(firing_location_to_park);
                         pathState = pathingState.PARK;
                         decBot.flylaunch(0);
+                        decBot.intakeControl(0);
                     }
                 }
                 break;

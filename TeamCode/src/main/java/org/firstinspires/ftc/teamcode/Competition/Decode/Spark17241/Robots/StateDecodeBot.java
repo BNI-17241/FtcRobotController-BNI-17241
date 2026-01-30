@@ -126,12 +126,12 @@ public class StateDecodeBot {
     }
 
     public void beginFeed(){
-        intakeControl(0.5);
-        transferSpeedCon(1);
+        transferServo.setPower(1);
+        //fill up with feeder logic
     }
     public void stopFeed(){
-        intakeControl(0);
-        transferSpeedCon(0);
+        //fill up with feeder logic
+        transferServo.setPower(0);
     }
 
     public void LEDCon(int color)
