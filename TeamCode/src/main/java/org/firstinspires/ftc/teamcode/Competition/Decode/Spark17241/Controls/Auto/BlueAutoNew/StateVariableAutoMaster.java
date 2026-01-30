@@ -17,7 +17,7 @@ public class StateVariableAutoMaster extends StateAutoMain {
 
     //--------------Config for paths-----------------------
     //Start Pose
-    public final Pose StartingPose = BlueNearParkPose;
+    public final Pose StartingPose = BlueGoalStartPose;
     //Shoot Pose
     public final Pose ShootingPose = BlueMidShootPose;
     //Park Pose
@@ -40,7 +40,7 @@ public class StateVariableAutoMaster extends StateAutoMain {
     B ----- |
     A ----- V
     */
-    public boolean AtoCIntake = true;
+    public boolean AtoCIntake = false;
     //-----------------------------------------------------
 
     /**  Pedro Pathing Variables, Poses, Paths & States */
@@ -194,7 +194,7 @@ public class StateVariableAutoMaster extends StateAutoMain {
         decBot.initRobot(hardwareMap);
         follower = ProgramConstants.createFollower(hardwareMap);
         pathGen();
-        follower.setStartingPose(BlueFarStartPose);
+        follower.setStartingPose(StartingPose);
     }
 
     @Override

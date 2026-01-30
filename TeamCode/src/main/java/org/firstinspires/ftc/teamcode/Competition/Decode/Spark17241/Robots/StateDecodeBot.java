@@ -127,11 +127,11 @@ public class StateDecodeBot {
 
     public void beginFeed(){
         intakeControl(0.5);
-        //fill up with feeder logic
+        transferSpeedCon(1);
     }
     public void stopFeed(){
         intakeControl(0);
-        //fill up with feeder logic
+        transferSpeedCon(0);
     }
 
     public void LEDCon(int color)
