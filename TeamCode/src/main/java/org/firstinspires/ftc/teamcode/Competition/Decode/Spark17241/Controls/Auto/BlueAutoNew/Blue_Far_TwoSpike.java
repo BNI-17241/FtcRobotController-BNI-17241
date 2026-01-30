@@ -36,6 +36,7 @@ public class Blue_Far_TwoSpike extends AutoMainNew {
 
     public boolean AtoCIntake = true;
 
+
     /*
     Order of intake
     true:
@@ -57,6 +58,8 @@ public class Blue_Far_TwoSpike extends AutoMainNew {
     public Path scorePreload;
 
     protected PathChain start_to_spike1;
+    protected PathChain start_to_fire;
+    protected PathChain fire_to_spike1;
     protected PathChain spike1_traversal;
     protected PathChain spike1_to_fire;
     protected PathChain fire_to_spike2;
@@ -72,7 +75,7 @@ public class Blue_Far_TwoSpike extends AutoMainNew {
     public double intakeSpeed = 1;
 
     //set up simple states
-    public enum pathingState {STARTDELAY, START, INTAKESPIKES, FIRING, FIRINGDELAY, PARK, END, MOVETOPOINT, RETURNMOVETOPOINT, FIREANDRETURNSTATE}
+    public enum pathingState {STARTDELAY, START, INTAKESPIKES, FIRING, FIRINGDELAY, PARK, END, MOVETOPOINT, RETURNMOVETOPOINT, FIREANDRETURNSTATE, PREFIRE}
     public pathingState pathState = pathingState.START;
 
     //State to return to after moveToPoint case
@@ -80,6 +83,22 @@ public class Blue_Far_TwoSpike extends AutoMainNew {
 
 
     public void pathGen(){
+        start_to_fire = follower
+                .pathBuilder()
+                .addPath(
+                        new BezierLine(BlueFarStartPose, BlueFarShootPose)
+                )
+                .setLinearHeadingInterpolation(BlueFarStartPose.getHeading(), BlueFarShootPose.getHeading())
+                .build();
+
+        fire_to_spike1 = follower
+                .pathBuilder()
+                .addPath(
+                        new BezierLine(BlueFarShootPose, BlueSpikeAInsidePose)
+                )
+                .setLinearHeadingInterpolation(BlueFarShootPose.getHeading(), BlueSpikeAInsidePose.getHeading())
+                .build();
+
         start_to_spike1 = follower
                 .pathBuilder()
                 .addPath(
@@ -185,13 +204,21 @@ public class Blue_Far_TwoSpike extends AutoMainNew {
 
 
             case START:
-                //Move to the first spike
+                //Spin up motors
                 decBot.intakeControl(intakeSpeed);
                 decBot.flylaunch(targetVelocity);
+                //Move to the first spike
+                follower.followPath(start_to_fire);
+                pathState = pathingState.PREFIRE;
+                break;
 
 
-                follower.followPath(start_to_spike1);
-                pathState = pathingState.INTAKESPIKES;
+            case PREFIRE:
+                //Fire before any spike logic
+                moveToPointChain = null;
+                startFireTime = opmodeTimer.getElapsedTime();
+                returnState = pathingState.INTAKESPIKES;
+                pathState = pathingState.FIREANDRETURNSTATE;
                 break;
 
 
@@ -204,13 +231,13 @@ public class Blue_Far_TwoSpike extends AutoMainNew {
                         if(AtoCIntake){
                             //Start 1st spike intake
                             if(moveToPointChain == null){
-                                moveToPointChain = start_to_spike1;
+                                moveToPointChain = fire_to_spike1;
                                 returnState = pathingState.INTAKESPIKES;
                                 pathState = pathingState.MOVETOPOINT;
                                 break;
                             }
                             //1st spike inside to outside
-                            if(moveToPointChain == start_to_spike1){
+                            if(moveToPointChain == fire_to_spike1){
                                 moveToPointChain = spike1_traversal;
                                 returnState = pathingState.INTAKESPIKES;
                                 pathState = pathingState.MOVETOPOINT;
