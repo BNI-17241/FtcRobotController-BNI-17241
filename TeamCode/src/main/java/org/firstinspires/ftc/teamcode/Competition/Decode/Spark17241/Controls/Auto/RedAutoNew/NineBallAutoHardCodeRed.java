@@ -7,12 +7,13 @@ import com.pedropathing.util.Timer;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
-import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Controls.Auto.AutoMainNew;
+import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Controls.Auto.StateAutoMain;
+import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Controls.Auto.StateAutoMain;
 import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.pedroPathing.MainContraints;
 
 
 @Autonomous(name = "9 ball auto hard code red", group = "Drive")
-public class NineBallAutoHardCodeRed extends AutoMainNew {
+public class NineBallAutoHardCodeRed extends StateAutoMain {
 
     public Follower follower;
 

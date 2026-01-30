@@ -1,10 +1,11 @@
 package org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Workspaces.Oz;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.Range;
-
+@Disabled
 @TeleOp(name = "Oz big scary Test", group = "Test")
 public class test extends OpMode {
 

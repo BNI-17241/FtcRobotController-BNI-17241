@@ -7,9 +7,10 @@ import com.pedropathing.paths.Path;
 import com.pedropathing.paths.PathChain;
 import com.pedropathing.util.Timer;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.pedroPathing.ProgramConstants;
-
+@Disabled
 @Autonomous(name = "OZ Test BSHP", group = "Drive")
 public class BlueStartHumanParkSpikeOz extends AutoMainOzV2{
 //
