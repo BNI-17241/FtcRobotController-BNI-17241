@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Controls.Au
 
 import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.BezierLine;
+import com.pedropathing.geometry.Pose;
 import com.pedropathing.paths.Path;
 import com.pedropathing.paths.PathChain;
 import com.pedropathing.util.Timer;
@@ -11,31 +12,22 @@ import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Controls.Aut
 import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.pedroPathing.ProgramConstants;
 
 
-@Autonomous(name = "Blue: Far Two Spike", group = "Drive")
-public class Blue_Far_TwoSpike extends StateAutoMain {
-//
-    /**  Pedro Pathing Variables, Poses, Paths & States */
-    public Follower follower;
-    public Timer pathTimer, opmodeTimer;
+@Autonomous(name = "State Auto Master", group = "Drive")
+public class StateVariableAutoMaster extends StateAutoMain {
+
+    //--------------Config for paths-----------------------
+    //Start Pose
+    public final Pose StartingPose = BlueFarStartPose;
+    //Shoot Pose
+    public final Pose ShootingPose = BlueFarShootPose;
+    //Park Pose
+    public final Pose ParkingPose = BlueFarParkPose;
 
     //Delay before intial movement (ms)
-    public final float startDelay = 3000;
-    //Delay at goal after firing (ms)
-    public final float fireDelay  = 5000;
+    public final float startDelay = 0;
 
     //How many spikes are needed? 0-2
     public final int spikeAmount = 2;
-
-    //Initial fire check
-    public boolean initialFire = false;
-
-    //How many spikes have been intook
-    public int spikesTaken = 0;
-
-    public double startFireTime;
-
-    public boolean AtoCIntake = true;
-
 
     /*
     Order of intake
@@ -48,6 +40,25 @@ public class Blue_Far_TwoSpike extends StateAutoMain {
     B ----- |
     A ----- V
     */
+    public boolean AtoCIntake = true;
+    //-----------------------------------------------------
+
+    /**  Pedro Pathing Variables, Poses, Paths & States */
+    public Follower follower;
+    public Timer pathTimer, opmodeTimer;
+
+    //Delay at goal after firing (ms)
+    public final float fireDelay  = 5000;
+
+    //Initial fire check
+    public boolean initialFire = false;
+
+    //How many spikes have been intook
+    public int spikesTaken = 0;
+
+    public double startFireTime;
+
+
 
     //path for the moveToPoint case used in spike navigation
     public PathChain moveToPointChain;
@@ -57,14 +68,16 @@ public class Blue_Far_TwoSpike extends StateAutoMain {
 
     public Path scorePreload;
 
-    protected PathChain start_to_spike1;
     protected PathChain start_to_fire;
     protected PathChain fire_to_spike1;
-    protected PathChain spike1_traversal;
-    protected PathChain spike1_to_fire;
     protected PathChain fire_to_spike2;
+    protected PathChain fire_to_spike3;
+    protected PathChain spike1_traversal;
     protected PathChain spike2_traversal;
+    protected PathChain spike3_traversal;
+    protected PathChain spike1_to_fire;
     protected PathChain spike2_to_fire;
+    protected PathChain spike3_to_fire;
     protected PathChain fire_to_park;
 
 
@@ -86,25 +99,33 @@ public class Blue_Far_TwoSpike extends StateAutoMain {
         start_to_fire = follower
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(BlueFarStartPose, BlueFarShootPose)
+                        new BezierLine(StartingPose, ShootingPose)
                 )
-                .setLinearHeadingInterpolation(BlueFarStartPose.getHeading(), BlueFarShootPose.getHeading())
+                .setLinearHeadingInterpolation(StartingPose.getHeading(), ShootingPose.getHeading())
                 .build();
 
         fire_to_spike1 = follower
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(BlueFarShootPose, BlueSpikeAInsidePose)
+                        new BezierLine(ShootingPose, BlueSpikeAInsidePose)
                 )
-                .setLinearHeadingInterpolation(BlueFarShootPose.getHeading(), BlueSpikeAInsidePose.getHeading())
+                .setLinearHeadingInterpolation(ShootingPose.getHeading(), BlueSpikeAInsidePose.getHeading())
                 .build();
 
-        start_to_spike1 = follower
+        fire_to_spike2 = follower
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(BlueFarStartPose, BlueSpikeAInsidePose)
+                        new BezierLine(ShootingPose, BlueSpikeBInsidePose)
                 )
-                .setLinearHeadingInterpolation(BlueFarStartPose.getHeading(), BlueSpikeAInsidePose.getHeading())
+                .setLinearHeadingInterpolation(ShootingPose.getHeading(), BlueSpikeBInsidePose.getHeading())
+                .build();
+
+        fire_to_spike3 = follower
+                .pathBuilder()
+                .addPath(
+                        new BezierLine(ShootingPose, BlueSpikeCInsidePose)
+                )
+                .setLinearHeadingInterpolation(ShootingPose.getHeading(), BlueSpikeCInsidePose.getHeading())
                 .build();
 
         spike1_traversal = follower
@@ -115,22 +136,6 @@ public class Blue_Far_TwoSpike extends StateAutoMain {
                 .setLinearHeadingInterpolation(BlueSpikeAInsidePose.getHeading(), BlueSpikeAOutsidePose.getHeading())
                 .build();
 
-        spike1_to_fire = follower
-                .pathBuilder()
-                .addPath(
-                        new BezierLine(BlueSpikeAOutsidePose, BlueFarShootPose)
-                )
-                .setLinearHeadingInterpolation(BlueSpikeAOutsidePose.getHeading(), BlueFarShootPose.getHeading())
-                .build();
-
-        fire_to_spike2 = follower
-                .pathBuilder()
-                .addPath(
-                        new BezierLine(BlueFarShootPose, BlueSpikeBInsidePose)
-                )
-                .setLinearHeadingInterpolation(BlueFarShootPose.getHeading(), BlueSpikeBInsidePose.getHeading())
-                .build();
-
         spike2_traversal = follower
                 .pathBuilder()
                 .addPath(
@@ -139,20 +144,44 @@ public class Blue_Far_TwoSpike extends StateAutoMain {
                 .setLinearHeadingInterpolation(BlueSpikeBInsidePose.getHeading(), BlueSpikeBOutsidePose.getHeading())
                 .build();
 
+        spike3_traversal = follower
+                .pathBuilder()
+                .addPath(
+                        new BezierLine(BlueSpikeCInsidePose, BlueSpikeCOutsidePose)
+                )
+                .setLinearHeadingInterpolation(BlueSpikeCInsidePose.getHeading(), BlueSpikeCOutsidePose.getHeading())
+                .build();
+
+        spike1_to_fire = follower
+                .pathBuilder()
+                .addPath(
+                        new BezierLine(BlueSpikeAOutsidePose, BlueFarShootPose)
+                )
+                .setLinearHeadingInterpolation(BlueSpikeAOutsidePose.getHeading(), BlueFarShootPose.getHeading())
+                .build();
+
         spike2_to_fire = follower
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(BlueSpikeBOutsidePose, BlueFarShootPose)
+                        new BezierLine(BlueSpikeBOutsidePose, ShootingPose)
                 )
-                .setLinearHeadingInterpolation(BlueSpikeBOutsidePose.getHeading(), BlueFarShootPose.getHeading())
+                .setLinearHeadingInterpolation(BlueSpikeBOutsidePose.getHeading(), ShootingPose.getHeading())
+                .build();
+
+        spike3_to_fire = follower
+                .pathBuilder()
+                .addPath(
+                        new BezierLine(BlueSpikeCOutsidePose, ShootingPose)
+                )
+                .setLinearHeadingInterpolation(BlueSpikeCOutsidePose.getHeading(), ShootingPose.getHeading())
                 .build();
 
         fire_to_park = follower
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(BlueFarShootPose, BlueFarParkPose)
+                        new BezierLine(ShootingPose, ParkingPose)
                 )
-                .setLinearHeadingInterpolation(BlueFarShootPose.getHeading(), BlueFarParkPose.getHeading())
+                .setLinearHeadingInterpolation(ShootingPose.getHeading(), ParkingPose.getHeading())
                 .build();
     }
 
@@ -263,23 +292,32 @@ public class Blue_Far_TwoSpike extends StateAutoMain {
                         else{
                             //Start 3rd spike intake
                             if(moveToPointChain == null){
-                                moveToPointChain = start_to_spike1;
+                                moveToPointChain = fire_to_spike3;
                                 returnState = pathingState.INTAKESPIKES;
                                 pathState = pathingState.MOVETOPOINT;
                                 break;
                             }
                             //3rd spike inside to outside
-                            if(moveToPointChain == start_to_spike1){
-                                moveToPointChain = spike1_traversal;
+                            if(moveToPointChain == fire_to_spike3){
+                                moveToPointChain = spike3_traversal;
                                 returnState = pathingState.INTAKESPIKES;
                                 pathState = pathingState.MOVETOPOINT;
                                 break;
                             }
-                            //3rd spike to fire
-                            if(moveToPointChain == spike1_traversal){
-                                moveToPointChain = spike1_to_fire;
+                            //1st spike to fire
+                            if(moveToPointChain == spike3_traversal){
+                                moveToPointChain = spike3_to_fire;
                                 returnState = pathingState.INTAKESPIKES;
                                 pathState = pathingState.MOVETOPOINT;
+                                break;
+                            }
+                            //Fire ball
+                            if(moveToPointChain == spike3_to_fire){
+                                moveToPointChain = null;
+                                startFireTime = opmodeTimer.getElapsedTime();
+                                returnState = pathingState.INTAKESPIKES;
+                                spikesTaken += 1;
+                                pathState = pathingState.FIREANDRETURNSTATE;
                                 break;
                             }
                         }
