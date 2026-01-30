@@ -8,12 +8,11 @@ import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Controls.Auto.StateAutoMain;
-import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.pedroPathing.MainContraints;
 import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.pedroPathing.ProgramConstants;
 
 
-@Autonomous(name = "9 ball auto hard code blue", group = "Drive")
-public class NineBallStateAutoHardCodeBlue extends StateAutoMain {
+@Autonomous(name = "9 ball auto hard code Blue", group = "Drive")
+public class NineBallAutoHardCodeBlue extends StateAutoMain {
 
     public Follower follower;
 
@@ -32,6 +31,8 @@ public class NineBallStateAutoHardCodeBlue extends StateAutoMain {
     protected PathChain ball_inside_to_ball_outside_Spike_B;
     protected PathChain ball_outside_B_to_fire_location;
     protected PathChain firing_location_to_park;
+
+
 
     protected double maxTime = 25.0;
     protected double startFireTime;
@@ -138,6 +139,7 @@ public class NineBallStateAutoHardCodeBlue extends StateAutoMain {
             case START:
                 follower.followPath(start_to_fire_location);
                 pathState = pathingState.First_Firing;
+                decBot.flylaunch(1000);
                 break;
             case First_Firing:
                 if (!(follower.isBusy())) {
@@ -180,7 +182,6 @@ public class NineBallStateAutoHardCodeBlue extends StateAutoMain {
                     if (burnerLaunch(target_velocity, opmodeTimer.getElapsedTime(), startFireTime)) {
                         hasStarted = false;
                         follower.followPath(fire_location_to_inside_SPike_B);
-                        decBot.flylaunch(0);
                         pathState = pathingState.INSIDE_B;
                     }
                 }
@@ -205,10 +206,15 @@ public class NineBallStateAutoHardCodeBlue extends StateAutoMain {
 //                    decBot.stopFeed();
 //                }
                 if (!(follower.isBusy())) {
-                    if (LaunchBalls(900)) {
-                        follower.followPath(fire_location_to_inside_SPike_B);
-                        decBot.flylaunch(0);
+                    if (!hasStarted){
+                        startFireTime = opmodeTimer.getElapsedTime();
+                        hasStarted = true;
+                    }
+                    if (burnerLaunch(target_velocity, opmodeTimer.getElapsedTime(), startFireTime)) {
+                        hasStarted = false;
+                        follower.followPath(firing_location_to_park);
                         pathState = pathingState.PARK;
+                        decBot.flylaunch(0);
                     }
                 }
                 break;
