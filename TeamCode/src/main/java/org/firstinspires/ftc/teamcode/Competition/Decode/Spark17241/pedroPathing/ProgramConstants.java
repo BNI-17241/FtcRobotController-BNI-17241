@@ -17,7 +17,7 @@ public class ProgramConstants {
 
     // Weight of Robot
     public static FollowerConstants followerConstants = new FollowerConstants()
-            .mass(6.0)   // Kilograms of Robot Weighed on 1/17 oz
+            .mass(8.0)   // Kilograms of Robot Weighed on 1/17 oz
             .forwardZeroPowerAcceleration(-37.186)    // Tested on 1/19 (Andrew)
             .lateralZeroPowerAcceleration(-59.037);   // Tested on 1/19 (Andrew)
 

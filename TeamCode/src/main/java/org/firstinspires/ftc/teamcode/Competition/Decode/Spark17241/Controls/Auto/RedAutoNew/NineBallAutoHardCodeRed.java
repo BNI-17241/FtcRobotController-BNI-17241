@@ -10,6 +10,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Controls.Auto.StateAutoMain;
 import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Controls.Auto.StateAutoMain;
 import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.pedroPathing.MainContraints;
+import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.pedroPathing.ProgramConstants;
 
 
 @Autonomous(name = "9 ball auto hard code red", group = "Drive")
@@ -116,7 +117,7 @@ public class NineBallAutoHardCodeRed extends StateAutoMain {
     public void init() {
         decBot.initRobot(hardwareMap);
         opmodeTimer = new Timer();
-        follower = MainContraints.createFollower(hardwareMap);
+        follower = ProgramConstants.createFollower(hardwareMap);
         follower.setStartingPose(RedFarStartPose);
         pathGen();
     }
