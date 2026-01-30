@@ -210,7 +210,7 @@ public class NineBallAutoHardCodeBlue extends StateAutoMain {
                         startFireTime = opmodeTimer.getElapsedTime();
                         hasStarted = true;
                     }
-                    if (burnerLaunch(target_velocity, opmodeTimer.getElapsedTime(), startFireTime)) {
+                    if (burnerLaunch(opmodeTimer.getElapsedTime(), startFireTime)) {
                         hasStarted = false;
                         follower.followPath(firing_location_to_park);
                         pathState = pathingState.PARK;
