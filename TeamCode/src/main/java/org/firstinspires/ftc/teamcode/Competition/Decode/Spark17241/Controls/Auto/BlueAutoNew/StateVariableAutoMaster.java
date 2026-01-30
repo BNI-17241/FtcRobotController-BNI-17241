@@ -17,11 +17,11 @@ public class StateVariableAutoMaster extends StateAutoMain {
 
     //--------------Config for paths-----------------------
     //Start Pose
-    public final Pose StartingPose = BlueFarStartPose;
+    public final Pose StartingPose = BlueNearParkPose;
     //Shoot Pose
-    public final Pose ShootingPose = BlueFarShootPose;
+    public final Pose ShootingPose = BlueMidShootPose;
     //Park Pose
-    public final Pose ParkingPose = BlueFarParkPose;
+    public final Pose ParkingPose = BlueNearParkPose;
 
     //Delay before intial movement (ms)
     public final float startDelay = 0;
@@ -383,10 +383,9 @@ public class StateVariableAutoMaster extends StateAutoMain {
 
             case FIREANDRETURNSTATE:
 
-                if(burnerLaunch(targetVelocity, opmodeTimer.getElapsedTime(), startFireTime))
+                if(burnerLaunch(opmodeTimer.getElapsedTime(), startFireTime))
                 {
                     pathState = returnState;
-
                 }
 
                 break;

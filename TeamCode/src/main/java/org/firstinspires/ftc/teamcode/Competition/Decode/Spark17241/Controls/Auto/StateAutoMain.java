@@ -29,10 +29,12 @@ public abstract class StateAutoMain extends OpMode {
 
     //------------Blue----------------
 
+    public final Pose BlueGoalStartPose = new Pose(22, 122, Math.toRadians(135));
+    public final Pose BlueNearParkPose = new Pose(50, 130, Math.toRadians(270));
     public final Pose BlueFarStartPose = new Pose(44, 8, Math.toRadians(90)); // Left corner of small triangle
     public final Pose BlueMidShootPose = new Pose(59, 81, Math.toRadians(133));// Blue goal scoring pose
     public final Pose BlueFarShootPose = new Pose(60, 20, Math.toRadians(110));// Blue goal scoring pose from small triangle
-    public final Pose BlueFarParkPose = new Pose(43, 12, Math.toRadians(0)); // Blue Home (park)
+    public final Pose BlueFarParkPose = new Pose(43, 12, Math.toRadians(90)); // Blue Home (park)
 
     // Spike closest to human
     public final Pose BlueSpikeAInsidePose = new Pose(48, 33, Math.toRadians(180));
@@ -106,8 +108,7 @@ public abstract class StateAutoMain extends OpMode {
     }
 
 
-    public boolean burnerLaunch(double velocity, double currentTime, double startTime){
-        decBot.flylaunch(velocity);
+    public boolean burnerLaunch(double currentTime, double startTime){
         if(currentTime - 5000 > startTime) {
             return true;
         }
