@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Controls.Auto.RedAutoNew;
+package org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Workspaces.Oz;
 
 import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.BezierCurve;
@@ -17,23 +17,22 @@ import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.pedroPathing
 import java.util.List;
 
 
-@Autonomous(name = "PathA_StartA_EndA_Red", group = "Drive")
-public class PathA_StartA_EndA_Red extends AutoMainNew {
+@Autonomous(name = "PathA_StartA_EndA_Blue", group = "Drive")
+public class PathA_StartA_EndA_Blue extends AutoMainNew {
 
     public Follower follower;
-    public Timer pathTimer, opmodeTimer;
-
+    public Timer opmodeTimer;
 
     protected Limelight3A limelight;
 
     public Pose Inside_pose;
     public Pose Outside_pose;
     // SIMPLE POSES
-    public final Pose StartPose = new Pose(102, 8.5, Math.toRadians(90));
-    public final Pose FiringPose = new Pose(87, 90, Math.toRadians(45));
-    public final Pose ParkPose = new Pose(100, 18, Math.toRadians(90));
+    public final Pose StartPose = new Pose(42, 8.5, Math.toRadians(90));
+    public final Pose FiringPose = new Pose(58, 90, Math.toRadians(135));
+    public final Pose ParkPose = new Pose(45, 18, Math.toRadians(90));
 
-    public final Pose ControlPointFiringLocation = new Pose(50, 30);
+    public final Pose ControlPointFiringLocation = new Pose(94, 30);
 
     // init for april tag value so its public in case needed in outher systems
     public int april_tag_value;
@@ -67,25 +66,32 @@ public class PathA_StartA_EndA_Red extends AutoMainNew {
         }
         return 21;
     }
+protected double maxTime = 25.0;
+    public boolean MaxTimeBreakout(){
+        if (opmodeTimer.getElapsedTime() >= maxTime){
+            return true;
+        }
+        return false;
+    }
 
     public void Paths_generation(int april_tag) {
         // definie inside/ outside (aka where
 
         if (april_tag == 23){
-            Inside_pose = new Pose(48, 36, Math.toRadians(180)); // closest to human 21
-            Outside_pose = new Pose(16, 36, Math.toRadians(180));
+            Inside_pose = new Pose(97, 36, Math.toRadians(0)); // closest to human 21
+            Outside_pose = new Pose(128, 36, Math.toRadians(0));
         }
         if (april_tag == 22){
-            Inside_pose = new Pose(48, 61, Math.toRadians(180)); // secount clostest 22
-            Outside_pose = new Pose(16, 61, Math.toRadians(180));
+            Inside_pose = new Pose(97, 61, Math.toRadians(0)); // secount clostest 22
+            Outside_pose = new Pose(128, 61, Math.toRadians(0));
         }
         if (april_tag == 21){
-            Inside_pose = new Pose(48, 85, Math.toRadians(180)); // third closest 23
-            Outside_pose = new Pose(16, 85, Math.toRadians(180));
+            Inside_pose = new Pose(97, 85, Math.toRadians(0)); // third closest 23
+            Outside_pose = new Pose(128, 85, Math.toRadians(0));
         }
         if (Inside_pose == null || Outside_pose == null){ // fall back incase error happens
-            Inside_pose = new Pose(48, 37, Math.toRadians(180));
-            Outside_pose = new Pose(16, 37, Math.toRadians(180));
+            Inside_pose = new Pose(97, 37, Math.toRadians(0));
+            Outside_pose = new Pose(128, 37, Math.toRadians(0));
         }
 
         start_to_fire_location = follower
@@ -129,23 +135,23 @@ public class PathA_StartA_EndA_Red extends AutoMainNew {
         AutoMainTelemetry();
         telemetry.addData("pathState", pathState);
         telemetry.addData("april tag", april_tag_value);
-        telemetry.addData("X", follower.getPose().getX());
-        telemetry.addData("Y", follower.getPose().getY());
         telemetry.update();
     }
 
     @Override
     public void init() {
-        follower.setStartingPose(StartPose);
+        opmodeTimer = new Timer();
         // turns on all timlight stuff
         limelight = hardwareMap.get(Limelight3A.class, "limelight");
         follower = ProgramConstants.createFollower(hardwareMap);
+        follower.setStartingPose(StartPose);
         limelight.start();
         limelight.pipelineSwitch(0);
     }
 
     @Override
     public void start(){
+        opmodeTimer.resetTimer();
         //gets april tag value
         april_tag_value = limeLightData();
         //generates path based on april tag
@@ -158,8 +164,8 @@ public class PathA_StartA_EndA_Red extends AutoMainNew {
     @Override
     public void loop() {
         follower.update();
-
         telemetry();
+
         // very simple movment test
         switch (pathState) {
             case START:
@@ -189,9 +195,15 @@ public class PathA_StartA_EndA_Red extends AutoMainNew {
                 }
                 break;
             case SECOND_FIRING:
+                if (MaxTimeBreakout()){
+                    pathState = pathingState.PARK;
+                    decBot.flylaunch(0);
+                    decBot.stopFeed();
+                }
                 if (!(follower.isBusy())) {
                     if (LaunchBalls(900)) {
                         follower.followPath(fire_location_to_park);
+                        decBot.flylaunch(0);
                         pathState = pathingState.PARK;
                     }
                 }

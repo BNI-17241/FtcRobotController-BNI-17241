@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Controls.Auto;
+package org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Workspaces.Oz.Old;
 
 import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.BezierCurve;
