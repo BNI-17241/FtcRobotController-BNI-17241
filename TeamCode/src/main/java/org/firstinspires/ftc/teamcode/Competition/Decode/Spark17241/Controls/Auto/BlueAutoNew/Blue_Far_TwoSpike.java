@@ -255,6 +255,7 @@ public class Blue_Far_TwoSpike extends AutoMainNew {
                                 moveToPointChain = null;
                                 startFireTime = opmodeTimer.getElapsedTime();
                                 returnState = pathingState.INTAKESPIKES;
+                                spikesTaken += 1;
                                 pathState = pathingState.FIREANDRETURNSTATE;
                                 break;
                             }
@@ -311,6 +312,7 @@ public class Blue_Far_TwoSpike extends AutoMainNew {
                             moveToPointChain = null;
                             startFireTime = opmodeTimer.getElapsedTime();
                             returnState = pathingState.INTAKESPIKES;
+                            spikesTaken += 1;
                             pathState = pathingState.FIREANDRETURNSTATE;
                             break;
                         }
@@ -346,7 +348,7 @@ public class Blue_Far_TwoSpike extends AutoMainNew {
                 if(burnerLaunch(targetVelocity, opmodeTimer.getElapsedTime(), startFireTime))
                 {
                     pathState = returnState;
-                    spikesTaken += 1;
+
                 }
 
                 break;
