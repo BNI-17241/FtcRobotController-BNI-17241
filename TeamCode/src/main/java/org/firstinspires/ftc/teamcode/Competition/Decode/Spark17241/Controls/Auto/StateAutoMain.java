@@ -38,15 +38,15 @@ public abstract class StateAutoMain extends OpMode {
 
     // Spike closest to human
     public final Pose BlueSpikeAInsidePose = new Pose(48, 33, Math.toRadians(180));
-    public final Pose BlueSpikeAOutsidePose = new Pose(16, 33, Math.toRadians(180));
+    public final Pose BlueSpikeAOutsidePose = new Pose(17, 33, Math.toRadians(180));
 
     // Middle spike
     public final Pose BlueSpikeBInsidePose = new Pose(48, 58, Math.toRadians(180));;
-    public final Pose BlueSpikeBOutsidePose = new Pose(16, 58, Math.toRadians(180));
+    public final Pose BlueSpikeBOutsidePose = new Pose(17, 58, Math.toRadians(180));
 
     //Farthest Spike
-    public final Pose BlueSpikeCInsidePose = new Pose(48, 82, Math.toRadians(0));
-    public final Pose BlueSpikeCOutsidePose = new Pose(16, 82, Math.toRadians(0));
+    public final Pose BlueSpikeCInsidePose = new Pose(48, 82, Math.toRadians(180));
+    public final Pose BlueSpikeCOutsidePose = new Pose(17, 82, Math.toRadians(180));
     //----------------------------------------------------------
 
     //------------Red-----------------
@@ -56,14 +56,14 @@ public abstract class StateAutoMain extends OpMode {
     public final Pose RedFarShootPose =  new Pose(84, 20, Math.toRadians(64)); // Red goal scoring pose from small triangle
     public final Pose RedFarParkPose = new Pose(101, 12, Math.toRadians(90)); // Red Home (park)
 
-    public final Pose RedSpikeAInsidePose = new Pose(105, 33, Math.toRadians(180)); // closest to human 23
-    public final Pose RedSpikeAOutsidePose = new Pose(125, 32, Math.toRadians(180));
+    public final Pose RedSpikeAInsidePose = new Pose(105, 33, Math.toRadians(0)); // closest to human 23
+    public final Pose RedSpikeAOutsidePose = new Pose(124, 32, Math.toRadians(0));
 
-    public final Pose RedSpikeBInsidePose = new Pose(105, 58, Math.toRadians(180)); // secount clostest 22
-    public final Pose RedSpikeBOutsidePose = new Pose(125, 58, Math.toRadians(180));
+    public final Pose RedSpikeBInsidePose = new Pose(105, 58, Math.toRadians(0)); // secount clostest 22
+    public final Pose RedSpikeBOutsidePose = new Pose(124, 58, Math.toRadians(0));
 
-    public final Pose RedSpikeCInsidePose = new Pose(105, 82, Math.toRadians(180)); // third closest 21
-    public final Pose RedSpikeCOutsidePose = new Pose(125, 82, Math.toRadians(180));
+    public final Pose RedSpikeCInsidePose = new Pose(105, 82, Math.toRadians(0)); // third closest 21
+    public final Pose RedSpikeCOutsidePose = new Pose(124, 82, Math.toRadians(0));
 
 
 

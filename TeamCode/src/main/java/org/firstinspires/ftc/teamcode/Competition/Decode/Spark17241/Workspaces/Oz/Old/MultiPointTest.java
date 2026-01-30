@@ -6,9 +6,10 @@ import com.pedropathing.geometry.Pose;
 import com.pedropathing.paths.PathChain;
 import com.pedropathing.util.Timer;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
-
+@Disabled
 @Autonomous(name = "Pedro Limelight og oz", group = "Drive")
 public class MultiPointTest extends OpMode {
 

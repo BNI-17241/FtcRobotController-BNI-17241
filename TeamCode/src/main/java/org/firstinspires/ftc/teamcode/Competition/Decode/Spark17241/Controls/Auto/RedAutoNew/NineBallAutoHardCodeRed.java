@@ -141,6 +141,7 @@ public class NineBallAutoHardCodeRed extends StateAutoMain {
             case START:
                 follower.followPath(start_to_fire_location);
                 pathState = pathingState.First_Firing;
+                decBot.flylaunch(1000);
                 break;
             case First_Firing:
                 if (!(follower.isBusy())) {
@@ -183,7 +184,6 @@ public class NineBallAutoHardCodeRed extends StateAutoMain {
                     if (burnerLaunch(opmodeTimer.getElapsedTime(), startFireTime)) {
                         hasStarted = false;
                         follower.followPath(fire_location_to_inside_SPike_B);
-                        decBot.flylaunch(0);
                         pathState = pathingState.INSIDE_B;
                     }
                 }
@@ -208,10 +208,15 @@ public class NineBallAutoHardCodeRed extends StateAutoMain {
 //                    decBot.stopFeed();
 //                }
                 if (!(follower.isBusy())) {
-                    if (LaunchBalls(900)) {
-                        follower.followPath(fire_location_to_inside_SPike_B);
-                        decBot.flylaunch(0);
+                    if (!hasStarted){
+                        startFireTime = opmodeTimer.getElapsedTime();
+                        hasStarted = true;
+                    }
+                    if (burnerLaunch(target_velocity, opmodeTimer.getElapsedTime(), startFireTime)) {
+                        hasStarted = false;
+                        follower.followPath(firing_location_to_park);
                         pathState = pathingState.PARK;
+                        decBot.flylaunch(0);
                     }
                 }
                 break;
