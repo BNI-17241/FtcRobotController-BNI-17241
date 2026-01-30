@@ -7,12 +7,12 @@ import com.pedropathing.paths.PathChain;
 import com.pedropathing.util.Timer;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
-import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Controls.Auto.AutoMainNew;
+import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Controls.Auto.StateAutoMain;
 import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.pedroPathing.ProgramConstants;
 
 
 @Autonomous(name = "Blue: Far Two Spike", group = "Drive")
-public class Blue_Far_TwoSpike extends AutoMainNew {
+public class Blue_Far_TwoSpike extends StateAutoMain {
 //
     /**  Pedro Pathing Variables, Poses, Paths & States */
     public Follower follower;

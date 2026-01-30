@@ -11,14 +11,14 @@ import com.qualcomm.hardware.limelightvision.LLResultTypes;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
-import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Controls.Auto.AutoMainNew;
+import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Controls.Auto.StateAutoMain;
 import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.pedroPathing.ProgramConstants;
 
 import java.util.List;
 
 
 @Autonomous(name = "PathA_StartA_EndA_Blue", group = "Drive")
-public class PathA_StartA_EndA_Blue extends AutoMainNew {
+public class PathA_StartA_EndA_Blue extends StateAutoMain {
 
     public Follower follower;
     public Timer opmodeTimer;
