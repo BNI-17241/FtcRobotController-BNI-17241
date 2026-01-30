@@ -342,6 +342,9 @@ public class Blue_Far_TwoSpike extends AutoMainNew {
 
 
             case PARK:
+                //Move to the first spike
+                decBot.intakeControl(0);
+                decBot.flylaunch(0);
                 if (!(follower.isBusy())) {
                     pathState = pathingState.END;
                 }
