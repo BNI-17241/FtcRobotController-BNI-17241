@@ -26,8 +26,8 @@ public class StateVariableAutoMaster extends StateAutoMain {
     //Delay before intial movement (ms)
     public final float startDelay = 0;
 
-    //How many spikes are needed? 0-2
-    public final int spikeAmount = 2;
+    //How many spikes are needed? 0-3
+    public final int spikeAmount = 3;
 
     /*
     Order of intake
@@ -256,8 +256,8 @@ public class StateVariableAutoMaster extends StateAutoMain {
                 if(spikesTaken < spikeAmount)
                 {
                     //Intake Spike A or C depending on bool AtoCIntake
-                    if(spikesTaken == 0){
-                        if(AtoCIntake){
+                    if(spikesTaken == 0 || spikesTaken == 2){
+                        if((AtoCIntake && spikesTaken == 0) || (!AtoCIntake && spikesTaken == 2)){
                             //Start 1st spike intake
                             if(moveToPointChain == null){
                                 moveToPointChain = fire_to_spike1;
@@ -289,7 +289,7 @@ public class StateVariableAutoMaster extends StateAutoMain {
                                 break;
                             }
                         }
-                        else{
+                        if((!AtoCIntake && spikesTaken == 0) || (AtoCIntake && spikesTaken == 2)) {
                             //Start 3rd spike intake
                             if(moveToPointChain == null){
                                 moveToPointChain = fire_to_spike3;
