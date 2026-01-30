@@ -110,8 +110,10 @@ public abstract class StateAutoMain extends OpMode {
 
     public boolean burnerLaunch(double currentTime, double startTime){
         if(currentTime - 5000 > startTime) {
+            decBot.stopFeed();
             return true;
         }
+        decBot.beginFeed();
         return false;
     }
 
