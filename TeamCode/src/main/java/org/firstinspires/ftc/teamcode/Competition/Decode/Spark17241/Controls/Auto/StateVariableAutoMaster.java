@@ -465,7 +465,7 @@ public class StateVariableAutoMaster extends StateAutoMain {
                 break;
 
             case FIREANDRETURNSTATE:
-                if(burnerLaunch(opmodeTimer.getElapsedTime(), startFireTime))
+                if(burnerLaunch(opmodeTimer.getElapsedTime(), startFireTime, 10, 1000))
                 {
                     pathState = returnState;
                 }
