@@ -13,14 +13,14 @@ import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Controls.Aut
 import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.pedroPathing.MainContraints;
 
 @Disabled
-@Autonomous(name = "Blue State Far 1 Spike", group = "Drive")
-public class BlueStateFar1Spike extends StateAutoMain {
+@Autonomous(name = "Blue State Far 1 Spike Medium", group = "Drive")
+public class BlueStateFar1SpikeMedium extends StateAutoMain {
 
     //--------------Config for paths-----------------------
     //Start Pose
     public final Pose StartingPose = BlueFarStartPose;
     //Shoot Pose
-    public final Pose ShootingPose = BlueFarShootPose;
+    public final Pose ShootingPose = BlueMidShootPose;
     //Park Pose
     public final Pose ParkingPose = BlueFarParkPose;
 
