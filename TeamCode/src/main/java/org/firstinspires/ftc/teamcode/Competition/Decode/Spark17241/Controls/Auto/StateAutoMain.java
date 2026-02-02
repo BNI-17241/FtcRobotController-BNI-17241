@@ -37,12 +37,12 @@ public abstract class StateAutoMain extends OpMode {
     public final Pose BlueFarParkPose = new Pose(43, 12, Math.toRadians(90)); // Blue Home (park)
 
     // Spike closest to human
-    public final Pose BlueSpikeAInsidePose = new Pose(48, 31, Math.toRadians(180));
-    public final Pose BlueSpikeAOutsidePose = new Pose(17, 31, Math.toRadians(180));
+    public final Pose BlueSpikeAInsidePose = new Pose(48, 33, Math.toRadians(180)); //31
+    public final Pose BlueSpikeAOutsidePose = new Pose(17, 33, Math.toRadians(180)); //31
 
     // Middle spike
-    public final Pose BlueSpikeBInsidePose = new Pose(48, 57, Math.toRadians(180));;
-    public final Pose BlueSpikeBOutsidePose = new Pose(17, 57, Math.toRadians(180));
+    public final Pose BlueSpikeBInsidePose = new Pose(48, 59, Math.toRadians(180));//57
+    public final Pose BlueSpikeBOutsidePose = new Pose(17, 59, Math.toRadians(180));//57
 
     //Farthest Spike
     public final Pose BlueSpikeCInsidePose = new Pose(48, 81, Math.toRadians(180));
@@ -108,12 +108,17 @@ public abstract class StateAutoMain extends OpMode {
     }
 
 
-    public boolean burnerLaunch(double currentTime, double startTime){
+    public boolean burnerLaunch(double currentTime, double startTime, double variance, double velocity){
         if(currentTime - 5000 > startTime) {
             decBot.stopFeed();
             return true;
         }
-        decBot.beginFeed();
+        if(Math.abs(velocity - ((decBot.launchFrontMotor.getVelocity() + decBot.launchBackMotor.getVelocity()) / 2)) < variance){
+            decBot.beginFeed();
+        }
+        else{
+            decBot.stopFeed();
+        }
         return false;
     }
 

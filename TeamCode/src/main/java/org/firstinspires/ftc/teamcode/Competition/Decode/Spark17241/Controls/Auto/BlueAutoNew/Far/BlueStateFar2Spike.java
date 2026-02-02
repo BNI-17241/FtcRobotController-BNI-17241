@@ -48,6 +48,9 @@ public class BlueStateFar2Spike extends StateAutoMain {
     //Base target velocity
     public double targetVelocity = 1520;
 
+    //Variance in velocity permitted
+    public double maxVariance = 5;
+
     //When to go to park as failsafe (0-30 seconds from start, recommended 25)
     public double maxTimeBreakout = 28 * 1000;
     //-----------------------------------------------------
@@ -465,7 +468,7 @@ public class BlueStateFar2Spike extends StateAutoMain {
                 break;
 
             case FIREANDRETURNSTATE:
-                if(burnerLaunch(opmodeTimer.getElapsedTime(), startFireTime))
+                if(burnerLaunch(opmodeTimer.getElapsedTime(), startFireTime, maxVariance, targetVelocity))
                 {
                     pathState = returnState;
                 }
