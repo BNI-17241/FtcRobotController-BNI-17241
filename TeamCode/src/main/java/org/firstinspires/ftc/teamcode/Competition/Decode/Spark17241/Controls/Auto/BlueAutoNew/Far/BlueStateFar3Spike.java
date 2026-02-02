@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Controls.Auto.BlueAutoNew;
+package org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Controls.Auto.BlueAutoNew.Far;
 
 import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.BezierLine;
@@ -7,20 +7,19 @@ import com.pedropathing.paths.Path;
 import com.pedropathing.paths.PathChain;
 import com.pedropathing.util.Timer;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Controls.Auto.StateAutoMain;
 import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.pedroPathing.MainContraints;
 
 
-@Autonomous(name = "Blue State Far 1 Spike Medium", group = "Drive")
-public class BlueStateFar1SpikeMedium extends StateAutoMain {
+@Autonomous(name = "Blue State Far 3 Spike", group = "Drive")
+public class BlueStateFar3Spike extends StateAutoMain {
 
     //--------------Config for paths-----------------------
     //Start Pose
     public final Pose StartingPose = BlueFarStartPose;
     //Shoot Pose
-    public final Pose ShootingPose = BlueMidShootPose;
+    public final Pose ShootingPose = BlueFarShootPose;
     //Park Pose
     public final Pose ParkingPose = BlueFarParkPose;
 
@@ -31,7 +30,7 @@ public class BlueStateFar1SpikeMedium extends StateAutoMain {
     public final float startDelay = 0;
 
     //How many spikes are needed? 0-3
-    public final int spikeAmount = 1;
+    public final int spikeAmount = 3;
 
     /*
     Order of intake

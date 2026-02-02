@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Controls.Auto.BlueAutoNew;
+package org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Controls.Auto.BlueAutoNew.Far;
 
 import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.BezierLine;
@@ -7,22 +7,21 @@ import com.pedropathing.paths.Path;
 import com.pedropathing.paths.PathChain;
 import com.pedropathing.util.Timer;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Controls.Auto.StateAutoMain;
 import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.pedroPathing.MainContraints;
 
 
-@Autonomous(name = "Blue State Close 2 Spike Medium", group = "Drive")
-public class BlueStateClose2SpikeMedium extends StateAutoMain {
+@Autonomous(name = "Blue State Far 2 Spike Medium", group = "Drive")
+public class BlueStateFar2SpikeMedium extends StateAutoMain {
 
     //--------------Config for paths-----------------------
     //Start Pose
-    public final Pose StartingPose = BlueGoalStartPose;
+    public final Pose StartingPose = BlueFarStartPose;
     //Shoot Pose
     public final Pose ShootingPose = BlueMidShootPose;
     //Park Pose
-    public final Pose ParkingPose = BlueNearParkPose;
+    public final Pose ParkingPose = BlueFarParkPose;
 
     //Optional Pose for shooting after Third Spike
     public final Pose ThirdShootPose = BlueFarShootPose;
@@ -44,7 +43,7 @@ public class BlueStateClose2SpikeMedium extends StateAutoMain {
     B ----- |
     A ----- V
     */
-    public boolean AtoCIntake = false;
+    public boolean AtoCIntake = true;
 
     //When to go to park as failsafe (0-30 seconds from start, recommended 25)
     public double maxTimeBreakout = 25 * 1000;
