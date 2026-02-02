@@ -291,30 +291,20 @@ public class StateVariableAutoMaster extends StateAutoMain {
                 if(spikesTaken < spikeAmount)
                 {
                     //Intake Spike A or C depending on bool AtoCIntake
-                    if(AtoCIntake){
-                        if(spikesTaken == 0){
-                            pathState = pathingState.TAKESPIKEONE;
-                            break;
-                        }
-                        if(spikesTaken == 2){
-                            pathState = pathingState.TAKESPIKETHREE;
-                            break;
-                        }
+                    if(spikesTaken == 0){
+                        pathState = AtoCIntake ? pathingState.TAKESPIKEONE : pathingState.TAKESPIKETHREE;
+                        break;
                     }
-                    else {
-                        if (spikesTaken == 0) {
-                            pathState = pathingState.TAKESPIKETHREE;
-                            break;
-                        }
-                        if (spikesTaken == 2) {
-                            pathState = pathingState.TAKESPIKEONE;
-                            break;
-                        }
-                    }
-                    //Intake Spike 2
+
+                    //Intake Spike B
                     if(spikesTaken == 1) {
                         //Take Spike B
                         pathState = pathingState.TAKESPIKETWO;
+                    }
+                    //Intake Spike C or A depending on bool AtoCIntake
+                    if(spikesTaken == 2){
+                        pathState = AtoCIntake ? pathingState.TAKESPIKETHREE : pathingState.TAKESPIKEONE;
+                        break;
                     }
                     break;
                 }
