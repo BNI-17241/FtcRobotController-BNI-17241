@@ -33,7 +33,7 @@ public abstract class StateAutoMain extends OpMode {
     public final Pose BlueNearParkPose = new Pose(50, 130, Math.toRadians(270));
     public final Pose BlueFarStartPose = new Pose(44, 8, Math.toRadians(90)); // Left corner of small triangle
     public final Pose BlueMidShootPose = new Pose(57, 83, Math.toRadians(133));// Blue goal scoring pose
-    public final Pose BlueFarShootPose = new Pose(60, 20, Math.toRadians(110));// Blue goal scoring pose from small triangle
+    public final Pose BlueFarShootPose = new Pose(60, 20, Math.toRadians(113));// Blue goal scoring pose from small triangle
     public final Pose BlueFarParkPose = new Pose(43, 12, Math.toRadians(90)); // Blue Home (park)
 
     // Spike closest to human
