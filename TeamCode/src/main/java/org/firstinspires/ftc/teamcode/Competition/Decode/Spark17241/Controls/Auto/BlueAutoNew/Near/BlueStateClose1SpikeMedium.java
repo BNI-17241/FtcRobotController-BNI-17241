@@ -46,7 +46,7 @@ public class BlueStateClose1SpikeMedium extends StateAutoMain {
     public boolean AtoCIntake = false;
 
     //When to go to park as failsafe (0-30 seconds from start, recommended 25)
-    public double maxTimeBreakout = 25 * 1000;
+    public double maxTimeBreakout = 28 * 1000;
     //-----------------------------------------------------
 
     /**  Pedro Pathing Variables, Poses, Paths & States */
