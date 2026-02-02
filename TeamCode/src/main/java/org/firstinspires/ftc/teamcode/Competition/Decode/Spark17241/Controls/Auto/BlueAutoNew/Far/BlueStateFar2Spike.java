@@ -49,7 +49,7 @@ public class BlueStateFar2Spike extends StateAutoMain {
     public double targetVelocity = 1520;
 
     //When to go to park as failsafe (0-30 seconds from start, recommended 25)
-    public double maxTimeBreakout = 25 * 1000;
+    public double maxTimeBreakout = 28 * 1000;
     //-----------------------------------------------------
 
     /**  Pedro Pathing Variables, Poses, Paths & States */
