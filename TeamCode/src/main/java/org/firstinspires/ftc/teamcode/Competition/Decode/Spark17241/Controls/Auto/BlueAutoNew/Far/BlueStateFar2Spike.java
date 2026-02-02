@@ -45,6 +45,9 @@ public class BlueStateFar2Spike extends StateAutoMain {
     */
     public boolean AtoCIntake = true;
 
+    //Base target velocity
+    public double targetVelocity = 1520;
+
     //When to go to park as failsafe (0-30 seconds from start, recommended 25)
     public double maxTimeBreakout = 25 * 1000;
     //-----------------------------------------------------
@@ -80,14 +83,11 @@ public class BlueStateFar2Spike extends StateAutoMain {
     protected PathChain fire_to_park;
     protected PathChain third_spike_to_shoot;
 
-    //Base target velocity
-    public double targetVelocity = 900;
-
     //Base intake spin speed
     public double intakeSpeed = 1;
 
     //Base motor power limit while intaking (0-1)
-    public double intakeMoveSpeed = 0.5;
+    public double intakeMoveSpeed = 0.3;
 
     //set up simple states
     public enum pathingState {STARTDELAY, START, INTAKESPIKES, FIRING, FIRINGDELAY, PARK, END, MOVETOPOINT, RETURNMOVETOPOINT, FIREANDRETURNSTATE, PREFIRE, INTAKETOPOINT, TAKESPIKEONE, TAKESPIKETWO, TAKESPIKETHREE}
