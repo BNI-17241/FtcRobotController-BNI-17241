@@ -475,29 +475,10 @@ public class StateVariableAutoMaster extends StateAutoMain {
                 } 
                 break;
 
-
             case FIREANDRETURNSTATE:
-
                 if(burnerLaunch(opmodeTimer.getElapsedTime(), startFireTime))
                 {
                     pathState = returnState;
-                }
-
-                break;
-
-            case FIRING:
-                if (!(follower.isBusy())) {
-                    pathState = pathingState.FIRINGDELAY;
-                    //Reset delay
-                    delayStartTime = opmodeTimer.getElapsedTime();
-                }
-                break;
-
-            case FIRINGDELAY:
-                //Check if wait has been fulfilled
-                if(delayStartTime <= opmodeTimer.getElapsedTime() - fireDelay) {
-                    //follower.followPath();
-                    pathState = pathingState.PARK;
                 }
                 break;
 
