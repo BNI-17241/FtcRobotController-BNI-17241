@@ -91,7 +91,7 @@ public class StateVariableAutoMaster extends StateAutoMain {
     public double intakeSpeed = 1;
 
     //Base motor power limit while intaking (0-1)
-    public double intakeMoveSpeed = 0.2;
+    public double intakeMoveSpeed = 0.5;
 
     //set up simple states
     public enum pathingState {STARTDELAY, START, INTAKESPIKES, FIRING, FIRINGDELAY, PARK, END, MOVETOPOINT, RETURNMOVETOPOINT, FIREANDRETURNSTATE, PREFIRE, INTAKETOPOINT, TAKESPIKEONE, TAKESPIKETWO, TAKESPIKETHREE}
