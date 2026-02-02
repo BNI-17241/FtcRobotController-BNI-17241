@@ -44,7 +44,7 @@ public class StateVariableAutoMaster extends StateAutoMain {
     B ----- |
     A ----- V
     */
-    public boolean AtoCIntake = false;
+    public boolean AtoCIntake = true;
 
     //When to go to park as failsafe (0-30 seconds from start, recommended 25)
     public double maxTimeBreakout = 25 * 1000;
@@ -91,7 +91,7 @@ public class StateVariableAutoMaster extends StateAutoMain {
     public double intakeSpeed = 1;
 
     //Base motor power limit while intaking (0-1)
-    public double intakeMoveSpeed = 0.5;
+    public double intakeMoveSpeed = 0.2;
 
     //set up simple states
     public enum pathingState {STARTDELAY, START, INTAKESPIKES, FIRING, FIRINGDELAY, PARK, END, MOVETOPOINT, RETURNMOVETOPOINT, FIREANDRETURNSTATE, PREFIRE, INTAKETOPOINT, TAKESPIKEONE, TAKESPIKETWO, TAKESPIKETHREE}
@@ -462,7 +462,7 @@ public class StateVariableAutoMaster extends StateAutoMain {
                 //Just returns to the case
                 if (!(follower.isBusy())) {
                     pathState = returnState;
-                } 
+                }
                 break;
 
             case FIREANDRETURNSTATE:
