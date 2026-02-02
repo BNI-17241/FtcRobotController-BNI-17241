@@ -18,11 +18,11 @@ public class StateVariableAutoMaster extends StateAutoMain {
 
     //--------------Config for paths-----------------------
     //Start Pose
-    public final Pose StartingPose = BlueGoalStartPose;
+    public final Pose StartingPose = BlueFarStartPose;
     //Shoot Pose
-    public final Pose ShootingPose = BlueMidShootPose;
+    public final Pose ShootingPose = BlueFarShootPose;
     //Park Pose
-    public final Pose ParkingPose = BlueNearParkPose;
+    public final Pose ParkingPose = BlueFarParkPose;
 
     //Optional Pose for shooting after Third Spike
     public final Pose ThirdShootPose = BlueFarShootPose;
@@ -31,7 +31,7 @@ public class StateVariableAutoMaster extends StateAutoMain {
     public final float startDelay = 0;
 
     //How many spikes are needed? 0-3
-    public final int spikeAmount = 2;
+    public final int spikeAmount = 1;
 
     /*
     Order of intake
@@ -54,15 +54,11 @@ public class StateVariableAutoMaster extends StateAutoMain {
     //Delay at goal after firing (ms)
     public final float fireDelay  = 5000;
 
-    //Initial fire check
-    public boolean initialFire = false;
-
     //How many spikes have been intook
     public int spikesTaken = 0;
 
+    //Time reference for burnerlaunch function
     public double startFireTime;
-
-
 
     //path for the moveToPoint case used in spike navigation
     public PathChain moveToPointChain;
@@ -91,8 +87,11 @@ public class StateVariableAutoMaster extends StateAutoMain {
     //Base intake spin speed
     public double intakeSpeed = 1;
 
+    //Base motor power limit while intaking (0-1)
+    public double intakeMoveSpeed = 0.5;
+
     //set up simple states
-    public enum pathingState {STARTDELAY, START, INTAKESPIKES, FIRING, FIRINGDELAY, PARK, END, MOVETOPOINT, RETURNMOVETOPOINT, FIREANDRETURNSTATE, PREFIRE}
+    public enum pathingState {STARTDELAY, START, INTAKESPIKES, FIRING, FIRINGDELAY, PARK, END, MOVETOPOINT, RETURNMOVETOPOINT, FIREANDRETURNSTATE, PREFIRE, INTAKETOPOINT}
     public pathingState pathState = pathingState.START;
 
     //State to return to after moveToPoint case
@@ -292,7 +291,7 @@ public class StateVariableAutoMaster extends StateAutoMain {
                             if(moveToPointChain == fire_to_spike1){
                                 moveToPointChain = spike1_traversal;
                                 returnState = pathingState.INTAKESPIKES;
-                                pathState = pathingState.MOVETOPOINT;
+                                pathState = pathingState.INTAKETOPOINT;
                                 break;
                             }
                             //1st spike to fire
@@ -329,7 +328,7 @@ public class StateVariableAutoMaster extends StateAutoMain {
                             if(moveToPointChain == fire_to_spike3){
                                 moveToPointChain = spike3_traversal;
                                 returnState = pathingState.INTAKESPIKES;
-                                pathState = pathingState.MOVETOPOINT;
+                                pathState = pathingState.INTAKETOPOINT;
                                 break;
                             }
                             //3rd spike to fire
@@ -368,7 +367,7 @@ public class StateVariableAutoMaster extends StateAutoMain {
                         if(moveToPointChain == fire_to_spike2){
                             moveToPointChain = spike2_traversal;
                             returnState = pathingState.INTAKESPIKES;
-                            pathState = pathingState.MOVETOPOINT;
+                            pathState = pathingState.INTAKETOPOINT;
                             break;
                         }
                         //2nd spike to fire
@@ -401,6 +400,14 @@ public class StateVariableAutoMaster extends StateAutoMain {
             case MOVETOPOINT:
                 //Uses moveToPointChain (Path) and returnState (pathingState)
                 follower.followPath(moveToPointChain);
+                telemetry.addData("Current Path:", moveToPointChain);
+
+                pathState = pathingState.RETURNMOVETOPOINT;
+                break;
+
+            case INTAKETOPOINT:
+                //Uses moveToPointChain (Path) and returnState (pathingState)
+                follower.followPath(moveToPointChain, intakeMoveSpeed, true);
                 telemetry.addData("Current Path:", moveToPointChain);
 
                 pathState = pathingState.RETURNMOVETOPOINT;
