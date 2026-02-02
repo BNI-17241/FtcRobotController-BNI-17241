@@ -12,7 +12,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Controls.Auto.StateAutoMain;
 import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.pedroPathing.MainContraints;
 
-@Disabled
+
 @Autonomous(name = "Blue State Far 1 Spike Medium", group = "Drive")
 public class BlueStateFar1SpikeMedium extends StateAutoMain {
 
