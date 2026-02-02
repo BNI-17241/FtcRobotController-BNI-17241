@@ -31,7 +31,7 @@ public class StateVariableAutoMaster extends StateAutoMain {
     public final float startDelay = 0;
 
     //How many spikes are needed? 0-3
-    public final int spikeAmount = 1;
+    public final int spikeAmount = 2;
 
     /*
     Order of intake
