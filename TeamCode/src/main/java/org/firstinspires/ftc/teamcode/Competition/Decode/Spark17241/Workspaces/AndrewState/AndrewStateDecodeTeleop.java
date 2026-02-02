@@ -192,8 +192,11 @@ public class AndrewStateDecodeTeleop extends OpMode {
         //Intake control
         //if right trigger, go forward, if not and left, go back, else 0
 
-        if(gamepad1.left_bumper != isIntaking && gamepad1.left_bumper){
-            isIntaking = !isIntaking;
+        if(gamepad1.left_bumper){
+            isIntaking = true;
+        }
+        if(gamepad1.right_bumper){
+            isIntaking = false;
         }
 
         if(isIntaking){
