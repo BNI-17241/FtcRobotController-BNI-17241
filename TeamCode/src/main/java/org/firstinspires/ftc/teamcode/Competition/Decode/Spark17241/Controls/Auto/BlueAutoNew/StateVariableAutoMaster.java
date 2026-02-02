@@ -27,7 +27,7 @@ public class StateVariableAutoMaster extends StateAutoMain {
     //Optional Pose for shooting after Third Spike
     public final Pose ThirdShootPose = BlueFarShootPose;
 
-    //Delay before intial movement (ms)
+    //Delay before initial movement (ms)
     public final float startDelay = 0;
 
     //How many spikes are needed? 0-3
@@ -45,6 +45,9 @@ public class StateVariableAutoMaster extends StateAutoMain {
     A ----- V
     */
     public boolean AtoCIntake = false;
+
+    //When to go to park as failsafe (0-30 seconds from start, recommended 25)
+    public double maxTimeBreakout = 25 * 1000;
     //-----------------------------------------------------
 
     /**  Pedro Pathing Variables, Poses, Paths & States */
@@ -91,7 +94,7 @@ public class StateVariableAutoMaster extends StateAutoMain {
     public double intakeMoveSpeed = 0.5;
 
     //set up simple states
-    public enum pathingState {STARTDELAY, START, INTAKESPIKES, FIRING, FIRINGDELAY, PARK, END, MOVETOPOINT, RETURNMOVETOPOINT, FIREANDRETURNSTATE, PREFIRE, INTAKETOPOINT}
+    public enum pathingState {STARTDELAY, START, INTAKESPIKES, FIRING, FIRINGDELAY, PARK, END, MOVETOPOINT, RETURNMOVETOPOINT, FIREANDRETURNSTATE, PREFIRE, INTAKETOPOINT, TAKESPIKEONE, TAKESPIKETWO, TAKESPIKETHREE}
     public pathingState pathState = pathingState.START;
 
     //State to return to after moveToPoint case
@@ -230,6 +233,7 @@ public class StateVariableAutoMaster extends StateAutoMain {
     }
 
 
+
     @Override
     public void loop() {
         follower.update();
@@ -242,7 +246,14 @@ public class StateVariableAutoMaster extends StateAutoMain {
         telemetry.addData("Current state :", pathState);
         telemetry.addData("Spikes Intook", spikesTaken);
         telemetry.update();
-        //telemetry.addData("Pose", Pose)
+
+        //Max time breakout
+        if(opmodeTimer.getElapsedTime() > maxTimeBreakout){
+            if(pathState != pathingState.END){
+                telemetry.addLine("EMERGENCY BREAKOUT. PARKING.");
+                pathState = pathingState.PARK;
+            }
+        }
 
         // very simple movment test
         switch (pathState) {
@@ -265,11 +276,13 @@ public class StateVariableAutoMaster extends StateAutoMain {
 
 
             case PREFIRE:
-                //Fire before any spike logic
-                moveToPointChain = null;
-                startFireTime = opmodeTimer.getElapsedTime();
-                returnState = pathingState.INTAKESPIKES;
-                pathState = pathingState.FIREANDRETURNSTATE;
+                if(!follower.isBusy()) {
+                    //Fire before any spike logic
+                    moveToPointChain = null;
+                    startFireTime = opmodeTimer.getElapsedTime();
+                    returnState = pathingState.INTAKESPIKES;
+                    pathState = pathingState.FIREANDRETURNSTATE;
+                }
                 break;
 
 
@@ -278,124 +291,166 @@ public class StateVariableAutoMaster extends StateAutoMain {
                 if(spikesTaken < spikeAmount)
                 {
                     //Intake Spike A or C depending on bool AtoCIntake
-                    if(spikesTaken == 0 || spikesTaken == 2){
-                        if((AtoCIntake && spikesTaken == 0) || (!AtoCIntake && spikesTaken == 2)){
-                            //Start 1st spike intake
-                            if(moveToPointChain == null){
-                                moveToPointChain = fire_to_spike1;
-                                returnState = pathingState.INTAKESPIKES;
-                                pathState = pathingState.MOVETOPOINT;
-                                break;
-                            }
-                            //1st spike inside to outside
-                            if(moveToPointChain == fire_to_spike1){
-                                moveToPointChain = spike1_traversal;
-                                returnState = pathingState.INTAKESPIKES;
-                                pathState = pathingState.INTAKETOPOINT;
-                                break;
-                            }
-                            //1st spike to fire
-                            if(moveToPointChain == spike1_traversal){
-                                if(spikesTaken == 2){
-                                    moveToPointChain = third_spike_to_shoot;
-                                }
-                                else {
-                                    moveToPointChain = spike1_to_fire;
-                                }
-                                returnState = pathingState.INTAKESPIKES;
-                                pathState = pathingState.MOVETOPOINT;
-                                break;
-                            }
-                            //Fire ball
-                            if(moveToPointChain == spike1_to_fire){
-                                moveToPointChain = null;
-                                startFireTime = opmodeTimer.getElapsedTime();
-                                returnState = pathingState.INTAKESPIKES;
-                                spikesTaken += 1;
-                                pathState = pathingState.FIREANDRETURNSTATE;
-                                break;
-                            }
-                        }
-                        if((!AtoCIntake && spikesTaken == 0) || (AtoCIntake && spikesTaken == 2)) {
-                            //Start 3rd spike intake
-                            if(moveToPointChain == null){
-                                moveToPointChain = fire_to_spike3;
-                                returnState = pathingState.INTAKESPIKES;
-                                pathState = pathingState.MOVETOPOINT;
-                                break;
-                            }
-                            //3rd spike inside to outside
-                            if(moveToPointChain == fire_to_spike3){
-                                moveToPointChain = spike3_traversal;
-                                returnState = pathingState.INTAKESPIKES;
-                                pathState = pathingState.INTAKETOPOINT;
-                                break;
-                            }
-                            //3rd spike to fire
-                            if(moveToPointChain == spike3_traversal){
-                                if(spikesTaken == 2){
-                                    moveToPointChain = third_spike_to_shoot;
-                                }
-                                else {
-                                    moveToPointChain = spike3_to_fire;
-                                }
-                                returnState = pathingState.INTAKESPIKES;
-                                pathState = pathingState.MOVETOPOINT;
-                                break;
-                            }
-                            //Fire ball
-                            if(moveToPointChain == spike3_to_fire){
-                                moveToPointChain = null;
-                                startFireTime = opmodeTimer.getElapsedTime();
-                                returnState = pathingState.INTAKESPIKES;
-                                spikesTaken += 1;
-                                pathState = pathingState.FIREANDRETURNSTATE;
-                                break;
-                            }
-                        }
-                    }
-                    //Intake Spike B
-                    if(spikesTaken == 1){
-                        //Start 2nd spike intake
-                        if(moveToPointChain == null){
-                            moveToPointChain = fire_to_spike2;
-                            returnState = pathingState.INTAKESPIKES;
-                            pathState = pathingState.MOVETOPOINT;
+                    if(AtoCIntake){
+                        if(spikesTaken == 0){
+                            pathState = pathingState.TAKESPIKEONE;
                             break;
                         }
-                        //2nd spike inside to outside
-                        if(moveToPointChain == fire_to_spike2){
-                            moveToPointChain = spike2_traversal;
-                            returnState = pathingState.INTAKESPIKES;
-                            pathState = pathingState.INTAKETOPOINT;
-                            break;
-                        }
-                        //2nd spike to fire
-                        if(moveToPointChain == spike2_traversal){
-                            moveToPointChain = spike2_to_fire;
-                            returnState = pathingState.INTAKESPIKES;
-                            pathState = pathingState.MOVETOPOINT;
-                            break;
-                        }
-                        //Fire ball
-                        if(moveToPointChain == spike2_to_fire){
-                            moveToPointChain = null;
-                            startFireTime = opmodeTimer.getElapsedTime();
-                            returnState = pathingState.INTAKESPIKES;
-                            spikesTaken += 1;
-                            pathState = pathingState.FIREANDRETURNSTATE;
+                        if(spikesTaken == 2){
+                            pathState = pathingState.TAKESPIKETHREE;
                             break;
                         }
                     }
+                    else {
+                        if (spikesTaken == 0) {
+                            pathState = pathingState.TAKESPIKETHREE;
+                            break;
+                        }
+                        if (spikesTaken == 2) {
+                            pathState = pathingState.TAKESPIKEONE;
+                            break;
+                        }
+                    }
+                    //Intake Spike 2
+                    if(spikesTaken == 1) {
+                        //Take Spike B
+                        pathState = pathingState.TAKESPIKETWO;
+                    }
+                    break;
                 }
                 else{
+                    //Go park
                     moveToPointChain = fire_to_park;
                     returnState = pathingState.PARK;
                     pathState = pathingState.MOVETOPOINT;
                     break;
                 }
+
+            case TAKESPIKEONE:
+                //Start 1st spike intake
+                if(moveToPointChain == null){
+                    moveToPointChain = fire_to_spike1;
+                    returnState = pathingState.TAKESPIKEONE;
+                    pathState = pathingState.MOVETOPOINT;
+                    break;
+                }
+                //1st spike inside to outside
+                if(moveToPointChain == fire_to_spike1){
+                    moveToPointChain = spike1_traversal;
+                    returnState = pathingState.TAKESPIKEONE;
+                    pathState = pathingState.INTAKETOPOINT;
+                    break;
+                }
+                //1st spike to fire
+                if(moveToPointChain == spike1_traversal){
+                    if(spikesTaken == 2){
+                        moveToPointChain = third_spike_to_shoot;
+                    }
+                    else {
+                        moveToPointChain = spike1_to_fire;
+                    }
+                    returnState = pathingState.TAKESPIKEONE;
+                    pathState = pathingState.MOVETOPOINT;
+                    break;
+                }
+                //Fire ball
+                if(moveToPointChain == spike1_to_fire){
+                    moveToPointChain = null;
+                    startFireTime = opmodeTimer.getElapsedTime();
+                    returnState = pathingState.INTAKESPIKES;
+                    spikesTaken += 1;
+                    pathState = pathingState.FIREANDRETURNSTATE;
+                    break;
+                }
+                if(moveToPointChain == third_spike_to_shoot){
+                    moveToPointChain = null;
+                    startFireTime = opmodeTimer.getElapsedTime();
+                    returnState = pathingState.INTAKESPIKES;
+                    spikesTaken += 1;
+                    pathState = pathingState.FIREANDRETURNSTATE;
+                    break;
+                }
                 break;
 
+
+            case TAKESPIKETWO:
+                //Start 2nd spike intake
+                if(moveToPointChain == null){
+                    moveToPointChain = fire_to_spike2;
+                    returnState = pathingState.TAKESPIKETWO;
+                    pathState = pathingState.MOVETOPOINT;
+                    break;
+                }
+                //2nd spike inside to outside
+                if(moveToPointChain == fire_to_spike2){
+                    moveToPointChain = spike2_traversal;
+                    returnState = pathingState.TAKESPIKETWO;
+                    pathState = pathingState.INTAKETOPOINT;
+                    break;
+                }
+                //2nd spike to fire
+                if(moveToPointChain == spike2_traversal){
+                    moveToPointChain = spike2_to_fire;
+                    returnState = pathingState.TAKESPIKETWO;
+                    pathState = pathingState.MOVETOPOINT;
+                    break;
+                }
+                //Fire ball
+                if(moveToPointChain == spike2_to_fire){
+                    moveToPointChain = null;
+                    startFireTime = opmodeTimer.getElapsedTime();
+                    returnState = pathingState.INTAKESPIKES;
+                    spikesTaken += 1;
+                    pathState = pathingState.FIREANDRETURNSTATE;
+                    break;
+                }
+                break;
+
+            case TAKESPIKETHREE:
+                //Start 3rd spike intake
+                if(moveToPointChain == null){
+                    moveToPointChain = fire_to_spike3;
+                    returnState = pathingState.TAKESPIKETHREE;
+                    pathState = pathingState.MOVETOPOINT;
+                    break;
+                }
+                //3rd spike inside to outside
+                if(moveToPointChain == fire_to_spike3){
+                    moveToPointChain = spike3_traversal;
+                    returnState = pathingState.TAKESPIKETHREE;
+                    pathState = pathingState.INTAKETOPOINT;
+                    break;
+                }
+                //3rd spike to fire
+                if(moveToPointChain == spike3_traversal){
+                    if(spikesTaken == 2){
+                        moveToPointChain = third_spike_to_shoot;
+                    }
+                    else {
+                        moveToPointChain = spike3_to_fire;
+                    }
+                    returnState = pathingState.TAKESPIKETHREE;
+                    pathState = pathingState.MOVETOPOINT;
+                    break;
+                }
+                //Fire ball
+                if(moveToPointChain == spike3_to_fire){
+                    moveToPointChain = null;
+                    startFireTime = opmodeTimer.getElapsedTime();
+                    returnState = pathingState.INTAKESPIKES;
+                    spikesTaken += 1;
+                    pathState = pathingState.FIREANDRETURNSTATE;
+                    break;
+                }
+                if(moveToPointChain == third_spike_to_shoot){
+                    moveToPointChain = null;
+                    startFireTime = opmodeTimer.getElapsedTime();
+                    returnState = pathingState.INTAKESPIKES;
+                    spikesTaken += 1;
+                    pathState = pathingState.FIREANDRETURNSTATE;
+                    break;
+                }
+                break;
 
             case MOVETOPOINT:
                 //Uses moveToPointChain (Path) and returnState (pathingState)
