@@ -45,6 +45,8 @@ public class AndrewStateDecodeTeleop extends OpMode {
     protected double autoTargetSpeed = .4;
     protected double autoYawVariation = 1;
 
+    protected boolean isIntaking = false;
+
     protected boolean isTracking = false;
 
     //Velocity of the Launching wheels
@@ -189,8 +191,17 @@ public class AndrewStateDecodeTeleop extends OpMode {
 
         //Intake control
         //if right trigger, go forward, if not and left, go back, else 0
-        decBot.intakeControl(gamepad1.right_trigger > .5 ? intakeMotorSpeed :
-                gamepad1.left_trigger > .5 ? -intakeMotorSpeed : 0);
+
+        if(gamepad1.left_bumper != isIntaking && gamepad1.left_bumper){
+            isIntaking = !isIntaking;
+        }
+
+        if(isIntaking){
+            decBot.intakeControl(gamepad1.left_trigger > 0.5 ? -intakeMotorSpeed : intakeMotorSpeed);
+        }
+
+
+
     }
 
     public void driverTwoInput(){
