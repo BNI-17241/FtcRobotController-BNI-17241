@@ -7,14 +7,14 @@ import com.pedropathing.paths.Path;
 import com.pedropathing.paths.PathChain;
 import com.pedropathing.util.Timer;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Controls.Auto.StateAutoMain;
 import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.pedroPathing.MainContraints;
-import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.pedroPathing.ProgramConstants;
 
-
+@Disabled
 @Autonomous(name = "State Auto Master", group = "Drive")
-public class StateVariableAutoMaster extends StateAutoMain {
+public class BlueStateFar1Spike extends StateAutoMain {
 
     //--------------Config for paths-----------------------
     //Start Pose
@@ -31,7 +31,7 @@ public class StateVariableAutoMaster extends StateAutoMain {
     public final float startDelay = 0;
 
     //How many spikes are needed? 0-3
-    public final int spikeAmount = 2;
+    public final int spikeAmount = 1;
 
     /*
     Order of intake
@@ -53,9 +53,6 @@ public class StateVariableAutoMaster extends StateAutoMain {
     /**  Pedro Pathing Variables, Poses, Paths & States */
     public Follower follower;
     public Timer pathTimer, opmodeTimer;
-
-    //Delay at goal after firing (ms)
-    public final float fireDelay  = 5000;
 
     //How many spikes have been intook
     public int spikesTaken = 0;
