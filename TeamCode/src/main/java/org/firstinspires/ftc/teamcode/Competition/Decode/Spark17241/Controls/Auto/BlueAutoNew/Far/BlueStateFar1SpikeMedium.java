@@ -244,11 +244,15 @@ public class BlueStateFar1SpikeMedium extends StateAutoMain {
 
         //Max time breakout
         if(opmodeTimer.getElapsedTime() > maxTimeBreakout){
-            if(pathState != pathingState.END){
+            if(pathState != pathingState.END && pathState != pathingState.RETURNMOVETOPOINT){
                 telemetry.addLine("EMERGENCY BREAKOUT. PARKING.");
-                pathState = pathingState.PARK;
+                //Go park
+                moveToPointChain = fire_to_park;
+                returnState = pathingState.PARK;
+                pathState = pathingState.MOVETOPOINT;
             }
         }
+
 
         // very simple movment test
         switch (pathState) {
