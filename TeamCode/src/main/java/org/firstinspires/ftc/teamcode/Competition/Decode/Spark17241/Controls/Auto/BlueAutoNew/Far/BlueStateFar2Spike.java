@@ -244,7 +244,7 @@ public class BlueStateFar2Spike extends StateAutoMain {
 
         //Max time breakout
         if(opmodeTimer.getElapsedTime() > maxTimeBreakout){
-            if(pathState != pathingState.END && pathState != pathingState.RETURNMOVETOPOINT){
+            if(pathState != pathingState.END && pathState != pathingState.RETURNMOVETOPOINT && pathState != pathingState.MOVETOPOINT){
                 telemetry.addLine("EMERGENCY BREAKOUT. PARKING.");
                 //Go park
                 moveToPointChain = fire_to_park;
