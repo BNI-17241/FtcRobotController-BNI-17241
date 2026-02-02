@@ -239,7 +239,6 @@ public class BlueStateFar1Spike extends StateAutoMain {
         telemetry.addData("Y", follower.getPose().getY());
         telemetry.addData("Current time : ", opmodeTimer.getElapsedTime());
         telemetry.addData("Wait time : ", delayStartTime);
-
         telemetry.addData("Current state :", pathState);
         telemetry.addData("Spikes Intook", spikesTaken);
         telemetry.update();
