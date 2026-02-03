@@ -1,9 +1,14 @@
 package org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Controls.Auto;
 
 import com.pedropathing.geometry.Pose;
+import com.qualcomm.hardware.limelightvision.LLResult;
+import com.qualcomm.hardware.limelightvision.LLResultTypes;
+import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Robots.StateDecodeBot;
+
+import java.util.List;
 
 
 //Auto main class writen by Oz Joswick
@@ -90,6 +95,25 @@ public abstract class StateAutoMain extends OpMode {
         return velocityDrop >= min_velocity_drop;
     }*/
 
+    //Limelight Cam data
+    protected  Limelight3A limelight;
+    protected LLResult result;
+
+
+
+
+    public void getLimelightData(){
+        result = limelight.getLatestResult();
+        if (result.isValid()) {
+            // Access fiducial results
+            List<LLResultTypes.FiducialResult> fiducialResults = result.getFiducialResults();
+            for (LLResultTypes.FiducialResult fr : fiducialResults) {
+                telemetry.addData("Fiducial", "ID: %d, Family: %s, X: %.2f, Y: %.2f", fr.getFiducialId(), fr.getFamily(), fr.getTargetXDegrees(), fr.getTargetYDegrees());
+            }
+        } else {
+            telemetry.addData("Limelight", "No data available");
+        }
+    }
 
     public double getCurrentVelocity() {
         // Averages front and back motor velocity
