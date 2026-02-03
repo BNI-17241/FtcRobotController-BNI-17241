@@ -24,10 +24,10 @@ public abstract class StateVarableMain extends StateAutoMain {
     public Pose ThirdShootPose;
 
     //Delay before initial movement (ms)
-    public float startDelay = 0;
+    public float startDelay;
 
     //How many spikes are needed? 0-3
-    public int spikeAmount = 0;
+    public int spikeAmount;
 
     /*
     Order of intake
@@ -40,10 +40,10 @@ public abstract class StateVarableMain extends StateAutoMain {
     B ----- |
     A ----- V
     */
-    public boolean AtoCIntake = true;
+    public boolean AtoCIntake;
 
     //When to go to park as failsafe (0-30 seconds from start, recommended 25)
-    public double maxTimeBreakout = 0;
+    public double maxTimeBreakout;
     //-----------------------------------------------------
 
     /**
@@ -52,11 +52,8 @@ public abstract class StateVarableMain extends StateAutoMain {
     public Follower follower;
     public Timer pathTimer, opmodeTimer;
 
-    //Delay at goal after firing (ms)
-    public final float fireDelay = 5000;
-
     //How many spikes have been intook
-    public int spikesTaken = 0;
+    public int spikesTaken;
 
     //Time reference for burnerlaunch function
     public double startFireTime;
@@ -83,13 +80,13 @@ public abstract class StateVarableMain extends StateAutoMain {
     protected PathChain third_spike_to_shoot;
 
     //Base target velocity
-    public double targetVelocity = 900;
+    public double targetVelocity;
 
     //Base intake spin speed
-    public double intakeSpeed = 1;
+    public double intakeSpeed;
 
     //Base motor power limit while intaking (0-1)
-    public double intakeMoveSpeed = 0.5;
+    public double intakeMoveSpeed;
 
     //set up simple states
     public enum pathingState {STARTDELAY, START, INTAKESPIKES, FIRING, FIRINGDELAY, PARK, END, MOVETOPOINT, RETURNMOVETOPOINT, FIREANDRETURNSTATE, PREFIRE, INTAKETOPOINT, TAKESPIKEONE, TAKESPIKETWO, TAKESPIKETHREE}
