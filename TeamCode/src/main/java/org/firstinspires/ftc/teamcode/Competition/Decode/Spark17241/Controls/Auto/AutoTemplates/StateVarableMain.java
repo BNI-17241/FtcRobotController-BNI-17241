@@ -26,6 +26,9 @@ public abstract class StateVarableMain extends StateAutoMain {
     //Delay before initial movement (ms)
     public float startDelay;
 
+    public double variance;
+
+
     //How many spikes are needed? 0-3
     public int spikeAmount;
 
@@ -435,7 +438,7 @@ public abstract class StateVarableMain extends StateAutoMain {
                 break;
 
             case FIREANDRETURNSTATE:
-                if(burnerLaunch(opmodeTimer.getElapsedTime(), startFireTime, 10, 1000))
+                if(burnerLaunch(opmodeTimer.getElapsedTime(), startFireTime, variance, targetVelocity))
                 {
                     pathState = returnState;
                 }

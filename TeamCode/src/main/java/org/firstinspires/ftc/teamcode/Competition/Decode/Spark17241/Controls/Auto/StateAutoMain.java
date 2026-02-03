@@ -113,7 +113,7 @@ public abstract class StateAutoMain extends OpMode {
             decBot.stopFeed();
             return true;
         }
-        if(Math.abs(velocity - ((decBot.launchFrontMotor.getVelocity() + decBot.launchBackMotor.getVelocity()) / 2)) < variance){
+        if(LaunchWheelsInGate(velocity, variance)){
             decBot.beginFeed();
         }
         else{
