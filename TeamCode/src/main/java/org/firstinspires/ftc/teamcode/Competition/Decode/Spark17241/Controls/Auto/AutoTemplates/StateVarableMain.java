@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Controls.Auto;
+package org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Controls.Auto.AutoTemplates;
 
 import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.BezierLine;
@@ -6,30 +6,28 @@ import com.pedropathing.geometry.Pose;
 import com.pedropathing.paths.Path;
 import com.pedropathing.paths.PathChain;
 import com.pedropathing.util.Timer;
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
-import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.pedroPathing.MainContraints;
+import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Controls.Auto.StateAutoMain;
 
-@Autonomous(name = "State Auto Master", group = "Drive")
-public class StateVariableAutoMaster extends StateAutoMain {
+
+public abstract class StateVarableMain extends StateAutoMain {
 
     //--------------Config for paths-----------------------
     //Start Pose
-    public final Pose StartingPose = BlueFarStartPose;
+    public Pose StartingPose ;
     //Shoot Pose
-    public final Pose ShootingPose = BlueFarShootPose;
+    public Pose ShootingPose;
     //Park Pose
-    public final Pose ParkingPose = BlueFarParkPose;
+    public Pose ParkingPose;
 
     //Optional Pose for shooting after Third Spike
-    public final Pose ThirdShootPose = BlueFarShootPose;
+    public Pose ThirdShootPose;
 
     //Delay before initial movement (ms)
-    public final float startDelay = 0;
+    public float startDelay = 0;
 
     //How many spikes are needed? 0-3
-    public final int spikeAmount = 2;
+    public int spikeAmount = 0;
 
     /*
     Order of intake
@@ -45,15 +43,17 @@ public class StateVariableAutoMaster extends StateAutoMain {
     public boolean AtoCIntake = true;
 
     //When to go to park as failsafe (0-30 seconds from start, recommended 25)
-    public double maxTimeBreakout = 25 * 1000;
+    public double maxTimeBreakout = 0;
     //-----------------------------------------------------
 
-    /**  Pedro Pathing Variables, Poses, Paths & States */
+    /**
+     * Pedro Pathing Variables, Poses, Paths & States
+     */
     public Follower follower;
     public Timer pathTimer, opmodeTimer;
 
     //Delay at goal after firing (ms)
-    public final float fireDelay  = 5000;
+    public final float fireDelay = 5000;
 
     //How many spikes have been intook
     public int spikesTaken = 0;
@@ -93,13 +93,14 @@ public class StateVariableAutoMaster extends StateAutoMain {
 
     //set up simple states
     public enum pathingState {STARTDELAY, START, INTAKESPIKES, FIRING, FIRINGDELAY, PARK, END, MOVETOPOINT, RETURNMOVETOPOINT, FIREANDRETURNSTATE, PREFIRE, INTAKETOPOINT, TAKESPIKEONE, TAKESPIKETWO, TAKESPIKETHREE}
+
     public pathingState pathState = pathingState.START;
 
     //State to return to after moveToPoint case
     public pathingState returnState;
 
 
-    public void pathGen(){
+    public void pathGen() {
         start_to_fire = follower
                 .pathBuilder()
                 .addPath(
@@ -188,7 +189,7 @@ public class StateVariableAutoMaster extends StateAutoMain {
                 .setLinearHeadingInterpolation(ShootingPose.getHeading(), ParkingPose.getHeading())
                 .build();
 
-        if(AtoCIntake){
+        if (AtoCIntake) {
             third_spike_to_shoot = follower
                     .pathBuilder()
                     .addPath(
@@ -196,8 +197,7 @@ public class StateVariableAutoMaster extends StateAutoMain {
                     )
                     .setLinearHeadingInterpolation(BlueSpikeCOutsidePose.getHeading(), ThirdShootPose.getHeading())
                     .build();
-        }
-        else{
+        } else {
             third_spike_to_shoot = follower
                     .pathBuilder()
                     .addPath(
@@ -209,33 +209,7 @@ public class StateVariableAutoMaster extends StateAutoMain {
     }
 
     /**  Required OpMode Autonomous Control Methods  */
-
-    @Override
-    public void init() {
-        pathTimer = new Timer();
-        opmodeTimer = new Timer();
-        decBot.initRobot(hardwareMap);
-        follower = MainContraints.createFollower(hardwareMap);
-        pathGen();
-        follower.setStartingPose(StartingPose);
-    }
-
-    @Override
-    public void start(){
-        opmodeTimer.resetTimer();
-        pathTimer.resetTimer();
-        pathState = pathingState.STARTDELAY;
-        //Get the time of the starting delay
-        delayStartTime = opmodeTimer.getElapsedTime();
-        spikesTaken = 0;
-    }
-
-
-
-    @Override
-    public void loop() {
-        follower.update();
-        AutoMainTelemetry();
+    public void stateVarableMainTelemetry(){
         telemetry.addData("X", follower.getPose().getX());
         telemetry.addData("Y", follower.getPose().getY());
         telemetry.addData("Current time : ", opmodeTimer.getElapsedTime());
@@ -243,7 +217,8 @@ public class StateVariableAutoMaster extends StateAutoMain {
 
         telemetry.addData("Current state :", pathState);
         telemetry.addData("Spikes Intook", spikesTaken);
-        telemetry.update();
+    }
+    public void autoStateLoop(){
 
         //Max time breakout
         if(opmodeTimer.getElapsedTime() > maxTimeBreakout){
@@ -253,7 +228,6 @@ public class StateVariableAutoMaster extends StateAutoMain {
             }
         }
 
-        // very simple movment test
         switch (pathState) {
             case STARTDELAY:
                 //Check if wait has been fulfilled
@@ -484,4 +458,5 @@ public class StateVariableAutoMaster extends StateAutoMain {
         }
     }
 }
+
 

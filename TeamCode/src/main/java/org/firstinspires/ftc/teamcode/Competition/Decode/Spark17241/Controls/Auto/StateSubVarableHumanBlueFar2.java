@@ -1,12 +1,12 @@
 package org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Controls.Auto;
 
-import com.pedropathing.geometry.Pose;
 import com.pedropathing.util.Timer;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
+import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Controls.Auto.AutoTemplates.StateVarableMain;
 import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.pedroPathing.MainContraints;
 @Autonomous(name = "Sub Blue Human Far 2 state", group = "Drive")
-public class StateSubVarableHumanBlueFar2 extends StateVarableMain{
+public class StateSubVarableHumanBlueFar2 extends StateVarableMain {
 
     //When to go to park as failsafe (0-30 seconds from start, recommended 25)
 
@@ -69,14 +69,8 @@ public class StateSubVarableHumanBlueFar2 extends StateVarableMain{
         stateVarableMainTelemetry();
         telemetry.update();
 
-        //Max time breakout
-        if(opmodeTimer.getElapsedTime() > maxTimeBreakout){
-            if(pathState != pathingState.END){
-                telemetry.addLine("EMERGENCY BREAKOUT. PARKING.");
-                pathState = pathingState.PARK;
-            }
-        }
-        doStuff();
+
+        autoStateLoop();
     }
 
 }
