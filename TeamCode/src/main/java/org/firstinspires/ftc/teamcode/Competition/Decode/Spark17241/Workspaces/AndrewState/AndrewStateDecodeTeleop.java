@@ -202,6 +202,9 @@ public class AndrewStateDecodeTeleop extends OpMode {
         if(isIntaking){
             decBot.intakeControl(gamepad1.left_trigger > 0.5 ? -intakeMotorSpeed : intakeMotorSpeed);
         }
+        else{
+            decBot.intakeControl(0);
+        }
 
 
 
@@ -235,7 +238,7 @@ public class AndrewStateDecodeTeleop extends OpMode {
         }
         if(gamepad2.right_stick_button)
         {
-            targetVelocity = 1530;
+            targetVelocity = 1550;
         }
 
         if (gamepad2.dpad_up)     { targetVelocity += 1; }
