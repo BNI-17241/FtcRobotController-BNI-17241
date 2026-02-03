@@ -41,10 +41,10 @@ public class StateSubVarableHumanBlueMed2 extends StateVarableMain {
         */
         AtoCIntake = true;
         maxTimeBreakout = 25 * 1000;
-        targetVelocity = 900;
+        targetVelocity = 1260;
         intakeSpeed = 1;
         intakeMoveSpeed = 0.4;
-
+        variance = 25;
 
 
 
