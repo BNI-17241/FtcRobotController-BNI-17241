@@ -1,23 +1,24 @@
-package org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Controls.Auto;
+package org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Controls.Auto.BlueAutoNew.Far;
 
 import com.pedropathing.util.Timer;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Controls.Auto.AutoTemplates.StateVarableMain;
 import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.pedroPathing.MainContraints;
-@Autonomous(name = "Sub Blue Human Far 2 state", group = "Drive")
-public class StateSubVarableHumanBlueFar2 extends StateVarableMain {
+
+@Autonomous(name = "Sub Blue Goal Med 1 state", group = "Drive")
+public class StateSubVarableGoalBlueMed1 extends StateVarableMain {
 
     //When to go to park as failsafe (0-30 seconds from start, recommended 25)
 
 
     @Override
     public void init() {
-        StartingPose = BlueFarStartPose;
+        StartingPose = BlueGoalStartPose;
         //Shoot Pose
-        ShootingPose = BlueFarShootPose;
+        ShootingPose = BlueMidShootPose;
         //Park Pose
-        ParkingPose = BlueFarParkPose;
+        ParkingPose = BlueNearParkPose;
 
         //Optional Pose for shooting after Third Spike
         ThirdShootPose = BlueFarShootPose;
@@ -26,7 +27,7 @@ public class StateSubVarableHumanBlueFar2 extends StateVarableMain {
         startDelay = 0;
 
         //How many spikes are needed? 0-3
-        spikeAmount = 2;
+        spikeAmount = 1;
         /*
         Order of intake
         true:
@@ -40,6 +41,10 @@ public class StateSubVarableHumanBlueFar2 extends StateVarableMain {
         */
         AtoCIntake = true;
         maxTimeBreakout = 25 * 1000;
+        targetVelocity = 900;
+        intakeSpeed = 1;
+        intakeMoveSpeed = 0.4;
+
 
 
 

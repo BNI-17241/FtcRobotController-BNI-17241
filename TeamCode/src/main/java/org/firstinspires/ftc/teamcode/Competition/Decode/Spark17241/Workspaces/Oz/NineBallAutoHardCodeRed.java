@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Controls.Auto.BlueAutoNew;
+package org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Workspaces.Oz;
 
 import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.BezierLine;
@@ -11,8 +11,8 @@ import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Controls.Aut
 import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.pedroPathing.ProgramConstants;
 
 
-@Autonomous(name = "9 ball auto hard code Blue", group = "Drive")
-public class NineBallAutoHardCodeBlue extends StateAutoMain {
+@Autonomous(name = "9 ball auto hard code red", group = "Drive")
+public class NineBallAutoHardCodeRed extends StateAutoMain {
 
     public Follower follower;
 
@@ -49,58 +49,58 @@ public class NineBallAutoHardCodeBlue extends StateAutoMain {
         start_to_fire_location = follower
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(BlueFarStartPose, BlueFarShootPose)
+                        new BezierLine(RedFarStartPose, RedFarShootPose)
                 )
-                .setLinearHeadingInterpolation(BlueFarStartPose.getHeading(), BlueFarShootPose.getHeading())
+                .setLinearHeadingInterpolation(RedFarStartPose.getHeading(), RedFarShootPose.getHeading())
                 .build();
         fire_location_to_inside_Spike_A = follower.
                 pathBuilder().
-                addPath(new BezierLine(BlueFarShootPose, BlueSpikeAInsidePose))
-                .setLinearHeadingInterpolation(BlueFarShootPose.getHeading(), BlueSpikeAInsidePose.getHeading())
+                addPath(new BezierLine(RedFarShootPose, RedSpikeAInsidePose))
+                .setLinearHeadingInterpolation(RedFarShootPose.getHeading(), RedSpikeAInsidePose.getHeading())
                 .build();
 
         ball_inside_to_ball_outside_Spike_A = follower
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(BlueSpikeAInsidePose, BlueSpikeAOutsidePose)
+                        new BezierLine(RedSpikeAInsidePose, RedSpikeAOutsidePose)
                 )
-                .setConstantHeadingInterpolation(BlueSpikeBInsidePose.getHeading())
+                .setConstantHeadingInterpolation(RedSpikeBInsidePose.getHeading())
                 .build();
 
         ball_outside_A_to_fire_location = follower
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(BlueSpikeAOutsidePose, BlueFarShootPose)
+                        new BezierLine(RedSpikeAOutsidePose, RedFarShootPose)
                 )
-                .setLinearHeadingInterpolation(BlueSpikeAOutsidePose.getHeading(), BlueFarShootPose.getHeading())
+                .setLinearHeadingInterpolation(RedSpikeAOutsidePose.getHeading(), RedFarShootPose.getHeading())
                 .build();
         fire_location_to_inside_SPike_B = follower
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(BlueFarShootPose, BlueSpikeBInsidePose)
+                        new BezierLine(RedFarShootPose, RedSpikeBInsidePose)
                 )
-                .setLinearHeadingInterpolation(BlueFarShootPose.getHeading(), BlueSpikeBInsidePose.getHeading())
+                .setLinearHeadingInterpolation(RedFarShootPose.getHeading(), RedSpikeBInsidePose.getHeading())
                 .build();
         ball_inside_to_ball_outside_Spike_B = follower.
                 pathBuilder()
                 .addPath(
-                        new BezierLine(BlueSpikeBInsidePose, BlueSpikeBOutsidePose)
+                        new BezierLine(RedSpikeBInsidePose, RedSpikeBOutsidePose)
                 )
-                .setConstantHeadingInterpolation(BlueSpikeAInsidePose.getHeading())
+                .setConstantHeadingInterpolation(RedSpikeAInsidePose.getHeading())
                 .build();
         ball_outside_B_to_fire_location = follower
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(BlueSpikeBOutsidePose, BlueFarShootPose)
+                        new BezierLine(RedSpikeBOutsidePose, RedFarShootPose)
                 )
-                .setLinearHeadingInterpolation(BlueSpikeBOutsidePose.getHeading(), BlueFarShootPose.getHeading())
+                .setLinearHeadingInterpolation(RedSpikeBOutsidePose.getHeading(), RedFarShootPose.getHeading())
                 .build();
         firing_location_to_park = follower
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(BlueFarShootPose, BlueFarParkPose)
+                        new BezierLine(RedFarShootPose, RedFarParkPose)
                 )
-                .setLinearHeadingInterpolation(BlueFarShootPose.getHeading(), BlueFarParkPose.getHeading())
+                .setLinearHeadingInterpolation(RedFarShootPose.getHeading(), RedFarParkPose.getHeading())
                 .build();
 
     }
@@ -116,7 +116,7 @@ public class NineBallAutoHardCodeBlue extends StateAutoMain {
         decBot.initRobot(hardwareMap);
         opmodeTimer = new Timer();
         follower = ProgramConstants.createFollower(hardwareMap);
-        follower.setStartingPose(BlueFarStartPose);
+        follower.setStartingPose(RedFarStartPose);
         pathGen();
     }
 
@@ -140,7 +140,6 @@ public class NineBallAutoHardCodeBlue extends StateAutoMain {
                 follower.followPath(start_to_fire_location);
                 pathState = pathingState.First_Firing;
                 decBot.flylaunch(1000);
-                decBot.intakeControl(1);
                 break;
             case First_Firing:
                 if (!(follower.isBusy())) {
@@ -216,7 +215,6 @@ public class NineBallAutoHardCodeBlue extends StateAutoMain {
                         follower.followPath(firing_location_to_park);
                         pathState = pathingState.PARK;
                         decBot.flylaunch(0);
-                        decBot.intakeControl(0);
                     }
                 }
                 break;
