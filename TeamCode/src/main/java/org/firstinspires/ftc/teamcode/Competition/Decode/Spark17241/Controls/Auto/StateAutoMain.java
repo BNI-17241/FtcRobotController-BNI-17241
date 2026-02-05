@@ -95,14 +95,19 @@ public abstract class StateAutoMain extends OpMode {
         return velocityDrop >= min_velocity_drop;
     }*/
 
+
+    protected Limelight3A limelight;
     //Limelight Cam data
-    protected  Limelight3A limelight;
     protected LLResult result;
 
+    public void limelightInit(){
+        limelight = hardwareMap.get(Limelight3A.class, "limelight");
+        limelight.pipelineSwitch(0);
+        limelight.start();
+    }
 
-
-
-    public void getLimelightData(){
+    //Auto Correction
+    public void limeLightData() {
         result = limelight.getLatestResult();
         if (result.isValid()) {
             // Access fiducial results

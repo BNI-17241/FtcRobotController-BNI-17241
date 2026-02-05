@@ -54,6 +54,8 @@ public class StateSubVarableHumanBlueFar2 extends StateVarableMain {
         follower = MainContraints.createFollower(hardwareMap);
         pathGen();
         follower.setStartingPose(StartingPose);
+
+        limelightInit();
     }
 
     @Override

@@ -6,6 +6,7 @@ import com.pedropathing.geometry.Pose;
 import com.pedropathing.paths.Path;
 import com.pedropathing.paths.PathChain;
 import com.pedropathing.util.Timer;
+import com.qualcomm.hardware.limelightvision.Limelight3A;
 
 import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Controls.Auto.StateAutoMain;
 
@@ -52,6 +53,9 @@ public abstract class StateVarableMain extends StateAutoMain {
     /**
      * Pedro Pathing Variables, Poses, Paths & States
      */
+
+
+
     public Follower follower;
     public Timer pathTimer, opmodeTimer;
 
@@ -92,13 +96,14 @@ public abstract class StateVarableMain extends StateAutoMain {
     public double intakeMoveSpeed;
 
     //set up simple states
-    public enum pathingState {STARTDELAY, START, INTAKESPIKES, FIRING, FIRINGDELAY, PARK, END, MOVETOPOINT, RETURNMOVETOPOINT, FIREANDRETURNSTATE, PREFIRE, INTAKETOPOINT, TAKESPIKEONE, TAKESPIKETWO, TAKESPIKETHREE}
+    public enum pathingState {
+        STARTDELAY, START, INTAKESPIKES, PARK, END, MOVETOPOINT, RETURNMOVETOPOINT, FIREANDRETURNSTATE,
+        PREFIRE, INTAKETOPOINT, TAKESPIKEONE, TAKESPIKETWO, TAKESPIKETHREE, AUTOTARGET}
 
     public pathingState pathState = pathingState.START;
 
     //State to return to after moveToPoint case
     public pathingState returnState;
-
 
     public void pathGen() {
         start_to_fire = follower
@@ -287,6 +292,9 @@ public abstract class StateVarableMain extends StateAutoMain {
                     pathState = pathingState.MOVETOPOINT;
                     break;
                 }
+
+            case AUTOTARGET:
+                getLimelightData();
 
             case TAKESPIKEONE:
                 //Start 1st spike intake
