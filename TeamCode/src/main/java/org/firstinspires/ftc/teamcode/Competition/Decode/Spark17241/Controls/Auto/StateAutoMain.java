@@ -39,11 +39,9 @@ public abstract class StateAutoMain extends OpMode {
 
     public final Pose BlueFarStartPose = new Pose(44, 8, Math.toRadians(90)); // Left corner of small triangle
 
-    public final Pose BlueMidFirstShootPose = new Pose(57, 83, Math.toRadians(13));// Blue goal scoring pose
-    public final Pose BlueMidOtherShootPose = new Pose(57, 83, Math.toRadians(133));// Blue goal scoring pose
+    public final Pose BlueMidShootPose = new Pose(57, 83, Math.toRadians(13));// Blue goal scoring pose
 
-    public final Pose BlueFarFirstShootPose = new Pose(60, 20, Math.toRadians(108));// Blue goal scoring pose from small triangle
-    public final Pose BlueFarOtherShootPose = new Pose(60, 20, Math.toRadians(116));// Blue goal scoring pose from small triangle
+    public final Pose BlueFarShootPose = new Pose(60, 20, Math.toRadians(108));// Blue goal scoring pose from small triangle
     public final Pose BlueFarParkPose = new Pose(43, 12, Math.toRadians(90)); // Blue Home (park)
 
     // Spike closest to human
@@ -61,11 +59,9 @@ public abstract class StateAutoMain extends OpMode {
 
     //------------Red-----------------
     public final Pose RedFarStartPose =  new Pose(100, 8, Math.toRadians(90));
-    public final Pose RedMidFirstShootPose = new Pose(85, 81, Math.toRadians(45));// Red goal scoring pose
-    public final Pose RedMidOtherShootPose = new Pose(85, 81, Math.toRadians(45));// Red goal scoring pose
+    public final Pose RedMidShootPose = new Pose(85, 81, Math.toRadians(45));// Red goal scoring pose
 
-    public final Pose RedFarFirstShootPose =  new Pose(84, 20, Math.toRadians(64)); // Red goal scoring pose from small triangle
-    public final Pose RedFarOtherShootPose =  new Pose(84, 20, Math.toRadians(64)); // Red goal scoring pose from small triangle
+    public final Pose RedFarShootPose =  new Pose(84, 20, Math.toRadians(64)); // Red goal scoring pose from small triangle
 
     public final Pose RedFarParkPose = new Pose(101, 12, Math.toRadians(90)); // Red Home (park)
 
