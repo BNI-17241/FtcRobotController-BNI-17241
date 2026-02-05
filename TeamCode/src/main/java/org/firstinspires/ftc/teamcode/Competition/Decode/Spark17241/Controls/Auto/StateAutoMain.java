@@ -232,7 +232,7 @@ public abstract class StateAutoMain extends OpMode {
     }
 
 
-    public void autoTarget() {
+    public void autoTarget(double offset) {
         if (result == null || !result.isValid()) {
             telemetry.addData("AutoTarget", "No valid Limelight result");
             return;
@@ -269,6 +269,8 @@ public abstract class StateAutoMain extends OpMode {
                 double maxTurnSpeed = 1;   // Max turn power
                 double minTurnSpeed = 0.25;  // Minimum turn power to overcome friction
                 double tolerance = 2;      // Deadband in degrees that controls oscillation
+
+                tagXDegrees += offset;
 
                 // If we’re close enough, stop and don’t oscillate
                 if (Math.abs(tagXDegrees) < tolerance) {

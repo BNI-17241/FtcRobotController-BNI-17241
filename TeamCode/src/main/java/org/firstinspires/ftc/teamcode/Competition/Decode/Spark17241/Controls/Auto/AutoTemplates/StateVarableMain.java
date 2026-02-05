@@ -29,6 +29,8 @@ public abstract class StateVarableMain extends StateAutoMain {
 
     public double variance;
 
+    public double xAutoOffset;
+
 
     //How many spikes are needed? 0-3
     public int spikeAmount;
@@ -447,7 +449,7 @@ public abstract class StateVarableMain extends StateAutoMain {
             case FIREANDRETURNSTATE:
                 //autotargeting
                 limeLightData();
-                autoTarget();
+                autoTarget(xAutoOffset);
                 if(burnerLaunch(opmodeTimer.getElapsedTime(), startFireTime, variance, targetVelocity))
                 {
                     pathState = returnState;
