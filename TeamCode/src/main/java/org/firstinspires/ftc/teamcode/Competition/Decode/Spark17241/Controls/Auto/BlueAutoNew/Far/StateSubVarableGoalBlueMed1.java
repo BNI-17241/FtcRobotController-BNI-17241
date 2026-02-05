@@ -41,7 +41,7 @@ public class StateSubVarableGoalBlueMed1 extends StateVarableMain {
         */
         AtoCIntake = true;
         maxTimeBreakout = 29 * 1000;
-        targetVelocity = 1260;
+        targetVelocity = 1150;
         intakeSpeed = 1;
         intakeMoveSpeed = 0.4;
         variance = 90;
