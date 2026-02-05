@@ -293,8 +293,7 @@ public abstract class StateVarableMain extends StateAutoMain {
                     break;
                 }
 
-            case AUTOTARGET:
-                getLimelightData();
+
 
             case TAKESPIKEONE:
                 //Start 1st spike intake
@@ -446,6 +445,9 @@ public abstract class StateVarableMain extends StateAutoMain {
                 break;
 
             case FIREANDRETURNSTATE:
+                //autotargeting
+                limeLightData();
+                autoTarget();
                 if(burnerLaunch(opmodeTimer.getElapsedTime(), startFireTime, variance, targetVelocity))
                 {
                     pathState = returnState;
