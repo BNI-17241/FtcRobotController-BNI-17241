@@ -17,7 +17,8 @@ public abstract class StateVarableMain extends StateAutoMain {
     //Start Pose
     public Pose StartingPose ;
     //Shoot Pose
-    public Pose ShootingPose;
+    public Pose FirstShootingPose;
+    public Pose OtherShootingPose;
     //Park Pose
     public Pose ParkingPose;
 
@@ -109,33 +110,33 @@ public abstract class StateVarableMain extends StateAutoMain {
         start_to_fire = follower
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(StartingPose, ShootingPose)
+                        new BezierLine(StartingPose, FirstShootingPose)
                 )
-                .setLinearHeadingInterpolation(StartingPose.getHeading(), ShootingPose.getHeading())
+                .setLinearHeadingInterpolation(StartingPose.getHeading(), FirstShootingPose.getHeading())
                 .build();
 
         fire_to_spike1 = follower
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(ShootingPose, BlueSpikeAInsidePose)
+                        new BezierLine(FirstShootingPose, BlueSpikeAInsidePose)
                 )
-                .setLinearHeadingInterpolation(ShootingPose.getHeading(), BlueSpikeAInsidePose.getHeading())
+                .setLinearHeadingInterpolation(FirstShootingPose.getHeading(), BlueSpikeAInsidePose.getHeading())
                 .build();
 
         fire_to_spike2 = follower
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(ShootingPose, BlueSpikeBInsidePose)
+                        new BezierLine(OtherShootingPose, BlueSpikeBInsidePose)
                 )
-                .setLinearHeadingInterpolation(ShootingPose.getHeading(), BlueSpikeBInsidePose.getHeading())
+                .setLinearHeadingInterpolation(OtherShootingPose.getHeading(), BlueSpikeBInsidePose.getHeading())
                 .build();
 
         fire_to_spike3 = follower
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(ShootingPose, BlueSpikeCInsidePose)
+                        new BezierLine(OtherShootingPose, BlueSpikeCInsidePose)
                 )
-                .setLinearHeadingInterpolation(ShootingPose.getHeading(), BlueSpikeCInsidePose.getHeading())
+                .setLinearHeadingInterpolation(OtherShootingPose.getHeading(), BlueSpikeCInsidePose.getHeading())
                 .build();
 
         spike1_traversal = follower
@@ -165,33 +166,33 @@ public abstract class StateVarableMain extends StateAutoMain {
         spike1_to_fire = follower
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(BlueSpikeAOutsidePose, BlueFarShootPose)
+                        new BezierLine(BlueSpikeAOutsidePose, OtherShootingPose)
                 )
-                .setLinearHeadingInterpolation(BlueSpikeAOutsidePose.getHeading(), BlueFarShootPose.getHeading())
+                .setLinearHeadingInterpolation(BlueSpikeAOutsidePose.getHeading(), OtherShootingPose.getHeading())
                 .build();
 
         spike2_to_fire = follower
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(BlueSpikeBOutsidePose, ShootingPose)
+                        new BezierLine(BlueSpikeBOutsidePose, OtherShootingPose)
                 )
-                .setLinearHeadingInterpolation(BlueSpikeBOutsidePose.getHeading(), ShootingPose.getHeading())
+                .setLinearHeadingInterpolation(BlueSpikeBOutsidePose.getHeading(), OtherShootingPose.getHeading())
                 .build();
 
         spike3_to_fire = follower
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(BlueSpikeCOutsidePose, ShootingPose)
+                        new BezierLine(BlueSpikeCOutsidePose, OtherShootingPose)
                 )
-                .setLinearHeadingInterpolation(BlueSpikeCOutsidePose.getHeading(), ShootingPose.getHeading())
+                .setLinearHeadingInterpolation(BlueSpikeCOutsidePose.getHeading(), OtherShootingPose.getHeading())
                 .build();
 
         fire_to_park = follower
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(ShootingPose, ParkingPose)
+                        new BezierLine(OtherShootingPose, ParkingPose)
                 )
-                .setLinearHeadingInterpolation(ShootingPose.getHeading(), ParkingPose.getHeading())
+                .setLinearHeadingInterpolation(OtherShootingPose.getHeading(), ParkingPose.getHeading())
                 .build();
 
         if (AtoCIntake) {
