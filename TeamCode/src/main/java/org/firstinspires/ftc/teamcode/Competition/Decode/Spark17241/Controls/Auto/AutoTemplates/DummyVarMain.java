@@ -464,7 +464,7 @@ public abstract class DummyVarMain extends StateAutoMain {
             case FIREANDRETURNSTATE:
                 //autotargeting
                 limeLightData();
-                autoTarget();
+                autoTarget(0);
                 if(burnerLaunch(opmodeTimer.getElapsedTime(), startFireTime, variance, targetVelocity))
                 {
                     pathState = returnState;

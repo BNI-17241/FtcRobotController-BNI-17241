@@ -240,6 +240,8 @@ public abstract class StateAutoMain extends OpMode {
         else{
             List<LLResultTypes.FiducialResult> fiducialResults = result.getFiducialResults();
             for (LLResultTypes.FiducialResult fr : fiducialResults) {
+                //Don't rotate for motif tags
+                if (fr.getFiducialId() == 20 || fr.getFiducialId() == 24) {
                 Pose3D tagInCam = fr.getTargetPoseCameraSpace();     // pose of tag in CAMERA space
                 double x = tagInCam.getPosition().x;  // right (+)
                 double y = tagInCam.getPosition().y;  // down (+)
@@ -255,60 +257,60 @@ public abstract class StateAutoMain extends OpMode {
                 telemetry.addLine("-------------------------------------");
                 double tagXDegrees;
 
-                //Don't rotate for motif tags
-                if (fr.getFiducialId() == 21 || fr.getFiducialId() == 22 || fr.getFiducialId() == 23) {
-                    return;
+
+
+
+                    //Check for tags and get X degrees
+                    tagXDegrees = fr.getFiducialId() == 20 ? fr.getTargetXDegrees() : 0;
+                    tagXDegrees = fr.getFiducialId() == 24 ? fr.getTargetXDegrees() : tagXDegrees;
+
+                    // --- Proportional Drive Control parameters  ---
+                    double kP = 0.03;             // Proportional gain for turning and oscillation
+                    double maxTurnSpeed = .35;   // Max turn power
+                    double minTurnSpeed = 0.25;  // Minimum turn power to overcome friction
+                    double tolerance = 1.5;      // Deadband in degrees that controls oscillation
+
+                    //tagXDegrees += offset;
+
+                    // If we’re close enough, stop and don’t oscillate
+                    if (Math.abs(tagXDegrees) < tolerance) {
+                        decBot.frontLeftMotor.setPower(0);
+                        decBot.rearLeftMotor.setPower(0);
+                        decBot.frontRightMotor.setPower(0);
+                        decBot.rearRightMotor.setPower(0);
+                        telemetry.addData("Align", "Aligned! tx=%.2f", tagXDegrees);
+                        telemetry.addData("Tag", "ID: %d", fr.getFiducialId());
+                        return;
+                    }
+
+                    // Proportional turning power
+                    double power = kP * tagXDegrees;
+
+                    // Clip to max speed
+                    if (power > maxTurnSpeed) power = maxTurnSpeed;
+                    if (power < -maxTurnSpeed) power = -maxTurnSpeed;
+
+                    // Enforce a minimum power when we’re still outside tolerance
+                    if (power > 0 && Math.abs(power) < minTurnSpeed) power = minTurnSpeed;
+                    if (power < 0 && Math.abs(power) < minTurnSpeed) power = -minTurnSpeed;
+
+                    // Map sign so that:
+                    //  tx < 0 (tag left) so robot turns left (fl -, fr +)
+                    //  tx > 0 (tag right) so robots turns right (fl +, fr -)
+                    double frontLeft = power;
+                    double frontRight = -power;
+                    double rearLeft = power;
+                    double rearRight = -power;
+
+                    // Set motor powers
+                    setMotorPower(decBot.frontLeftMotor, frontLeft, powerThreshold, 1.0);
+                    setMotorPower(decBot.frontRightMotor, frontRight, powerThreshold, 1.0);
+                    setMotorPower(decBot.rearLeftMotor, rearLeft, powerThreshold, 1.0);
+                    setMotorPower(decBot.rearRightMotor, rearRight, powerThreshold, 1.0);
+
+                    telemetry.addData("Align", "tx=%.2f, power=%.2f", tagXDegrees, power);
+
                 }
-
-                //Check for tags and get X degrees
-                tagXDegrees = fr.getFiducialId() == 20 ? fr.getTargetXDegrees() : 0;
-                tagXDegrees = fr.getFiducialId() == 24 ? fr.getTargetXDegrees() : tagXDegrees;
-
-                // --- Proportional Drive Control parameters  ---
-                double kP = 0.08;             // Proportional gain for turning and oscillation
-                double maxTurnSpeed = 1;   // Max turn power
-                double minTurnSpeed = 0.25;  // Minimum turn power to overcome friction
-                double tolerance = 2;      // Deadband in degrees that controls oscillation
-
-                tagXDegrees += offset;
-
-                // If we’re close enough, stop and don’t oscillate
-                if (Math.abs(tagXDegrees) < tolerance) {
-                    decBot.frontLeftMotor.setPower(0);
-                    decBot.rearLeftMotor.setPower(0);
-                    decBot.frontRightMotor.setPower(0);
-                    decBot.rearRightMotor.setPower(0);
-                    telemetry.addData("Align", "Aligned! tx=%.2f", tagXDegrees);
-                    telemetry.addData("Tag", "ID: %d", fr.getFiducialId());
-                    return;
-                }
-
-                // Proportional turning power
-                double power = kP * tagXDegrees;
-
-                // Clip to max speed
-                if (power > maxTurnSpeed) power = maxTurnSpeed;
-                if (power < -maxTurnSpeed) power = -maxTurnSpeed;
-
-                // Enforce a minimum power when we’re still outside tolerance
-                if (power > 0 && Math.abs(power) < minTurnSpeed) power = minTurnSpeed;
-                if (power < 0 && Math.abs(power) < minTurnSpeed) power = -minTurnSpeed;
-
-                // Map sign so that:
-                //  tx < 0 (tag left) so robot turns left (fl -, fr +)
-                //  tx > 0 (tag right) so robots turns right (fl +, fr -)
-                double frontLeft = power;
-                double frontRight = -power;
-                double rearLeft = power;
-                double rearRight = -power;
-
-                // Set motor powers
-                setMotorPower(decBot.frontLeftMotor, frontLeft, powerThreshold, 1.0);
-                setMotorPower(decBot.frontRightMotor, frontRight, powerThreshold, 1.0);
-                setMotorPower(decBot.rearLeftMotor, rearLeft, powerThreshold, 1.0);
-                setMotorPower(decBot.rearRightMotor, rearRight, powerThreshold, 1.0);
-
-                telemetry.addData("Align", "tx=%.2f, power=%.2f", tagXDegrees, power);
             }
         }
     }

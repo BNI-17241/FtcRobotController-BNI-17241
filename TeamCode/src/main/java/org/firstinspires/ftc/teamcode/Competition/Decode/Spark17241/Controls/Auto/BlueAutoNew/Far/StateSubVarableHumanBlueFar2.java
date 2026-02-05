@@ -40,11 +40,11 @@ public class StateSubVarableHumanBlueFar2 extends StateVarableMain {
         */
         AtoCIntake = true;
         maxTimeBreakout = 29 * 1000;
-        targetVelocity = 1520;
+        targetVelocity = 1500;
         intakeSpeed = 1;
         intakeMoveSpeed = 0.4;
         variance = 90;
-        xAutoOffset = -7;
+        xAutoOffset = -3.5;
 
 
 
