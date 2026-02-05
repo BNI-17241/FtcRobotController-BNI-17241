@@ -16,13 +16,11 @@ public class StateSubVarableHumanBlueMed2 extends StateVarableMain {
     public void init() {
         StartingPose = BlueFarStartPose;
         //Shoot Pose
-        FirstShootingPose = BlueMidFirstShootPose;
-        OtherShootingPose = BlueMidOtherShootPose;
+        ShootingPose = BlueMidShootPose;
         //Park Pose
         ParkingPose = BlueFarParkPose;
-
         //Optional Pose for shooting after Third Spike
-        ThirdShootPose = BlueMidOtherShootPose;
+        ThirdShootPose = BlueMidShootPose;
 
         //Delay before initial movement (ms)
         startDelay = 0;

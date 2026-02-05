@@ -16,13 +16,12 @@ public class StateSubVarableGoalBlueMed2 extends StateVarableMain {
     public void init() {
         StartingPose = BlueGoalStartPose;
         //Shoot Pose
-        FirstShootingPose = BlueMidFirstShootPose;
-        OtherShootingPose = BlueMidOtherShootPose;
+        ShootingPose = BlueMidShootPose;
         //Park Pose
         ParkingPose = BlueNearParkPose;
 
         //Optional Pose for shooting after Third Spike
-        ThirdShootPose = BlueMidOtherShootPose;
+        ThirdShootPose = BlueMidShootPose;
 
         //Delay before initial movement (ms)
         startDelay = 0;
