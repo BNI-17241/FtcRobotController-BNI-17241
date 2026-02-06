@@ -265,10 +265,10 @@ public abstract class StateAutoMain extends OpMode {
                     tagXDegrees = fr.getFiducialId() == 24 ? fr.getTargetXDegrees() : tagXDegrees;
 
                     // --- Proportional Drive Control parameters  ---
-                    double kP = 0.06;             // Proportional gain for turning and oscillation
-                    double maxTurnSpeed = .2;   // Max turn power
-                    double minTurnSpeed = .15;  // Minimum turn power to overcome friction
-                    double tolerance = 1.5;      // Deadband in degrees that controls oscillation
+                    double kP = 0.03;             // Proportional gain for turning and oscillation
+                    double maxTurnSpeed = .15;   // Max turn power
+                    double minTurnSpeed = .1;  // Minimum turn power to overcome friction
+                    double tolerance = 1;      // Deadband in degrees that controls oscillation
 
                     //tagXDegrees += offset;
 
