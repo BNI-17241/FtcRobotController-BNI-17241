@@ -55,8 +55,8 @@ public abstract class StateAutoMain extends OpMode {
     public final Pose BlueSpikeAOutsidePose = new Pose(17, 33, Math.toRadians(180)); //31
 
     // Middle spike
-    public final Pose BlueSpikeBInsidePose = new Pose(48, 59, Math.toRadians(180));//57
-    public final Pose BlueSpikeBOutsidePose = new Pose(17, 59, Math.toRadians(180));//57
+    public final Pose BlueSpikeBInsidePose = new Pose(48, 56, Math.toRadians(180));//57
+    public final Pose BlueSpikeBOutsidePose = new Pose(17, 56, Math.toRadians(180));//57
 
     //Farthest Spike
     public final Pose BlueSpikeCInsidePose = new Pose(48, 81, Math.toRadians(180));
@@ -265,9 +265,9 @@ public abstract class StateAutoMain extends OpMode {
                     tagXDegrees = fr.getFiducialId() == 24 ? fr.getTargetXDegrees() : tagXDegrees;
 
                     // --- Proportional Drive Control parameters  ---
-                    double kP = 0.03;             // Proportional gain for turning and oscillation
-                    double maxTurnSpeed = .35;   // Max turn power
-                    double minTurnSpeed = 0.25;  // Minimum turn power to overcome friction
+                    double kP = 0.08;             // Proportional gain for turning and oscillation
+                    double maxTurnSpeed = .3;   // Max turn power
+                    double minTurnSpeed = .2;  // Minimum turn power to overcome friction
                     double tolerance = 1.5;      // Deadband in degrees that controls oscillation
 
                     //tagXDegrees += offset;
