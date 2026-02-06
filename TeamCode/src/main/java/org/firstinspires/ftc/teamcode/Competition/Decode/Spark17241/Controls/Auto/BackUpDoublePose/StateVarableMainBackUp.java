@@ -447,9 +447,7 @@ public abstract class StateVarableMainBackUp extends StateAutoMainBackUp {
                 break;
 
             case FIREANDRETURNSTATE:
-                //autotargeting
-                limeLightData();
-                autoTarget();
+
                 if(burnerLaunch(opmodeTimer.getElapsedTime(), startFireTime, variance, targetVelocity))
                 {
                     pathState = returnState;

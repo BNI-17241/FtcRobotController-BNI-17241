@@ -44,7 +44,7 @@ public class StateSubVarableHumanBlueFar2 extends StateVarableMain {
         intakeSpeed = 1;
         intakeMoveSpeed = 0.4;
         variance = 90;
-        xAutoOffset = -3.5;
+        xAutoOffset = -7;
 
 
 
