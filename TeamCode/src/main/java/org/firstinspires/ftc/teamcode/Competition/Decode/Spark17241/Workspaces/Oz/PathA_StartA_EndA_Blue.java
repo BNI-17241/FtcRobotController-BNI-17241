@@ -1,3 +1,4 @@
+/*
 package org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Workspaces.Oz;
 
 import com.pedropathing.follower.Follower;
@@ -20,7 +21,7 @@ import java.util.List;
 @Disabled
 @Autonomous(name = "PathA_StartA_EndA_Blue", group = "Drive")
 public class PathA_StartA_EndA_Blue extends StateAutoMain {
-
+/*
     public Follower follower;
     public Timer opmodeTimer;
 
@@ -53,6 +54,7 @@ public class PathA_StartA_EndA_Blue extends StateAutoMain {
     protected PathChain ball_inside_to_ball_outside;
     protected PathChain ball_outside_to_fire_location;
     protected PathChain fire_location_to_park;
+
 
     public int limeLightData() {
         LLResult result = limelight.getLatestResult();
@@ -221,3 +223,5 @@ protected double maxTime = 25.0;
 }
 
 //I added coment
+*/
+

@@ -6,20 +6,22 @@ import com.pedropathing.geometry.Pose;
 import com.pedropathing.paths.Path;
 import com.pedropathing.paths.PathChain;
 import com.pedropathing.util.Timer;
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Controls.Auto.StateAutoMain;
+import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.pedroPathing.MainContraints;
 
-
-public abstract class StateVarableMain extends StateAutoMain {
+@Autonomous(name = "Dummy fire", group = "Drive")
+public abstract class DummyVarMain extends StateAutoMain {
 
     //--------------Config for paths-----------------------
     //Start Pose
-    public Pose StartingPose ;
+    public Pose StartingPose = BlueFarStartPose;
     //Shoot Pose
-    public Pose ShootingPose;
+    public Pose ShootingPose = BlueFarShootPose;
 
     //Park Pose
-    public Pose ParkingPose;
+    public Pose ParkingPose = BlueFarParkPose;
 
     //Optional Pose for shooting after Third Spike
     public Pose ThirdShootPose;
@@ -29,11 +31,9 @@ public abstract class StateVarableMain extends StateAutoMain {
 
     public double variance;
 
-    public double xAutoOffset;
-
 
     //How many spikes are needed? 0-3
-    public int spikeAmount;
+    public int spikeAmount = 0;
 
     /*
     Order of intake
@@ -99,7 +99,7 @@ public abstract class StateVarableMain extends StateAutoMain {
 
     //set up simple states
     public enum pathingState {
-        STARTDELAY, START, INTAKESPIKES, PARK, END, MOVETOPOINT, RETURNMOVETOPOINT, FIREANDRETURNSTATE,
+        STARTDELAY, START, INTAKESPIKES, END, MOVETOPOINT, RETURNMOVETOPOINT, FIREANDRETURNSTATE,
         PREFIRE, INTAKETOPOINT, TAKESPIKEONE, TAKESPIKETWO, TAKESPIKETHREE, AUTOTARGET}
 
     public pathingState pathState = pathingState.START;
@@ -225,15 +225,32 @@ public abstract class StateVarableMain extends StateAutoMain {
         telemetry.addData("Current state :", pathState);
         telemetry.addData("Spikes Intook", spikesTaken);
     }
-    public void autoStateLoop(){
 
-        //Max time breakout
-        if(opmodeTimer.getElapsedTime() > maxTimeBreakout){
-            if(pathState != pathingState.END){
-                telemetry.addLine("EMERGENCY BREAKOUT. PARKING.");
-                pathState = pathingState.PARK;
-            }
-        }
+    @Override
+    public void init() {
+        pathTimer = new Timer();
+        opmodeTimer = new Timer();
+        decBot.initRobot(hardwareMap);
+        follower = MainContraints.createFollower(hardwareMap);
+        pathGen();
+        follower.setStartingPose(StartingPose);
+    }
+
+    @Override
+    public void start(){
+        opmodeTimer.resetTimer();
+        pathTimer.resetTimer();
+        pathState = pathingState.STARTDELAY;
+        //Get the time of the starting delay
+        delayStartTime = opmodeTimer.getElapsedTime();
+        spikesTaken = 0;
+    }
+
+
+
+    @Override
+    public void loop(){
+
 
         switch (pathState) {
             case STARTDELAY:
@@ -259,7 +276,7 @@ public abstract class StateVarableMain extends StateAutoMain {
                     //Fire before any spike logic
                     moveToPointChain = null;
                     startFireTime = opmodeTimer.getElapsedTime();
-                    returnState = pathingState.INTAKESPIKES;
+                    returnState = pathingState.END;
                     pathState = pathingState.FIREANDRETURNSTATE;
                 }
                 break;
@@ -289,9 +306,7 @@ public abstract class StateVarableMain extends StateAutoMain {
                 }
                 else{
                     //Go park
-                    moveToPointChain = fire_to_park;
-                    returnState = pathingState.PARK;
-                    pathState = pathingState.MOVETOPOINT;
+                    returnState = pathingState.END;
                     break;
                 }
 
@@ -449,22 +464,13 @@ public abstract class StateVarableMain extends StateAutoMain {
             case FIREANDRETURNSTATE:
                 //autotargeting
                 limeLightData();
-                autoTarget(xAutoOffset);
+                autoTarget(0);
                 if(burnerLaunch(opmodeTimer.getElapsedTime(), startFireTime, variance, targetVelocity))
                 {
                     pathState = returnState;
                 }
                 break;
 
-
-            case PARK:
-                //Move to the first spike
-                decBot.intakeControl(0);
-                decBot.flylaunch(0);
-                if (!(follower.isBusy())) {
-                    pathState = pathingState.END;
-                }
-                break;
             case END:
                 break;
         }
