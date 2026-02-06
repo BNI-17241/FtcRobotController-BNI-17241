@@ -40,7 +40,7 @@ public class StateSubVarableHumanBlueFar1BackUp extends StateVarableMainBackUp {
         */
         AtoCIntake = true;
         maxTimeBreakout = 29 * 1000;
-        targetVelocity = 1520;
+        targetVelocity = 1485;
         intakeSpeed = 1;
         intakeMoveSpeed = 0.4;
         variance = 90;
