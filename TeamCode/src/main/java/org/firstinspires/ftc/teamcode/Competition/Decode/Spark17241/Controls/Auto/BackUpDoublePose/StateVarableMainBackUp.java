@@ -447,7 +447,6 @@ public abstract class StateVarableMainBackUp extends StateAutoMainBackUp {
                 break;
 
             case FIREANDRETURNSTATE:
-
                 if(burnerLaunch(opmodeTimer.getElapsedTime(), startFireTime, variance, targetVelocity))
                 {
                     pathState = returnState;
