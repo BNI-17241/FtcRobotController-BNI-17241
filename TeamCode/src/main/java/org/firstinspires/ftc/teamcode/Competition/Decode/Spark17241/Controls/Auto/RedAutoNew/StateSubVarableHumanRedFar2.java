@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Controls.Auto.BlueAutoNew.Far;
+package org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Controls.Auto.RedAutoNew;
 
 import com.pedropathing.util.Timer;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -6,28 +6,29 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Controls.Auto.AutoTemplates.StateVarableMain;
 import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.pedroPathing.MainContraints;
 
-@Autonomous(name = "Sub Blue Goal Med 1 state", group = "Drive")
-public class StateSubVarableGoalBlueMed1 extends StateVarableMain {
+@Autonomous(name = "Red Far 2 State Variable", group = "Drive")
+public class StateSubVarableHumanRedFar2 extends StateVarableMain {
 
     //When to go to park as failsafe (0-30 seconds from start, recommended 25)
 
 
     @Override
     public void init() {
-        StartingPose = BlueGoalStartPose;
+
+        StartingPose = RedFarStartPose;
         //Shoot Pose
-        ShootingPose = BlueMidShootPose;
+        ShootingPose = RedFarShootPose;
         //Park Pose
-        ParkingPose = BlueNearParkPose;
+        ParkingPose = RedFarParkPose;
 
         //Optional Pose for shooting after Third Spike
-        ThirdShootPose = BlueMidShootPose;
+        ThirdShootPose = RedFarShootPose;
 
         //Delay before initial movement (ms)
         startDelay = 0;
 
         //How many spikes are needed? 0-3
-        spikeAmount = 1;
+        spikeAmount = 2;
         /*
         Order of intake
         true:
@@ -41,11 +42,12 @@ public class StateSubVarableGoalBlueMed1 extends StateVarableMain {
         */
         AtoCIntake = true;
         maxTimeBreakout = 29 * 1000;
-        targetVelocity = 1150;
+        targetVelocity = 1400;
         intakeSpeed = 1;
         intakeMoveSpeed = 0.4;
-        variance = 90;
-
+        variance = 20;
+        xAutoOffset = 3;//-3
+        pathOffset = 0;
 
 
 
@@ -53,8 +55,11 @@ public class StateSubVarableGoalBlueMed1 extends StateVarableMain {
         opmodeTimer = new Timer();
         decBot.initRobot(hardwareMap);
         follower = MainContraints.createFollower(hardwareMap);
-        pathGen();
+        redPathGen();
         follower.setStartingPose(StartingPose);
+
+        limelightInit();
+
     }
 
     @Override
@@ -70,8 +75,9 @@ public class StateSubVarableGoalBlueMed1 extends StateVarableMain {
     @Override
     public void loop() {
         follower.update();
-        AutoMainTelemetry();
-        stateVarableMainTelemetry();
+        telemetry.addData("Velocity: ", getCurrentVelocity());
+        //AutoMainTelemetry();
+        //stateVarableMainTelemetry();
         telemetry.update();
 
 

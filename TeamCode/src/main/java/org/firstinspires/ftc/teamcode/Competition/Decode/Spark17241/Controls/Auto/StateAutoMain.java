@@ -123,10 +123,10 @@ public abstract class StateAutoMain extends OpMode {
             // Access fiducial results
             List<LLResultTypes.FiducialResult> fiducialResults = result.getFiducialResults();
             for (LLResultTypes.FiducialResult fr : fiducialResults) {
-                telemetry.addData("Fiducial", "ID: %d, Family: %s, X: %.2f, Y: %.2f", fr.getFiducialId(), fr.getFamily(), fr.getTargetXDegrees(), fr.getTargetYDegrees());
+                //telemetry.addData("Fiducial", "ID: %d, Family: %s, X: %.2f, Y: %.2f", fr.getFiducialId(), fr.getFamily(), fr.getTargetXDegrees(), fr.getTargetYDegrees());
             }
         } else {
-            telemetry.addData("Limelight", "No data available");
+            //telemetry.addData("Limelight", "No data available");
         }
     }
 
@@ -152,13 +152,23 @@ public abstract class StateAutoMain extends OpMode {
     public boolean burnerLaunch(double currentTime, double startTime, double variance, double velocity){
         if(currentTime - 5000 > startTime) {
             decBot.stopFeed();
+            decBot.LEDCon(5);
             return true;
         }
-        if(LaunchWheelsInGate(velocity, variance)){
+        else if(currentTime - 1500 > startTime) {
             decBot.beginFeed();
+            decBot.LEDCon(4);
+        }
+        else if(currentTime - 1000 > startTime) {
+            decBot.stopFeed();
+            decBot.LEDCon(3);
+        }
+        else if(currentTime - 500 > startTime) {
+            decBot.beginFeed();
+            decBot.LEDCon(2);
         }
         else{
-            decBot.stopFeed();
+            decBot.LEDCon(1);
         }
         return false;
     }
@@ -248,13 +258,13 @@ public abstract class StateAutoMain extends OpMode {
 
                 double forwardMeters = tagInCam.getPosition().z;  // forward/out of camera (+)
                 double rangeMeters = Math.sqrt(x * x + y * y + forwardMeters * forwardMeters);// 3D range
-
+                /*
                 telemetry.addLine("-------------------------------------");
                 telemetry.addData("Tag ID", fr.getFiducialId());
                 telemetry.addData("Forward (m)", "%.3f", forwardMeters);
                 telemetry.addData("Range (m)", "%.3f", rangeMeters);
                 telemetry.addData("Yaw", fr.getTargetXDegrees());
-                telemetry.addLine("-------------------------------------");
+                telemetry.addLine("-------------------------------------");*/
                 double tagXDegrees;
 
 
@@ -265,12 +275,12 @@ public abstract class StateAutoMain extends OpMode {
                     tagXDegrees = fr.getFiducialId() == 24 ? fr.getTargetXDegrees() : tagXDegrees;
 
                     // --- Proportional Drive Control parameters  ---
-                    double kP = 0.03;             // Proportional gain for turning and oscillation
-                    double maxTurnSpeed = .15;   // Max turn power
+                    double kP = 0.04;             // Proportional gain for turning and oscillation
+                    double maxTurnSpeed = .2;   // Max turn power
                     double minTurnSpeed = .1;  // Minimum turn power to overcome friction
                     double tolerance = 1;      // Deadband in degrees that controls oscillation
 
-                    //tagXDegrees += offset;
+                    tagXDegrees += offset;
 
                     // If we’re close enough, stop and don’t oscillate
                     if (Math.abs(tagXDegrees) < tolerance) {

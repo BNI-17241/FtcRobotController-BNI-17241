@@ -31,9 +31,13 @@ public abstract class StateVarableMain extends StateAutoMain {
 
     public double xAutoOffset;
 
+    //Offset for spike to fire paths
+    public double pathOffset;
 
     //How many spikes are needed? 0-3
     public int spikeAmount;
+
+    public double firingStartingTime = 0;
 
     /*
     Order of intake
@@ -100,14 +104,14 @@ public abstract class StateVarableMain extends StateAutoMain {
     //set up simple states
     public enum pathingState {
         STARTDELAY, START, INTAKESPIKES, PARK, END, MOVETOPOINT, RETURNMOVETOPOINT, FIREANDRETURNSTATE,
-        PREFIRE, INTAKETOPOINT, TAKESPIKEONE, TAKESPIKETWO, TAKESPIKETHREE, AUTOTARGET}
+        PREFIRE, INTAKETOPOINT, TAKESPIKEONE, TAKESPIKETWO, TAKESPIKETHREE, AUTOTARGET, CHECKINGATE}
 
     public pathingState pathState = pathingState.START;
 
     //State to return to after moveToPoint case
     public pathingState returnState;
 
-    public void pathGen() {
+    public void bluePathGen() {
         start_to_fire = follower
                 .pathBuilder()
                 .addPath(
@@ -169,7 +173,7 @@ public abstract class StateVarableMain extends StateAutoMain {
                 .addPath(
                         new BezierLine(BlueSpikeAOutsidePose, ShootingPose)
                 )
-                .setLinearHeadingInterpolation(BlueSpikeAOutsidePose.getHeading(), ShootingPose.getHeading())
+                .setLinearHeadingInterpolation(BlueSpikeAOutsidePose.getHeading(), ShootingPose.getHeading() + pathOffset)
                 .build();
 
         spike2_to_fire = follower
@@ -177,7 +181,7 @@ public abstract class StateVarableMain extends StateAutoMain {
                 .addPath(
                         new BezierLine(BlueSpikeBOutsidePose, ShootingPose)
                 )
-                .setLinearHeadingInterpolation(BlueSpikeBOutsidePose.getHeading(), ShootingPose.getHeading())
+                .setLinearHeadingInterpolation(BlueSpikeBOutsidePose.getHeading(), ShootingPose.getHeading() + pathOffset)
                 .build();
 
         spike3_to_fire = follower
@@ -185,7 +189,7 @@ public abstract class StateVarableMain extends StateAutoMain {
                 .addPath(
                         new BezierLine(BlueSpikeCOutsidePose, ShootingPose)
                 )
-                .setLinearHeadingInterpolation(BlueSpikeCOutsidePose.getHeading(), ShootingPose.getHeading())
+                .setLinearHeadingInterpolation(BlueSpikeCOutsidePose.getHeading(), ShootingPose.getHeading() + pathOffset)
                 .build();
 
         fire_to_park = follower
@@ -211,6 +215,114 @@ public abstract class StateVarableMain extends StateAutoMain {
                             new BezierLine(BlueSpikeAOutsidePose, ThirdShootPose)
                     )
                     .setLinearHeadingInterpolation(BlueSpikeAOutsidePose.getHeading(), ThirdShootPose.getHeading())
+                    .build();
+        }
+    }
+
+    public void redPathGen() {
+        start_to_fire = follower
+                .pathBuilder()
+                .addPath(
+                        new BezierLine(StartingPose, ShootingPose)
+                )
+                .setLinearHeadingInterpolation(StartingPose.getHeading(), ShootingPose.getHeading())
+                .build();
+
+        fire_to_spike1 = follower
+                .pathBuilder()
+                .addPath(
+                        new BezierLine(ShootingPose, RedSpikeAInsidePose)
+                )
+                .setLinearHeadingInterpolation(ShootingPose.getHeading(), RedSpikeAInsidePose.getHeading())
+                .build();
+
+        fire_to_spike2 = follower
+                .pathBuilder()
+                .addPath(
+                        new BezierLine(ShootingPose, RedSpikeBInsidePose)
+                )
+                .setLinearHeadingInterpolation(ShootingPose.getHeading(), RedSpikeBInsidePose.getHeading())
+                .build();
+
+        fire_to_spike3 = follower
+                .pathBuilder()
+                .addPath(
+                        new BezierLine(ShootingPose, RedSpikeCInsidePose)
+                )
+                .setLinearHeadingInterpolation(ShootingPose.getHeading(), RedSpikeCInsidePose.getHeading())
+                .build();
+
+        spike1_traversal = follower
+                .pathBuilder()
+                .addPath(
+                        new BezierLine(RedSpikeAInsidePose, RedSpikeAOutsidePose)
+                )
+                .setLinearHeadingInterpolation(RedSpikeAInsidePose.getHeading(), RedSpikeAOutsidePose.getHeading())
+                .build();
+
+        spike2_traversal = follower
+                .pathBuilder()
+                .addPath(
+                        new BezierLine(RedSpikeBInsidePose, RedSpikeBOutsidePose)
+                )
+                .setLinearHeadingInterpolation(RedSpikeBInsidePose.getHeading(), RedSpikeBOutsidePose.getHeading())
+                .build();
+
+        spike3_traversal = follower
+                .pathBuilder()
+                .addPath(
+                        new BezierLine(RedSpikeCInsidePose, RedSpikeCOutsidePose)
+                )
+                .setLinearHeadingInterpolation(RedSpikeCInsidePose.getHeading(), RedSpikeCOutsidePose.getHeading())
+                .build();
+
+        spike1_to_fire = follower
+                .pathBuilder()
+                .addPath(
+                        new BezierLine(RedSpikeAOutsidePose, ShootingPose)
+                )
+                .setLinearHeadingInterpolation(RedSpikeAOutsidePose.getHeading(), ShootingPose.getHeading() + pathOffset)
+                .build();
+
+        spike2_to_fire = follower
+                .pathBuilder()
+                .addPath(
+                        new BezierLine(RedSpikeBOutsidePose, ShootingPose)
+                )
+                .setLinearHeadingInterpolation(RedSpikeBOutsidePose.getHeading(), ShootingPose.getHeading() + pathOffset)
+                .build();
+
+        spike3_to_fire = follower
+                .pathBuilder()
+                .addPath(
+                        new BezierLine(RedSpikeCOutsidePose, ShootingPose)
+                )
+                .setLinearHeadingInterpolation(RedSpikeCOutsidePose.getHeading(), ShootingPose.getHeading() + pathOffset)
+                .build();
+
+        fire_to_park = follower
+                .pathBuilder()
+                .addPath(
+                        new BezierLine(ShootingPose, ParkingPose)
+                )
+                .setLinearHeadingInterpolation(ShootingPose.getHeading(), ParkingPose.getHeading())
+                .build();
+
+        if (AtoCIntake) {
+            third_spike_to_shoot = follower
+                    .pathBuilder()
+                    .addPath(
+                            new BezierLine(RedSpikeCOutsidePose, ThirdShootPose)
+                    )
+                    .setLinearHeadingInterpolation(RedSpikeCOutsidePose.getHeading(), ThirdShootPose.getHeading())
+                    .build();
+        } else {
+            third_spike_to_shoot = follower
+                    .pathBuilder()
+                    .addPath(
+                            new BezierLine(RedSpikeAOutsidePose, ThirdShootPose)
+                    )
+                    .setLinearHeadingInterpolation(RedSpikeAOutsidePose.getHeading(), ThirdShootPose.getHeading())
                     .build();
         }
     }
@@ -260,7 +372,7 @@ public abstract class StateVarableMain extends StateAutoMain {
                     moveToPointChain = null;
                     startFireTime = opmodeTimer.getElapsedTime();
                     returnState = pathingState.INTAKESPIKES;
-                    pathState = pathingState.FIREANDRETURNSTATE;
+                    pathState = pathingState.CHECKINGATE;
                 }
                 break;
 
@@ -330,7 +442,7 @@ public abstract class StateVarableMain extends StateAutoMain {
                     startFireTime = opmodeTimer.getElapsedTime();
                     returnState = pathingState.INTAKESPIKES;
                     spikesTaken += 1;
-                    pathState = pathingState.FIREANDRETURNSTATE;
+                    pathState = pathingState.CHECKINGATE;
                     break;
                 }
                 if(moveToPointChain == third_spike_to_shoot){
@@ -338,7 +450,7 @@ public abstract class StateVarableMain extends StateAutoMain {
                     startFireTime = opmodeTimer.getElapsedTime();
                     returnState = pathingState.INTAKESPIKES;
                     spikesTaken += 1;
-                    pathState = pathingState.FIREANDRETURNSTATE;
+                    pathState = pathingState.CHECKINGATE;
                     break;
                 }
                 break;
@@ -372,7 +484,7 @@ public abstract class StateVarableMain extends StateAutoMain {
                     startFireTime = opmodeTimer.getElapsedTime();
                     returnState = pathingState.INTAKESPIKES;
                     spikesTaken += 1;
-                    pathState = pathingState.FIREANDRETURNSTATE;
+                    pathState = pathingState.CHECKINGATE;
                     break;
                 }
                 break;
@@ -410,7 +522,7 @@ public abstract class StateVarableMain extends StateAutoMain {
                     startFireTime = opmodeTimer.getElapsedTime();
                     returnState = pathingState.INTAKESPIKES;
                     spikesTaken += 1;
-                    pathState = pathingState.FIREANDRETURNSTATE;
+                    pathState = pathingState.CHECKINGATE;
                     break;
                 }
                 if(moveToPointChain == third_spike_to_shoot){
@@ -418,7 +530,7 @@ public abstract class StateVarableMain extends StateAutoMain {
                     startFireTime = opmodeTimer.getElapsedTime();
                     returnState = pathingState.INTAKESPIKES;
                     spikesTaken += 1;
-                    pathState = pathingState.FIREANDRETURNSTATE;
+                    pathState = pathingState.CHECKINGATE;
                     break;
                 }
                 break;
@@ -444,6 +556,13 @@ public abstract class StateVarableMain extends StateAutoMain {
                 if (!(follower.isBusy())) {
                     pathState = returnState;
                 }
+                break;
+
+            case CHECKINGATE:
+                if(LaunchWheelsInGate(targetVelocity, variance)){
+                    pathState = pathingState.FIREANDRETURNSTATE;
+                }
+                startFireTime = opmodeTimer.getElapsedTime();
                 break;
 
             case FIREANDRETURNSTATE:

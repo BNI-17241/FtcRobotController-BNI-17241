@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Controls.Auto.AutoTemplates.StateVarableMain;
 import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.pedroPathing.MainContraints;
-@Autonomous(name = "Sub Blue Human Far 2 state", group = "Drive")
+@Autonomous(name = "Blue Far 2 State Variable", group = "Drive")
 public class StateSubVarableHumanBlueFar2 extends StateVarableMain {
 
     //When to go to park as failsafe (0-30 seconds from start, recommended 25)
@@ -13,6 +13,7 @@ public class StateSubVarableHumanBlueFar2 extends StateVarableMain {
 
     @Override
     public void init() {
+
         StartingPose = BlueFarStartPose;
         //Shoot Pose
         ShootingPose = BlueFarShootPose;
@@ -40,11 +41,12 @@ public class StateSubVarableHumanBlueFar2 extends StateVarableMain {
         */
         AtoCIntake = true;
         maxTimeBreakout = 29 * 1000;
-        targetVelocity = 1480;
+        targetVelocity = 1400;
         intakeSpeed = 1;
         intakeMoveSpeed = 0.4;
-        variance = 90;
-        xAutoOffset = -12;
+        variance = 20;
+        xAutoOffset = -3;//-3
+        pathOffset = Math.PI / 18;
 
 
 
@@ -52,8 +54,12 @@ public class StateSubVarableHumanBlueFar2 extends StateVarableMain {
         opmodeTimer = new Timer();
         decBot.initRobot(hardwareMap);
         follower = MainContraints.createFollower(hardwareMap);
-        pathGen();
+
+        //Change for alliance
+        bluePathGen();
+
         follower.setStartingPose(StartingPose);
+
 
         limelightInit();
 
@@ -72,8 +78,9 @@ public class StateSubVarableHumanBlueFar2 extends StateVarableMain {
     @Override
     public void loop() {
         follower.update();
-        AutoMainTelemetry();
-        stateVarableMainTelemetry();
+        telemetry.addData("Velocity: ", getCurrentVelocity());
+        //AutoMainTelemetry();
+        //stateVarableMainTelemetry();
         telemetry.update();
 
 
