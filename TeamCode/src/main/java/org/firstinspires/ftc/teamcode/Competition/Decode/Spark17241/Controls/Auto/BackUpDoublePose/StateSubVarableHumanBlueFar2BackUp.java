@@ -3,11 +3,10 @@ package org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Controls.Au
 import com.pedropathing.util.Timer;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
-import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Controls.Auto.AutoTemplates.StateVarableMain;
 import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.pedroPathing.MainContraints;
 
-@Autonomous(name = "Sub Blue Human Far 1 state Back Up", group = "Drive")
-public class StateSubVarableHumanBlueFar1BackUp extends StateVarableMainBackUp {
+@Autonomous(name = "Sub Blue Human Far 2 state Back Up", group = "Drive")
+public class StateSubVarableHumanBlueFar2BackUp extends StateVarableMainBackUp {
 
     //When to go to park as failsafe (0-30 seconds from start, recommended 25)
 
@@ -26,7 +25,7 @@ public class StateSubVarableHumanBlueFar1BackUp extends StateVarableMainBackUp {
         startDelay = 0;
 
         //How many spikes are needed? 0-3
-        spikeAmount = 1;
+        spikeAmount = 2;
         /*
         Order of intake
         true:
