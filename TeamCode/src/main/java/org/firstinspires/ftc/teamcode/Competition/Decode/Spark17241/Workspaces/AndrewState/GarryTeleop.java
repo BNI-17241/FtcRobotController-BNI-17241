@@ -14,6 +14,7 @@ import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Robots.State
 import java.util.ArrayList;
 import java.util.List;
 
+//TeleOp for Garry
 @TeleOp(name = "Garry Teleop", group = "Drive")
 public class GarryTeleop extends OpMode {
 
