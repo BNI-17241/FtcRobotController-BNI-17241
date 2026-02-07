@@ -7,10 +7,11 @@ import com.pedropathing.paths.Path;
 import com.pedropathing.paths.PathChain;
 import com.pedropathing.util.Timer;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Controls.Auto.StateAutoMain;
 import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.pedroPathing.MainContraints;
-
+@Disabled
 @Autonomous(name = "Dummy fire", group = "Drive")
 public abstract class DummyVarMain extends StateAutoMain {
 
@@ -465,7 +466,7 @@ public abstract class DummyVarMain extends StateAutoMain {
                 //autotargeting
                 limeLightData();
                 autoTarget(0);
-                if(burnerLaunch(opmodeTimer.getElapsedTime(), startFireTime, variance, targetVelocity))
+                if(burnerLaunch(opmodeTimer.getElapsedTime(), startFireTime, true))
                 {
                     pathState = returnState;
                 }

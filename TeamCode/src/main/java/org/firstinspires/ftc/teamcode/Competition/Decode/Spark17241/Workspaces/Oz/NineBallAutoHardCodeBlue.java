@@ -149,7 +149,7 @@ public class NineBallAutoHardCodeBlue extends StateAutoMain {
                         startFireTime = opmodeTimer.getElapsedTime();
                         hasStarted = true;
                     }
-                    if (burnerLaunch(opmodeTimer.getElapsedTime(), startFireTime, 10, 1000)) {
+                    if (burnerLaunch(opmodeTimer.getElapsedTime(), startFireTime, true)) {
                         hasStarted = false;
                         follower.followPath(fire_location_to_inside_Spike_A);
                         pathState = pathingState.INSIDE_A;
@@ -181,7 +181,7 @@ public class NineBallAutoHardCodeBlue extends StateAutoMain {
                         startFireTime = opmodeTimer.getElapsedTime();
                         hasStarted = true;
                     }
-                    if (burnerLaunch(opmodeTimer.getElapsedTime(), startFireTime, 10, 1000)) {
+                    if (burnerLaunch(opmodeTimer.getElapsedTime(), startFireTime, true)) {
                         hasStarted = false;
                         follower.followPath(fire_location_to_inside_SPike_B);
                         pathState = pathingState.INSIDE_B;
@@ -212,7 +212,7 @@ public class NineBallAutoHardCodeBlue extends StateAutoMain {
                         startFireTime = opmodeTimer.getElapsedTime();
                         hasStarted = true;
                     }
-                    if (burnerLaunch(opmodeTimer.getElapsedTime(), startFireTime, 10, 1000)) {
+                    if (burnerLaunch(opmodeTimer.getElapsedTime(), startFireTime, true)) {
                         hasStarted = false;
                         follower.followPath(firing_location_to_park);
                         pathState = pathingState.PARK;

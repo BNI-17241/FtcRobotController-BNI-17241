@@ -1,26 +1,28 @@
-package org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Controls.Auto.BackUpDoublePose;
+package org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Controls.Auto.StateAuto.Red;
 
 import com.pedropathing.util.Timer;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
+import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Controls.Auto.AutoTemplates.StateVarableMain;
 import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.pedroPathing.MainContraints;
-@Disabled
-@Autonomous(name = "Sub Blue Human Far 2 state Back Up", group = "Drive")
-public class StateSubVarableHumanBlueFar2BackUp extends StateVarableMainBackUp {
+
+@Autonomous(name = "Red Far Two Spike State", group = "Drive")
+public class RedFarTwoSpikeState extends StateVarableMain {
 
     //When to go to park as failsafe (0-30 seconds from start, recommended 25)
 
 
     @Override
     public void init() {
-        StartingPose = BlueFarStartPose;
+
+        StartingPose = RedFarStartPose;
         //Shoot Pose
-        FirstShootingPose = BlueFarFirstShootPose;
-        SecountShootingPose = BlueFarSecountShootPose;
-        ThirdShootingPose = BLueFarThirdShootPose;
+        ShootingPose = RedFarShootPose;
         //Park Pose
-        ParkingPose = BlueFarParkPose;
+        ParkingPose = RedFarParkPose;
+
+        //Optional Pose for shooting after Third Spike
+        ThirdShootPose = ShootingPose;
 
         //Delay before initial movement (ms)
         startDelay = 0;
@@ -40,20 +42,24 @@ public class StateSubVarableHumanBlueFar2BackUp extends StateVarableMainBackUp {
         */
         AtoCIntake = true;
         maxTimeBreakout = 29 * 1000;
-        targetVelocity = 1485;
+        targetVelocity = 1400;
         intakeSpeed = 1;
         intakeMoveSpeed = 0.4;
-        variance = 90;
-
-
+        variance = 20;
+        xAutoOffset = 3;//-3
+        pathOffset = 0;
+        farLaunch = true;
 
 
         pathTimer = new Timer();
         opmodeTimer = new Timer();
         decBot.initRobot(hardwareMap);
         follower = MainContraints.createFollower(hardwareMap);
-        pathGen();
+        redPathGen();
         follower.setStartingPose(StartingPose);
+
+        limelightInit();
+
     }
 
     @Override
@@ -69,8 +75,9 @@ public class StateSubVarableHumanBlueFar2BackUp extends StateVarableMainBackUp {
     @Override
     public void loop() {
         follower.update();
-        AutoMainTelemetry();
-        stateVarableMainTelemetry();
+        telemetry.addData("Velocity: ", getCurrentVelocity());
+        //AutoMainTelemetry();
+        //stateVarableMainTelemetry();
         telemetry.update();
 
 

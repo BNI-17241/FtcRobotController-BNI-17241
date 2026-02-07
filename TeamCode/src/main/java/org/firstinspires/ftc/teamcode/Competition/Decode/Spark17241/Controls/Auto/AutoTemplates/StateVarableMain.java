@@ -21,6 +21,8 @@ public abstract class StateVarableMain extends StateAutoMain {
     //Park Pose
     public Pose ParkingPose;
 
+    public boolean farLaunch;
+
     //Optional Pose for shooting after Third Spike
     public Pose ThirdShootPose;
 
@@ -343,6 +345,7 @@ public abstract class StateVarableMain extends StateAutoMain {
         if(opmodeTimer.getElapsedTime() > maxTimeBreakout){
             if(pathState != pathingState.END){
                 telemetry.addLine("EMERGENCY BREAKOUT. PARKING.");
+                follower.followPath(fire_to_park);
                 pathState = pathingState.PARK;
             }
         }
@@ -569,7 +572,7 @@ public abstract class StateVarableMain extends StateAutoMain {
                 //autotargeting
                 limeLightData();
                 autoTarget(xAutoOffset);
-                if(burnerLaunch(opmodeTimer.getElapsedTime(), startFireTime, variance, targetVelocity))
+                if(burnerLaunch(opmodeTimer.getElapsedTime(), startFireTime, farLaunch))
                 {
                     pathState = returnState;
                 }
@@ -577,7 +580,6 @@ public abstract class StateVarableMain extends StateAutoMain {
 
 
             case PARK:
-                //Move to the first spike
                 decBot.intakeControl(0);
                 decBot.flylaunch(0);
                 if (!(follower.isBusy())) {

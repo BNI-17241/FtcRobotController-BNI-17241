@@ -468,7 +468,7 @@ public class BlueStateFar2Spike extends StateAutoMain {
                 break;
 
             case FIREANDRETURNSTATE:
-                if(burnerLaunch(opmodeTimer.getElapsedTime(), startFireTime, maxVariance, targetVelocity))
+                if(burnerLaunch(opmodeTimer.getElapsedTime(), startFireTime, true))
                 {
                     pathState = returnState;
                 }

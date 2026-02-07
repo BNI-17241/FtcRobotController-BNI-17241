@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Controls.Auto.RedAutoNew;
+package org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Controls.Auto.StateAuto.Blue;
 
 import com.pedropathing.util.Timer;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -6,8 +6,8 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Controls.Auto.AutoTemplates.StateVarableMain;
 import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.pedroPathing.MainContraints;
 
-@Autonomous(name = "Red Far 2 State Variable", group = "Drive")
-public class StateSubVarableHumanRedFar2 extends StateVarableMain {
+@Autonomous(name = "Blue Near Two Spike State", group = "Drive")
+public class BlueNearTwoSpikeState extends StateVarableMain {
 
     //When to go to park as failsafe (0-30 seconds from start, recommended 25)
 
@@ -15,14 +15,14 @@ public class StateSubVarableHumanRedFar2 extends StateVarableMain {
     @Override
     public void init() {
 
-        StartingPose = RedFarStartPose;
+        StartingPose = BlueGoalStartPose;
         //Shoot Pose
-        ShootingPose = RedFarShootPose;
+        ShootingPose = BlueMidShootPose;
         //Park Pose
-        ParkingPose = RedFarParkPose;
+        ParkingPose = BlueNearParkPose;
 
         //Optional Pose for shooting after Third Spike
-        ThirdShootPose = RedFarShootPose;
+        ThirdShootPose = ShootingPose;
 
         //Delay before initial movement (ms)
         startDelay = 0;
@@ -40,14 +40,15 @@ public class StateSubVarableHumanRedFar2 extends StateVarableMain {
         B ----- |
         A ----- V
         */
-        AtoCIntake = true;
+        AtoCIntake = false;
         maxTimeBreakout = 29 * 1000;
-        targetVelocity = 1400;
+        targetVelocity = 1215;
         intakeSpeed = 1;
         intakeMoveSpeed = 0.4;
         variance = 20;
-        xAutoOffset = 3;//-3
+        xAutoOffset = 0;//-3
         pathOffset = 0;
+        farLaunch = false;
 
 
 
@@ -55,8 +56,12 @@ public class StateSubVarableHumanRedFar2 extends StateVarableMain {
         opmodeTimer = new Timer();
         decBot.initRobot(hardwareMap);
         follower = MainContraints.createFollower(hardwareMap);
-        redPathGen();
+
+        //Change for alliance
+        bluePathGen();
+
         follower.setStartingPose(StartingPose);
+
 
         limelightInit();
 

@@ -1,12 +1,13 @@
-package org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Controls.Auto.BlueAutoNew.Far;
+package org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Controls.Auto.StateAuto.Red;
 
 import com.pedropathing.util.Timer;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Controls.Auto.AutoTemplates.StateVarableMain;
 import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.pedroPathing.MainContraints;
-@Autonomous(name = "Blue Far 2 State Variable", group = "Drive")
-public class StateSubVarableHumanBlueFar2 extends StateVarableMain {
+
+@Autonomous(name = "Red Near Two Spike State", group = "Drive")
+public class RedNearTwoSpikeState extends StateVarableMain {
 
     //When to go to park as failsafe (0-30 seconds from start, recommended 25)
 
@@ -14,14 +15,14 @@ public class StateSubVarableHumanBlueFar2 extends StateVarableMain {
     @Override
     public void init() {
 
-        StartingPose = BlueFarStartPose;
+        StartingPose = RedGoalStartPose;
         //Shoot Pose
-        ShootingPose = BlueFarShootPose;
+        ShootingPose = RedMidShootPose;
         //Park Pose
-        ParkingPose = BlueFarParkPose;
+        ParkingPose = RedNearParkPose;
 
         //Optional Pose for shooting after Third Spike
-        ThirdShootPose = BlueFarShootPose;
+        ThirdShootPose = ShootingPose;
 
         //Delay before initial movement (ms)
         startDelay = 0;
@@ -39,14 +40,15 @@ public class StateSubVarableHumanBlueFar2 extends StateVarableMain {
         B ----- |
         A ----- V
         */
-        AtoCIntake = true;
+        AtoCIntake = false;
         maxTimeBreakout = 29 * 1000;
-        targetVelocity = 1400;
+        targetVelocity = 1215;
         intakeSpeed = 1;
         intakeMoveSpeed = 0.4;
         variance = 20;
-        xAutoOffset = -3;//-3
-        pathOffset = Math.PI / 18;
+        xAutoOffset = 0;
+        pathOffset = 0;
+        farLaunch = false;
 
 
 
@@ -56,7 +58,7 @@ public class StateSubVarableHumanBlueFar2 extends StateVarableMain {
         follower = MainContraints.createFollower(hardwareMap);
 
         //Change for alliance
-        bluePathGen();
+        redPathGen();
 
         follower.setStartingPose(StartingPose);
 

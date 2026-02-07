@@ -40,14 +40,15 @@ public abstract class StateAutoMain extends OpMode {
 
     //------------Blue----------------
 
-    public final Pose BlueGoalStartPose = new Pose(22, 122, Math.toRadians(135));
+    public final Pose BlueGoalStartPose = new Pose(22, 120, Math.toRadians(135));
     public final Pose BlueNearParkPose = new Pose(50, 130, Math.toRadians(270));
 
     public final Pose BlueFarStartPose = new Pose(44, 8, Math.toRadians(90)); // Left corner of small triangle
 
-    public final Pose BlueMidShootPose = new Pose(57, 83, Math.toRadians(13));// Blue goal scoring pose
+    public final Pose BlueMidShootPose = new Pose(57, 83, Math.toRadians(135));// Blue goal scoring pose
 
-    public final Pose BlueFarShootPose = new Pose(60, 20, Math.toRadians(108));// Blue goal scoring pose from small triangle
+    //Might want to make heading 116
+    public final Pose BlueFarShootPose = new Pose(60, 20, Math.toRadians(116));// Blue goal scoring pose from small triangle 108
     public final Pose BlueFarParkPose = new Pose(43, 12, Math.toRadians(90)); // Blue Home (park)
 
     // Spike closest to human
@@ -64,6 +65,9 @@ public abstract class StateAutoMain extends OpMode {
     //----------------------------------------------------------
 
     //------------Red-----------------
+    public final Pose RedGoalStartPose = new Pose(122, 122, Math.toRadians(45));
+    public final Pose RedNearParkPose = new Pose(96, 130, Math.toRadians(270));
+
     public final Pose RedFarStartPose =  new Pose(100, 8, Math.toRadians(90));
     public final Pose RedMidShootPose = new Pose(85, 81, Math.toRadians(45));// Red goal scoring pose
 
@@ -71,13 +75,13 @@ public abstract class StateAutoMain extends OpMode {
 
     public final Pose RedFarParkPose = new Pose(101, 12, Math.toRadians(90)); // Red Home (park)
 
-    public final Pose RedSpikeAInsidePose = new Pose(105, 32, Math.toRadians(0)); // closest to human 23
+    public final Pose RedSpikeAInsidePose = new Pose(101, 32, Math.toRadians(0)); // closest to human 105
     public final Pose RedSpikeAOutsidePose = new Pose(124, 32, Math.toRadians(0));
 
-    public final Pose RedSpikeBInsidePose = new Pose(105, 57, Math.toRadians(0)); // secount clostest 22
+    public final Pose RedSpikeBInsidePose = new Pose(101, 57, Math.toRadians(0)); // secount clostest 105
     public final Pose RedSpikeBOutsidePose = new Pose(124, 57, Math.toRadians(0));
 
-    public final Pose RedSpikeCInsidePose = new Pose(105, 81, Math.toRadians(0)); // third closest 21
+    public final Pose RedSpikeCInsidePose = new Pose(101, 81, Math.toRadians(0)); // third closest 105
     public final Pose RedSpikeCOutsidePose = new Pose(124, 81, Math.toRadians(0));
 
 
@@ -149,26 +153,42 @@ public abstract class StateAutoMain extends OpMode {
     }
 
 
-    public boolean burnerLaunch(double currentTime, double startTime, double variance, double velocity){
-        if(currentTime - 5000 > startTime) {
-            decBot.stopFeed();
-            decBot.LEDCon(5);
-            return true;
-        }
-        else if(currentTime - 1500 > startTime) {
-            decBot.beginFeed();
-            decBot.LEDCon(4);
-        }
-        else if(currentTime - 1000 > startTime) {
-            decBot.stopFeed();
-            decBot.LEDCon(3);
-        }
-        else if(currentTime - 500 > startTime) {
-            decBot.beginFeed();
-            decBot.LEDCon(2);
+    public boolean burnerLaunch(double currentTime, double startTime, boolean farLaunch){
+        if(farLaunch) {
+            if (currentTime - 5000 > startTime) {
+                decBot.stopFeed();
+                decBot.LEDCon(5);
+                return true;
+            } else if (currentTime - 1500 > startTime) {
+                decBot.beginFeed();
+                decBot.LEDCon(4);
+            } else if (currentTime - 1000 > startTime) {
+                decBot.stopFeed();
+                decBot.LEDCon(3);
+            } else if (currentTime - 500 > startTime) {
+                decBot.beginFeed();
+                decBot.LEDCon(2);
+            } else {
+                decBot.LEDCon(1);
+            }
         }
         else{
-            decBot.LEDCon(1);
+            if (currentTime - 5000 > startTime) {
+                decBot.stopFeed();
+                decBot.LEDCon(5);
+                return true;
+            } else if (currentTime - 2000 > startTime) {
+                decBot.beginFeed();
+                decBot.LEDCon(4);
+            } else if (currentTime - 1500 > startTime) {
+                decBot.stopFeed();
+                decBot.LEDCon(3);
+            } else if (currentTime - 1000 > startTime) {
+                decBot.beginFeed();
+                decBot.LEDCon(2);
+            } else {
+                decBot.LEDCon(1);
+            }
         }
         return false;
     }
