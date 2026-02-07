@@ -69,7 +69,7 @@ public abstract class StateAutoMain extends OpMode {
     public final Pose RedNearParkPose = new Pose(96, 130, Math.toRadians(270));
 
     public final Pose RedFarStartPose =  new Pose(100, 8, Math.toRadians(90));
-    public final Pose RedMidShootPose = new Pose(85, 81, Math.toRadians(45));// Red goal scoring pose
+    public final Pose RedMidShootPose = new Pose(87, 83, Math.toRadians(45));// Red goal scoring pose
 
     public final Pose RedFarShootPose =  new Pose(84, 20, Math.toRadians(64)); // Red goal scoring pose from small triangle
 
