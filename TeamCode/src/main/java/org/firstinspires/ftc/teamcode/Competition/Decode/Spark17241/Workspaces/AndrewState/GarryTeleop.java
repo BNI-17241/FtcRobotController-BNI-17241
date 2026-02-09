@@ -172,13 +172,6 @@ public class GarryTeleop extends OpMode {
     }
     // ***** Manual Feeder Wheel Controller
     public void driverOneInput() {
-        //Check if tracking april tags ... Not required for Garry
-//        if (gamepad1.a) {
-//            isTracking = true;
-//        }
-//        if (gamepad1.b) {
-//            isTracking = false;
-//        }
         //Change ground move speed
         if (gamepad1.dpad_right) {
             moveSpeedMultiply = 0.5;
@@ -190,30 +183,21 @@ public class GarryTeleop extends OpMode {
             moveSpeedMultiply = 1;
         }
 
-        //Intake control
-        //if right trigger, go forward, if not and left, go back, else 0
+        if(gamepad1.left_bumper){
+            isIntaking = true;
+        }
+        if(gamepad1.right_bumper){
+            isIntaking = false;
+        }
 
-//        if(gamepad1.left_bumper){
-//            isIntaking = true;
-//        }
-//        if(gamepad1.right_bumper){
-//            isIntaking = false;
-//        }
-//
-//        if(isIntaking){
-//            decBot.intakeControl(gamepad1.left_trigger > 0.5 ? -intakeMotorSpeed : intakeMotorSpeed);
-//        }
-//        else{
-//            decBot.intakeControl(0);
-//        }
-
-
-
+        if(isIntaking){
+            decBot.intakeControl(gamepad1.left_trigger > 0.5 ? -intakeMotorSpeed : intakeMotorSpeed);
+        }
+        else{
+            decBot.intakeControl(0);
+        }
     }
-
     public void driverTwoInput(){
-
-        //Control transfer servo
         if(gamepad2.right_bumper){
             decBot.transferSpeedCon(transferServoSpeed);
         }
@@ -268,88 +252,6 @@ public class GarryTeleop extends OpMode {
         }
     }
 
-    public void autoTarget() {
-        if (result == null || !result.isValid()) {
-            telemetry.addData("AutoTarget", "No valid Limelight result");
-            return;
-        }
-        if(!isTracking)
-        {
-            autoTargetRotation = 0;
-        }
-        else{
-        List<LLResultTypes.FiducialResult> fiducialResults = result.getFiducialResults();
-        for (LLResultTypes.FiducialResult fr : fiducialResults) {
-            Pose3D tagInCam = fr.getTargetPoseCameraSpace();     // pose of tag in CAMERA space
-            double x = tagInCam.getPosition().x;  // right (+)
-            double y = tagInCam.getPosition().y;  // down (+)
-
-            double forwardMeters = tagInCam.getPosition().z;  // forward/out of camera (+)
-            double rangeMeters = Math.sqrt(x * x + y * y + forwardMeters * forwardMeters);// 3D range
-
-            telemetry.addLine("-------------------------------------");
-            telemetry.addData("Tag ID", fr.getFiducialId());
-            telemetry.addData("Forward (m)", "%.3f", forwardMeters);
-            telemetry.addData("Range (m)", "%.3f", rangeMeters);
-            telemetry.addData("Yaw", fr.getTargetXDegrees());
-            telemetry.addLine("-------------------------------------");
-            double tagXDegrees;
-
-            //Don't rotate for motif tags
-            if (fr.getFiducialId() == 21 || fr.getFiducialId() == 22 || fr.getFiducialId() == 23) {
-                return;
-            }
-
-            //Check for tags and get X degrees
-            tagXDegrees = fr.getFiducialId() == 20 ? fr.getTargetXDegrees() : 0;
-            tagXDegrees = fr.getFiducialId() == 24 ? fr.getTargetXDegrees() : tagXDegrees;
-
-            // --- Proportional Drive Control parameters  ---
-            double kP = 0.08;             // Proportional gain for turning and oscillation
-            double maxTurnSpeed = 1;   // Max turn power
-            double minTurnSpeed = 0.25;  // Minimum turn power to overcome friction
-            double tolerance = 2;      // Deadband in degrees that controls oscillation
-
-            // If we’re close enough, stop and don’t oscillate
-            if (Math.abs(tagXDegrees) < tolerance) {
-                decBot.frontLeftMotor.setPower(0);
-                decBot.rearLeftMotor.setPower(0);
-                decBot.frontRightMotor.setPower(0);
-                decBot.rearRightMotor.setPower(0);
-                telemetry.addData("Align", "Aligned! tx=%.2f", tagXDegrees);
-                telemetry.addData("Tag", "ID: %d", fr.getFiducialId());
-                return;
-            }
-
-            // Proportional turning power
-            double power = kP * tagXDegrees;
-
-            // Clip to max speed
-            if (power > maxTurnSpeed) power = maxTurnSpeed;
-            if (power < -maxTurnSpeed) power = -maxTurnSpeed;
-
-            // Enforce a minimum power when we’re still outside tolerance
-            if (power > 0 && Math.abs(power) < minTurnSpeed) power = minTurnSpeed;
-            if (power < 0 && Math.abs(power) < minTurnSpeed) power = -minTurnSpeed;
-
-            // Map sign so that:
-            //  tx < 0 (tag left) so robot turns left (fl -, fr +)
-            //  tx > 0 (tag right) so robots turns right (fl +, fr -)
-            double frontLeft = power;
-            double frontRight = -power;
-            double rearLeft = power;
-            double rearRight = -power;
-
-            // Set motor powers
-            setMotorPower(decBot.frontLeftMotor, frontLeft, powerThreshold, 1.0);
-            setMotorPower(decBot.frontRightMotor, frontRight, powerThreshold, 1.0);
-            setMotorPower(decBot.rearLeftMotor, rearLeft, powerThreshold, 1.0);
-            setMotorPower(decBot.rearRightMotor, rearRight, powerThreshold, 1.0);
-
-            telemetry.addData("Align", "tx=%.2f, power=%.2f", tagXDegrees, power);
-            }
-        }
-    }
 
     // ***** Helper Method for Telemetry
     public void telemetryOutput() {
@@ -360,13 +262,11 @@ public class GarryTeleop extends OpMode {
 //        telemetry.addData("Is Launching", isLaunching);
         telemetry.update();
     }
-
     //******** Helper Functions **************************
     private double getCurrentVelocity() {
         // Averages front and back motor velocity
         return (decBot.launchFrontMotor.getVelocity() + decBot.launchBackMotor.getVelocity()) / 2.0;
     }
-
     public void setMotorPower(DcMotor motor, double speed, double threshold, double multiplier) {
         if (speed <= threshold && speed >= -threshold) {
             motor.setPower(0);
@@ -374,7 +274,6 @@ public class GarryTeleop extends OpMode {
             motor.setPower(speed * multiplier);
         }
     }
-
     // ****** Led Controller
     public void LEDDriver() {
         decBot.LEDCon(6);
