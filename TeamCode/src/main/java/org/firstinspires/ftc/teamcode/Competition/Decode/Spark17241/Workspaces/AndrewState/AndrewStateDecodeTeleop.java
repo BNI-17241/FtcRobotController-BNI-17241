@@ -89,7 +89,6 @@ public class AndrewStateDecodeTeleop extends OpMode {
         limeLightData();
         autoTarget();
         robotCentricDrive();
-        LEDDriver();
         telemetryOutput();
     }
 
@@ -277,6 +276,7 @@ public class AndrewStateDecodeTeleop extends OpMode {
             autoTargetRotation = 0;
         }
         else{
+        boolean foundTarget = false;
         List<LLResultTypes.FiducialResult> fiducialResults = result.getFiducialResults();
         for (LLResultTypes.FiducialResult fr : fiducialResults) {
             Pose3D tagInCam = fr.getTargetPoseCameraSpace();     // pose of tag in CAMERA space
@@ -298,7 +298,7 @@ public class AndrewStateDecodeTeleop extends OpMode {
             if (fr.getFiducialId() == 21 || fr.getFiducialId() == 22 || fr.getFiducialId() == 23) {
                 return;
             }
-
+            foundTarget = true;
             //Check for tags and get X degrees
             tagXDegrees = fr.getFiducialId() == 20 ? fr.getTargetXDegrees() : 0;
             tagXDegrees = fr.getFiducialId() == 24 ? fr.getTargetXDegrees() : tagXDegrees;
@@ -347,6 +347,7 @@ public class AndrewStateDecodeTeleop extends OpMode {
 
             telemetry.addData("Align", "tx=%.2f, power=%.2f", tagXDegrees, power);
             }
+        decBot.LEDCon(foundTarget ? 4 : 1);
         }
     }
 
@@ -374,8 +375,4 @@ public class AndrewStateDecodeTeleop extends OpMode {
         }
     }
 
-    // ****** Led Controller
-    public void LEDDriver() {
-        decBot.LEDCon(6);
-    }
 }
