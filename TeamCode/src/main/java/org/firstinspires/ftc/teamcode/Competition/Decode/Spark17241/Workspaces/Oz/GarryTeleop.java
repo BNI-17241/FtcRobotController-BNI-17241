@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Workspaces.AndrewState;
+package org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Workspaces.Oz;
 
 import com.qualcomm.hardware.limelightvision.LLResult;
 import com.qualcomm.hardware.limelightvision.LLResultTypes;
@@ -8,7 +8,6 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.Range;
 
-import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
 import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Robots.StateDecodeBot;
 
 import java.util.ArrayList;
@@ -210,7 +209,7 @@ public class GarryTeleop extends OpMode {
 
         if (gamepad1.x) { // Square
             // NEAR preset
-            targetVelocity = 1209;
+            targetVelocity = 2500;
         }
         if (gamepad1.a) { // X
             targetVelocity = 1259;
