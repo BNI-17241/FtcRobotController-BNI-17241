@@ -271,13 +271,17 @@ public class AndrewStateDecodeTeleop extends OpMode {
             telemetry.addData("AutoTarget", "No valid Limelight result");
             return;
         }
+        int foundTarget = 1;
         if(!isTracking)
         {
             autoTargetRotation = 0;
+            decBot.LEDCon(1);
         }
         else{
-        boolean foundTarget = false;
         List<LLResultTypes.FiducialResult> fiducialResults = result.getFiducialResults();
+        if(fiducialResults.isEmpty()){
+            foundTarget = 2;
+        }
         for (LLResultTypes.FiducialResult fr : fiducialResults) {
             Pose3D tagInCam = fr.getTargetPoseCameraSpace();     // pose of tag in CAMERA space
             double x = tagInCam.getPosition().x;  // right (+)
@@ -298,7 +302,7 @@ public class AndrewStateDecodeTeleop extends OpMode {
             if (fr.getFiducialId() == 21 || fr.getFiducialId() == 22 || fr.getFiducialId() == 23) {
                 return;
             }
-            foundTarget = true;
+            foundTarget = 4;
             //Check for tags and get X degrees
             tagXDegrees = fr.getFiducialId() == 20 ? fr.getTargetXDegrees() : 0;
             tagXDegrees = fr.getFiducialId() == 24 ? fr.getTargetXDegrees() : tagXDegrees;
@@ -317,6 +321,7 @@ public class AndrewStateDecodeTeleop extends OpMode {
                 decBot.rearRightMotor.setPower(0);
                 telemetry.addData("Align", "Aligned! tx=%.2f", tagXDegrees);
                 telemetry.addData("Tag", "ID: %d", fr.getFiducialId());
+                foundTarget = 5;
                 return;
             }
 
@@ -347,7 +352,7 @@ public class AndrewStateDecodeTeleop extends OpMode {
 
             telemetry.addData("Align", "tx=%.2f, power=%.2f", tagXDegrees, power);
             }
-        decBot.LEDCon(foundTarget ? 4 : 1);
+        decBot.LEDCon(foundTarget);
         }
     }
 
