@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Workspaces.AndrewState;
+package org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Controls.TeleOp;
 
 import com.qualcomm.hardware.limelightvision.LLResult;
 import com.qualcomm.hardware.limelightvision.LLResultTypes;
@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @TeleOp(name = "Andrew State Decode Teleop", group = "Drive")
-public class AndrewStateDecodeTeleop extends OpMode {
+public class TeleOp_Final extends OpMode {
 
     protected  Limelight3A limelight;
 

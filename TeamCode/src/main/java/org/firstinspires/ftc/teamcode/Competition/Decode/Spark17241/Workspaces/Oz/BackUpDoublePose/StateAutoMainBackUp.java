@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Controls.Auto.BackUpDoublePose;
+package org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Workspaces.Oz.BackUpDoublePose;
 
 import com.pedropathing.geometry.Pose;
 import com.qualcomm.hardware.limelightvision.LLResult;

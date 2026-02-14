@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Controls.Auto.BackUpDoublePose;
+package org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Workspaces.Oz.BackUpDoublePose;
 
 import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.BezierLine;
@@ -6,8 +6,6 @@ import com.pedropathing.geometry.Pose;
 import com.pedropathing.paths.Path;
 import com.pedropathing.paths.PathChain;
 import com.pedropathing.util.Timer;
-
-import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Controls.Auto.StateAutoMain;
 
 
 public abstract class StateVarableMainBackUp extends StateAutoMainBackUp {

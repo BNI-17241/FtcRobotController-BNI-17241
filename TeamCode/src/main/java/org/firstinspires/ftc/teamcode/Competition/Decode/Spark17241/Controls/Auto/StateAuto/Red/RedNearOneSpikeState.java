@@ -1,32 +1,34 @@
-package org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Controls.Auto.BackUpDoublePose;
+package org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Controls.Auto.StateAuto.Red;
 
 import com.pedropathing.util.Timer;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
+import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Controls.Auto.AutoTemplates.StateVarableMain;
 import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.pedroPathing.MainContraints;
-@Disabled
-@Autonomous(name = "Sub Blue Human Far 2 state Back Up", group = "Drive")
-public class StateSubVarableHumanBlueFar2BackUp extends StateVarableMainBackUp {
+
+@Autonomous(name = "Red Near One Spike State", group = "Drive")
+public class RedNearOneSpikeState extends StateVarableMain {
 
     //When to go to park as failsafe (0-30 seconds from start, recommended 25)
 
 
     @Override
     public void init() {
-        StartingPose = BlueFarStartPose;
+
+        StartingPose = RedGoalStartPose;
         //Shoot Pose
-        FirstShootingPose = BlueFarFirstShootPose;
-        SecountShootingPose = BlueFarSecountShootPose;
-        ThirdShootingPose = BLueFarThirdShootPose;
+        ShootingPose = RedMidShootPose;
         //Park Pose
-        ParkingPose = BlueFarParkPose;
+        ParkingPose = RedNearParkPose;
+
+        //Optional Pose for shooting after Third Spike
+        ThirdShootPose = ShootingPose;
 
         //Delay before initial movement (ms)
         startDelay = 0;
 
         //How many spikes are needed? 0-3
-        spikeAmount = 2;
+        spikeAmount = 1;
         /*
         Order of intake
         true:
@@ -38,13 +40,15 @@ public class StateSubVarableHumanBlueFar2BackUp extends StateVarableMainBackUp {
         B ----- |
         A ----- V
         */
-        AtoCIntake = true;
+        AtoCIntake = false;
         maxTimeBreakout = 29 * 1000;
-        targetVelocity = 1485;
+        targetVelocity = 1215;
         intakeSpeed = 1;
         intakeMoveSpeed = 0.4;
-        variance = 90;
-
+        variance = 20;
+        xAutoOffset = 0;
+        pathOffset = 0;
+        farLaunch = false;
 
 
 
@@ -52,8 +56,15 @@ public class StateSubVarableHumanBlueFar2BackUp extends StateVarableMainBackUp {
         opmodeTimer = new Timer();
         decBot.initRobot(hardwareMap);
         follower = MainContraints.createFollower(hardwareMap);
-        pathGen();
+
+        //Change for alliance
+        redPathGen();
+
         follower.setStartingPose(StartingPose);
+
+
+        limelightInit();
+
     }
 
     @Override
@@ -69,8 +80,9 @@ public class StateSubVarableHumanBlueFar2BackUp extends StateVarableMainBackUp {
     @Override
     public void loop() {
         follower.update();
-        AutoMainTelemetry();
-        stateVarableMainTelemetry();
+        telemetry.addData("Velocity: ", getCurrentVelocity());
+        //AutoMainTelemetry();
+        //stateVarableMainTelemetry();
         telemetry.update();
 
 

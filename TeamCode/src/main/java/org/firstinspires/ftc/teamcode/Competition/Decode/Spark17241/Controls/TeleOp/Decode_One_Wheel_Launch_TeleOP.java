@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Controls.Te
 import com.qualcomm.hardware.limelightvision.LLResult;
 import com.qualcomm.hardware.limelightvision.LLResultTypes;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -15,8 +16,8 @@ import java.util.ArrayList;
 import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Workspaces.Oz.DecodeBot_One__Wheel_Launch;
 
 //
-
-@TeleOp(name = "Decode_One_Wheel_Launch_TeleOP", group = "Drive")
+@Disabled
+@TeleOp(name = "TelopFinal", group = "Drive")
 public class Decode_One_Wheel_Launch_TeleOP extends OpMode {
 
     protected  Limelight3A limelight;
