@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Controls.Auto.AutoTemplates.StateVarableMain;
 import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.pedroPathing.MainContraints;
-@Disabled
+
 @Autonomous(name = "Blue Far Two Spike State", group = "Drive")
 public class BlueFarTwoSpikeState extends StateVarableMain {
 
