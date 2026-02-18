@@ -572,10 +572,10 @@ public abstract class StateVarableMain extends StateAutoMain {
                 //autotargeting
                 limeLightData();
                 autoTarget(xAutoOffset);
-                if(burnerLaunch(opmodeTimer.getElapsedTime(), startFireTime, farLaunch))
-                {
+                if (burnerLaunch(opmodeTimer.getElapsedTime(), startFireTime, farLaunch)) {
                     pathState = returnState;
                 }
+
                 break;
 
 

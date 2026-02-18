@@ -46,7 +46,7 @@ public class BlueFarZeroSpikeState extends StateVarableMain {
         intakeSpeed = 1;
         intakeMoveSpeed = 0.4;
         variance = 20;
-        xAutoOffset = -3;//-3
+        xAutoOffset = -2;//-3
         pathOffset = 0;// Math.PI / 18;
         farLaunch = true;
 

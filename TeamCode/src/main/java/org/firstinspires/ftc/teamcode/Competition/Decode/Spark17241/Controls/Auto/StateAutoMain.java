@@ -155,17 +155,17 @@ public abstract class StateAutoMain extends OpMode {
 
     public boolean burnerLaunch(double currentTime, double startTime, boolean farLaunch){
         if(farLaunch) {
-            if (currentTime - 5000 > startTime) {
+            if (currentTime - 5000 > startTime) {//5000  5000
                 decBot.stopFeed();
                 decBot.LEDCon(5);
                 return true;
-            } else if (currentTime - 1500 > startTime) {
+            } else if (currentTime - 1650 > startTime) {//1500  2000
                 decBot.beginFeed();
                 decBot.LEDCon(4);
-            } else if (currentTime - 1000 > startTime) {
+            } else if (currentTime - 1250 > startTime) {//1000  1500
                 decBot.stopFeed();
                 decBot.LEDCon(3);
-            } else if (currentTime - 500 > startTime) {
+            } else if (currentTime - 350 > startTime) {//500  500
                 decBot.beginFeed();
                 decBot.LEDCon(2);
             } else {
