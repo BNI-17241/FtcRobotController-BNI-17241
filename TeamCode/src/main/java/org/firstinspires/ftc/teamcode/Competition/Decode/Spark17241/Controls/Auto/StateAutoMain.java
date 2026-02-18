@@ -173,17 +173,17 @@ public abstract class StateAutoMain extends OpMode {
             }
         }
         else{
-            if (currentTime - 5000 > startTime) {
+            if (currentTime - 5000 > startTime) {//5000
                 decBot.stopFeed();
                 decBot.LEDCon(5);
                 return true;
-            } else if (currentTime - 2000 > startTime) {
+            } else if (currentTime - 2500 > startTime) {//2000
                 decBot.beginFeed();
                 decBot.LEDCon(4);
-            } else if (currentTime - 1500 > startTime) {
+            } else if (currentTime - 1750 > startTime) {//1500
                 decBot.stopFeed();
                 decBot.LEDCon(3);
-            } else if (currentTime - 1000 > startTime) {
+            } else if (currentTime - 500 > startTime) {//1000
                 decBot.beginFeed();
                 decBot.LEDCon(2);
             } else {
