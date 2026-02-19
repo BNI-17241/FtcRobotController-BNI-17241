@@ -31,7 +31,7 @@ public class TeleOp_Final extends OpMode {
     protected double rearRightSpeed;
     protected double powerThreshold;
 
-    protected double moveSpeedMultiply = 0.75;
+    protected double moveSpeedMultiply = 1;
 
     // Drive Profile Control Variables
     protected  static final int PROFILE_1 = 1;  //User 1
