@@ -85,6 +85,8 @@ public abstract class StateHumanMain extends StateAutoMain {
     //State to return to after moveToPoint case
     public pathingState returnState;
 
+    public double pathTimeOut = 30000;
+
     public void bluePathGen() {
         start_to_fire = follower
                 .pathBuilder()
@@ -297,12 +299,6 @@ public abstract class StateHumanMain extends StateAutoMain {
                 }
                 break;
 
-
-
-
-
-
-
             case TAKESPIKEONE:
                 //Start 1st spike intake
                 if(moveToPointChain == null){
@@ -341,12 +337,14 @@ public abstract class StateHumanMain extends StateAutoMain {
                 //Start 2nd spike intake
                 if(moveToPointChain == null){
                     moveToPointChain = fire_to_spike4;
+                    pathTimeOut = 4000;
                     returnState = pathingState.TAKESPIKEFOUR;
                     pathState = pathingState.MOVETOPOINT;
                     break;
                 }
                 //2nd spike inside to outside
                 if(moveToPointChain == fire_to_spike4){
+                    pathTimeOut = 3000;
                     moveToPointChain = spike4_traversal;
                     returnState = pathingState.TAKESPIKEFOUR;
                     pathState = pathingState.INTAKETOPOINT;
@@ -387,8 +385,9 @@ public abstract class StateHumanMain extends StateAutoMain {
 
             case RETURNMOVETOPOINT:
                 //Just returns to the case
-                if (!(follower.isBusy())) {
+                if (!(follower.isBusy()) || pathTimeOut < opmodeTimer.getElapsedTime()) {
                     pathState = returnState;
+                    pathTimeOut = 30000;
                 }
                 break;
 
