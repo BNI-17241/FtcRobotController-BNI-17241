@@ -63,8 +63,8 @@ public abstract class StateAutoMain extends OpMode {
     public final Pose BlueSpikeCInsidePose = new Pose(48, 81, Math.toRadians(180));
     public final Pose BlueSpikeCOutsidePose = new Pose(17, 81, Math.toRadians(180));
 
-    public final Pose BLueSPikeDInsidePose = new Pose(10, 28, Math.toRadians(270));
-    public final Pose BLueSPikeDOutsidePose = new Pose(10, 10, Math.toRadians(270));
+    public final Pose BlueSpikeDInsidePose = new Pose(10, 28, Math.toRadians(270));
+    public final Pose BlueSpikeDOutsidePose = new Pose(10, 10, Math.toRadians(270));
     //----------------------------------------------------------
 
     //------------Red-----------------
