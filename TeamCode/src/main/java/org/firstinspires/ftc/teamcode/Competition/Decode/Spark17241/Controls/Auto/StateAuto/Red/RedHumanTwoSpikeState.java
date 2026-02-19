@@ -3,11 +3,12 @@ package org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Controls.Au
 import com.pedropathing.util.Timer;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
+import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Controls.Auto.AutoTemplates.StateHumanMain;
 import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.Controls.Auto.AutoTemplates.StateVarableMain;
 import org.firstinspires.ftc.teamcode.Competition.Decode.Spark17241.pedroPathing.MainContraints;
 
 @Autonomous(name = "Red Human Two Spike State", group = "Drive")
-public class RedHumanTwoSpikeState extends StateVarableMain {
+public class RedHumanTwoSpikeState extends StateHumanMain {
 
     //When to go to park as failsafe (0-30 seconds from start, recommended 25)
 
