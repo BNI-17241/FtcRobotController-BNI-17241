@@ -337,15 +337,16 @@ public abstract class StateHumanMain extends StateAutoMain {
                 //Start 2nd spike intake
                 if(moveToPointChain == null){
                     moveToPointChain = fire_to_spike4;
-                    pathTimeOut = 4000;
+                    pathTimeOut = opmodeTimer.getElapsedTime() + 2000;
                     returnState = pathingState.TAKESPIKEFOUR;
                     pathState = pathingState.MOVETOPOINT;
                     break;
                 }
                 //2nd spike inside to outside
                 if(moveToPointChain == fire_to_spike4){
-                    pathTimeOut = 3000;
+                    pathTimeOut = opmodeTimer.getElapsedTime() + 20;
                     moveToPointChain = spike4_traversal;
+                    intakeMoveSpeed = 0.2;
                     returnState = pathingState.TAKESPIKEFOUR;
                     pathState = pathingState.INTAKETOPOINT;
                     break;
