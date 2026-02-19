@@ -62,6 +62,9 @@ public abstract class StateAutoMain extends OpMode {
     //Farthest Spike
     public final Pose BlueSpikeCInsidePose = new Pose(48, 81, Math.toRadians(180));
     public final Pose BlueSpikeCOutsidePose = new Pose(17, 81, Math.toRadians(180));
+
+    public final Pose BLueSPikeDInsidePose = new Pose(10, 28, Math.toRadians(270));
+    public final Pose BLueSPikeDOutsidePose = new Pose(10, 10, Math.toRadians(270));
     //----------------------------------------------------------
 
     //------------Red-----------------
@@ -84,6 +87,8 @@ public abstract class StateAutoMain extends OpMode {
     public final Pose RedSpikeCInsidePose = new Pose(101, 81, Math.toRadians(0)); // third closest 105
     public final Pose RedSpikeCOutsidePose = new Pose(124, 81, Math.toRadians(0));
 
+    public final Pose RedSpikeDInsidePose = new Pose(134, 28, Math.toRadians(270));
+    public final Pose RedSpikeDOutsidePose = new Pose(134, 28, Math.toRadians(270));
 
 
     /* Velocity drop function and vars
