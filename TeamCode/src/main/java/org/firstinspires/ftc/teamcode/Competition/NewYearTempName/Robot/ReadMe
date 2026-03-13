@@ -1,0 +1,17 @@
+This is where you define robot(bot.java)
+
+This is where you define general robot function for the robot, (functionMain.java)
+
+Structure of program
+
+                   bot
+                    |
+               functionMain
+                    |
+
+           Hold Object of This(bot)
+
+                /       \
+            AutoMain  TelopMain
+                |         |
+ Individual Telop         Individual Auto
